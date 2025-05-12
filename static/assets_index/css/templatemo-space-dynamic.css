@@ -1575,3 +1575,16 @@ responsive
     margin-left: 0px;
   }
 }
+
+@media (max-width: 767.98px) {
+  .item .hidden-content {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+    position: relative !important;
+  }
+
+  .item .showed-content {
+    display: none !important;
+  }
+}
