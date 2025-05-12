@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+}
+
+.checkout-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 50px;
+    max-width: 1000px;
+    margin: auto;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+}
+
+.summary,
+.payment {
+    flex: 1;
+}
+
+h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.item h4 {
+    margin: 0;
+}
+
+.item p {
+    margin: 2px 0;
+    color: #555;
+}
+
+.price {
+    font-weight: bold;
+    color: #333;
+}
+
+.total {
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.total p {
+    margin: 0;
+    color: #888;
+}
+
+.total h3 {
+    margin-top: 5px;
+    font-size: 24px;
+    color: #111;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.card-sub {
+    display: flex;
+    gap: 10px;
+}
+
+.card-sub input {
+    flex: 1;
+}
+
+button {
+    padding: 14px;
+    font-size: 16px;
+    background-color: #2e72e3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #215ed1;
+}
+
+.secure-text {
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin-top: 10px;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/checkout.css') }}">
+</head>
+
+<body>
+    <div class="checkout-container">
+        <div class="summary">
+            <h2>Order Summary</h2>
+            <div class="item">
+                <div class="details">
+                    <h4>Pro Annual</h4>
+                    <p>1-year subscription</p>
+                </div>
+                <p class="price">$120.00</p>
+            </div>
+            <div class="item">
+                <div class="details">
+                    <h4>Business Annual</h4>
+                    <p>1-year subscription</p>
+                </div>
+                <p class="price">$250.00</p>
+            </div>
+            <div class="total">
+                <p>Total</p>
+                <h3>$370.00</h3>
+            </div>
+        </div>
+
+        <div class="payment">
+            <h2>Payment details</h2>
+
+            <form action="{{ url_for('create_checkout_session') }}" method="POST">
+                <!-- Stripe gestirà queste informazioni -->
+                <button type="submit">Pay $370.00</button>
+            </form>
+
+            <p class="secure-text">Secure payment via Stripe</p>
+        </div>
+    </div>
+</body>
+
+</html>
