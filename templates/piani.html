@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"
+        content="TeamTime è l'app intelligente per il registro presenze dei dipendenti: semplice, veloce e basata su QR code. Automatizza entrata, uscita e genera report precisi per la tua azienda. Piano gratis disponibile">
+
+    <meta name="author" content="Maurizio Polverini">
+    <meta name="keywords"
+        content="TeamTime, registro presenze, registro presenze dipendenti, app registro presenze, app orari lavoro, gestione dipendenti, orari entrata uscita, controllo presenze, QR code dipendenti, registro digitale presenze">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <title>TeamTime - App Registro Presenze</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor_index/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="/static/assets_index/css/fontawesome.css">
+    <link rel="stylesheet" href="/static/assets_index/css/templatemo-space-dynamic.css">
+    <link rel="stylesheet" href="/static/assets_index/css/animated.css">
+    <link rel="stylesheet" href="/static/assets_index/css/owl.css">
+
+    <!-- Style -->
+
+    <style>
+        @media (max-width: 767px) {
+            .hide-on-mobile {
+                display: none !important;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="logo">
+                            <h4>Team<span>Time</span></h4>
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="#about">About Us</a></li>
+                            <li class="scroll-to-section"><a href="#services">Servizi</a></li>
+                            <li class="scroll-to-section"><a href="#portfolio">Piani</a></li>
+                            <li class="scroll-to-section"><a href="#blog">News</a></li>
+                            <li class="scroll-to-section"><a href="#contact">Contattaci</a></li>
+                            <li class="scroll-to-section">
+                                <div class="main-red-button"><a href="#contact">Richiedi DEMO</a></div>
+                            </li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <div id="promo-banner"
+        style="background-color: #e63946; color: white; padding: 15px 0; text-align: center; z-index: 1000; position: relative;">
+        <strong>🎁 Offerta "STARTUP" -50% valida fino alla fine del mese corrente</strong><br>
+        <span id="countdown-text">Tempo rimasto: <span id="countdown" style="font-weight: bold;"></span></span>
+    </div>
+
+
+
+    <!DOCTYPE html>
+    <html lang="it">
+    
+    <head>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Piani Tariffari</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+        <!-- INCOLLA QUESTO BLOCCO CSS nel <style> esistente nel <head> -->
+        <style>
+            @media (max-width: 767px) {
+                .hide-on-mobile {
+                    display: none !important;
+                }
+            }
+        
+            .pricing-section {
+                background: #ffffff;
+                /* Bianco */
+                padding: 60px 20px;
+                max-width: 1200px;
+                margin: auto;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 30px;
+                border-radius: 20px;
+            }
+        
+            .pricing-card {
+                background: white;
+                border-radius: 10px;
+                text-align: center;
+                padding: 30px 20px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                flex: 1 1 250px;
+                max-width: 270px;
+                transition: transform 0.3s;
+            }
+        
+            .pricing-card:hover {
+                transform: scale(1.05);
+            }
+        
+            .pricing-title {
+                font-weight: 600;
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+        
+            .price {
+                font-size: 20px;
+                font-weight: bold;
+                color: #e63946;
+            }
+        
+            .per-month {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+        
+            .features {
+                font-size: 14px;
+                color: #666;
+                margin-bottom: 25px;
+                line-height: 1.5;
+            }
+        
+            .btn {
+                background-color: #e63946;
+                color: white;
+                padding: 10px 25px;
+                border: none;
+                border-radius: 50px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background 0.3s;
+                text-decoration: none;
+                display: inline-block;
+            }
+        
+            .btn:hover {
+                background-color: #d62839;
+            }
+        
+            @media (max-width: 768px) {
+                .pricing-card {
+                    max-width: 100%;
+                }
+            }
+        </style>
+
+    </head>
+    
+    <body>
+    
+    <!-- ***** Pricing Section Start ***** -->
+    <!-- ***** Pricing Section Start ***** -->
+    <section id="portfolio" class="pricing-section">
+        <div class="container">
+            <div class="row mb-5 text-center">
+                <div class="col-lg-12">
+                 
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <!-- Gratis -->
+                <div class="pricing-card">
+                    <div class="pricing-title">Gratuito</div>
+                    <div class="price">Nessun Costo</div>
+                    <div class="per-month"><strong>Prova di 7 giorni</strong></div>
+                    <div class="features">
+                        Tutte le funzionalità<br>Assistenza base<br>Report Excel e PDF<br>Database Medio</br>
+                    </div>
+                    <a href="#contact" class="btn">Richiedi DEMO</a>
+                </div>
+                <!-- Base -->
+                <div class="pricing-card">
+                    <div class="pricing-title">Start</div>
+                    <div class="price"><s>288 €</s></div>
+                    <div class="price" style="font-size: 30px;">144 €</div>
+                    <div class="per-month">(12€/mese per azienda)</div>
+                    <div class="features">
+                        <strong>Fino a 5 dipendenti</strong><br><br>QR Code Personalizzato<br>Report Excel e PDF<br>Database Medio<br><br>Assistenza base
+                    </div>
+                    <a href="https://buy.stripe.com/eVa6pc3dRaeJegodQR" class="btn">Acquista</a>
+                    <div style="margin-top: 15px; text-align: center;">
+                        <p style="font-size: 13px; font-weight: 500; color: #444; margin-bottom: 6px;">
+                            <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; color: #28a745;"></i>
+                            Pagamento sicuro con Stripe
+                        </p>
+                    </div>
+                    <div class="features" style="font-size: 10px;">L'abbonamento ha valenza annuale</div>
+                </div>
+                <!-- Avanzato -->
+                <div class="pricing-card">
+                    <div class="pricing-title">Teams</div>
+                    <div class="price"><s>348 €</s></div>
+                    <div class="price" style="font-size: 30px;">174 €</div>
+                    <div class="per-month">(14.5€/mese per azienda)</div>
+                    <div class="features">
+                        <strong>Fino a 11 dipendenti</strong><br><br>QR Code Personalizzato<br>Report Excel e PDF<br>Database Grande<br><br>Assistenza prioritaria
+                    </div>
+                    <a href="https://buy.stripe.com/7sI8xkdSv9aF3BKeUW" class="btn">Acquista</a>
+                                        <div style="margin-top: 15px; text-align: center;">
+                                            <p style="font-size: 13px; font-weight: 500; color: #444; margin-bottom: 6px;">
+                                                <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; color: #28a745;"></i>
+                                                Pagamento sicuro con Stripe
+                                            </p>
+                                        </div>
+                    <div class="features" style="font-size: 10px;">L'abbonamento ha valenza annuale</div>
+                </div>
+                <!-- Business -->
+                <div class="pricing-card">
+                    <div class="pricing-title">Business</div>
+                    <div class="price"><s>648 €</s></div>
+                    <div class="price" style="font-size: 30px;">324 €</div>
+                    <div class="per-month">(27€/mese per azienda)</div>
+                    <div class="features">
+                        <strong>12+ dipendenti</strong><br><br>QR Code Personalizzato<br>Report Excel e PDF<br>Database Massimo<br><br>Assistenza LiveChat
+                    </div>
+                    <a href="https://buy.stripe.com/8wM4h4bKn72xb4c147" class="btn">Acquista</a>
+                                        <div style="margin-top: 15px; text-align: center;">
+                                            <p style="font-size: 13px; font-weight: 500; color: #444; margin-bottom: 6px;">
+                                                <i class="fa fa-lock" aria-hidden="true" style="margin-right: 5px; color: #28a745;"></i>
+                                                Pagamento sicuro con Stripe
+                                            </p>
+                                        </div>
+                    <div class="features" style="font-size: 10px;">L'abbonamento ha valenza annuale</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <div id="contact" class="contact-us section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 align-self-center wow fadeInLeft" data-wow-duration="0.2s" data-wow-delay="0.15s">
+                    <div class="section-heading">
+                        <h2>Richiedi Ora Una Demo Gratuita Per Esplorare L'Applicazione</h2>
+                        <p>Accedi ad una sessione di test senza alcun vincolo di acquisto e prova per 7 giorni
+                            gratuitamente l'app e tutte le sue funzionalità</p>
+                        <div class="phone-info">
+                            <h4>Compila il Form, Ti Contatteremo Entro 48 Ore Lavorative</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInRight" data-wow-duration="0.5s" data-wow-delay="0.25s">
+                    <form id="contact" action="/contact" method="post">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <input type="text" name="name" id="name" placeholder="Nome Azienda"
+                                        autocomplete="on" required>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                    <input type="text" name="dipendenti" id="dipendenti" placeholder="Numero Dipendenti"
+                                        autocomplete="on" required>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12">
+                                <fieldset>
+                                    <input type="text" name="telefono" id="telefono" placeholder="Telefono" required="">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12">
+                                <fieldset>
+                                    <textarea name="message" type="text" class="form-control" id="message"
+                                        placeholder="Ciao, mi chiamo Mario e cerco un'app per registro presenze del personale perché..."
+                                        required=""></textarea>
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-12">
+                                <fieldset>
+                                    <button type="submit" id="form-submit" class="main-button ">Invia Messaggio</button>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="contact-dec">
+                            <img src="/static/assets_index/images/contact-decoration.png" alt="">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 wow fadeIn" data-wow-duration="1s" data-wow-delay="0.25s">
+                    <p>©2025 TeamTime - Registro Presenze App - MAURIZIO POLVERINI PLVMRZ89P09H501L -
+                        help.teamtime@gmail.com - VIA DEL TRULLO 454, ROMA
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Scripts -->
+    <script src="/static/vendor_index/jquery/jquery.min.js"></script>
+    <script src="/static/vendor_index/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/assets_index/js/owl-carousel.js"></script>
+    <script src="/static/assets_index/js/animation.js"></script>
+    <script src="/static/assets_index/js/imagesloaded.js"></script>
+    <script src="/static/assets_index/js/templatemo-custom.js"></script>
+    <script>
+        function handleFormRedirect(event) {
+            event.preventDefault(); // Evita il submit tradizionale
+            const azienda = document.querySelector('#search input[name="address"]').value;
+
+            // Popola il campo "Nome Azienda" nel form di contatto
+            const nomeAziendaInput = document.querySelector('#contact input[name="name"]');
+            if (nomeAziendaInput) {
+                nomeAziendaInput.value = azienda;
+            }
+
+            // Scrolla fino al form di contatto
+            const contactSection = document.querySelector('#contact');
+            if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+<script>
+    function updateCountdown() {
+        const now = new Date();
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        const diff = endOfMonth - now;
+
+        const countdownElement = document.getElementById("countdown");
+        const countdownText = document.getElementById("countdown-text");
+
+        if (diff <= 0) {
+            countdownText.innerHTML = "<strong>L'offerta -50% è terminata! Ma torna il prossimo mese 🎉</strong>";
+            return;
+        }
+
+        const days = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+        const hours = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+        const minutes = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+        const seconds = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+
+        countdownElement.textContent = `${days} giorni ${hours}:${minutes}:${seconds}`;
+
+        // Cambia colore se meno di 1 giorno
+        if (diff < 1000 * 60 * 60 * 24) {
+            countdownElement.style.color = "#ffcccc";
+        } else {
+            countdownElement.style.color = "#ffffff";
+        }
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>
+
+
+</body>
+
+</html>

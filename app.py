@@ -25,6 +25,10 @@ mail = Mail(app)
 def home():
     return render_template('index.html')
 
+@app.route('/piani')
+def piani():
+    return render_template('piani.html')
+
 @app.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
