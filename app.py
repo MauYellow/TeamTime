@@ -25,6 +25,14 @@ mail = Mail(app)
 def home():
     return render_template('index.html')
 
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('static', 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('static', 'sitemap.xml')
+
 @app.route('/piani')
 def piani():
     return render_template('piani.html')
