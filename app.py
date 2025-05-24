@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 from datetime import datetime
 from collections import Counter, defaultdict
 from babel.dates import format_date
-format_date(date_obj, locale='it')
 load_dotenv()
 
 locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8') #Non supportato da Koyeb
