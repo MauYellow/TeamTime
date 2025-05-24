@@ -9,9 +9,11 @@ from pyairtable.formulas import match
 from dotenv import load_dotenv
 from datetime import datetime
 from collections import Counter, defaultdict
+from babel.dates import format_date
+format_date(date_obj, locale='it')
 load_dotenv()
 
-locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8')
+locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8') #Non supportato da Koyeb
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -135,7 +137,7 @@ def login():
         # Logica di autenticazione
         if email == data['fields']['Mail'] and password == user_password:
             session['data'] = data['fields']
-            return redirect(url_for('dashboard'))  # oppure una pagina diversa
+            return redirect(url_for('dashboard')) 
         else:
             return "Credenziali non valide", 401
 
@@ -147,7 +149,7 @@ def dashboard():
     data = session.get("data")
     #print(f"Data da Login: {data}")
     oggi = datetime.now().strftime('%Y-%m-%d')
-    mese_corrente = datetime.now().strftime('%B').lower()
+    mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
     if not data:
         return redirect(url_for('login'))
     
