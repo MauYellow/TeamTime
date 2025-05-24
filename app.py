@@ -1,5 +1,5 @@
 import stripe
-import locale
+#import locale
 import os
 from flask import Flask, render_template, redirect, url_for, request, jsonify, send_from_directory, session
 from flask_mail import Mail, Message
@@ -12,7 +12,7 @@ from collections import Counter, defaultdict
 from babel.dates import format_date
 load_dotenv()
 
-locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8') #Non supportato da Koyeb
+# locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8') #Non supportato da Koyeb
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
