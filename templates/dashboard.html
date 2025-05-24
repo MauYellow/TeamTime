@@ -23,7 +23,12 @@
       </title>
       <meta content="" name="description" />
       <!-- Favicon -->
-      <link href="/static/img/favicon/favicon.ico" rel="icon" type="image/x-icon" />
+      <!-- FAVICON -->
+      <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png" />
+      <link rel="icon" type="image/svg+xml" href="/static/img/favicon/favicon.svg" />
+      <link rel="shortcut icon" href="/static/img/favicon/favicon.ico" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-touch-icon.png" />
+      <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
       <!-- Fonts -->
       <link href="https://fonts.googleapis.com" rel="preconnect" />
       <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
@@ -114,7 +119,7 @@
      <ul class="menu-inner py-1">
       <!-- Dashboard -->
       <li class="menu-item active">
-       <a class="menu-link" href="index.html">
+       <a class="menu-link" href="/">
         <i class="menu-icon tf-icons bx bx-home-circle">
         </i>
         <div data-i18n="Analytics">
@@ -122,6 +127,14 @@
         </div>
        </a>
       </li>
+      <li class="menu-item active">
+            <a class="menu-link" href="/">
+                  <i class="menu-icon tf-icons bx bx-home-circle">
+                  </i>
+                  <div data-i18n="Referal">
+                        Invita un Amico
+                  </div>
+            </a></li>
 
       <li class="menu-header small text-uppercase">
        <span class="menu-header-text">
@@ -192,6 +205,15 @@
         </li>
        </ul>
       </li>
+      <li class="menu-item">
+            <a class="menu-link" href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                  target="_blank">
+                  <i class="menu-icon tf-icons bx bx-support">
+                  </i>
+                  <div data-i18n="Support">
+                        Support
+                  </div>
+            </a></li>
 
 
       <!-- Misc -->
@@ -205,7 +227,7 @@
         <i class="menu-icon tf-icons bx bx-support">
         </i>
         <div data-i18n="Support">
-         Support
+         Impostazioni
         </div>
        </a>
       </li>
@@ -214,7 +236,7 @@
         <i class="menu-icon tf-icons bx bx-file">
         </i>
         <div data-i18n="Documentation">
-         Documentation
+         Monetizza
         </div>
        </a>
       </li>
@@ -232,15 +254,7 @@
        </a>
       </div>
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-       <!-- Search -->
-       <div class="navbar-nav align-items-center">
-        <div class="nav-item d-flex align-items-center">
-         <i class="bx bx-search fs-4 lh-0">
-         </i>
-         <input aria-label="Search..." class="form-control border-0 shadow-none" placeholder="Search..." type="text"/>
-        </div>
-       </div>
-       <!-- /Search -->
+
        <ul class="navbar-nav flex-row align-items-center ms-auto">
         <!-- Place this tag where you want the button to render. -->
         <li class="nav-item lh-1 me-3">
@@ -327,7 +341,7 @@
            <div class="col-sm-7">
             <div class="card-body">
              <h5 class="card-title text-primary">
-              Congratulations John! 🎉
+              Benvenuto/a {{ data.Nome }}! 🎉
              </h5>
              <p class="mb-4">
               You have done
@@ -338,8 +352,10 @@
                             your profile.
              </p>
              <a class="btn btn-sm btn-outline-primary" href="javascript:;">
-              View Badges
+              Lascia Recensione su Apple
              </a>
+            <a class="btn btn-sm btn-outline-primary" href="javascript:;">
+                  Lascia Recensione su Android</a>
             </div>
            </div>
            <div class="col-sm-5 text-center text-sm-left">
@@ -352,78 +368,38 @@
         </div>
         <div class="col-lg-4 col-md-4 order-1">
          <div class="row">
-          <div class="col-lg-6 col-md-12 col-6 mb-4">
-           <div class="card">
-            <div class="card-body">
-             <div class="card-title d-flex align-items-start justify-content-between">
-              <div class="avatar flex-shrink-0">
-               <img alt="chart success" class="rounded" src="/static/img/icons/unicons/chart-success.png"/>
-              </div>
-              <div class="dropdown">
-               <button aria-expanded="false" aria-haspopup="true" class="btn p-0" data-bs-toggle="dropdown" id="cardOpt3" type="button">
-                <i class="bx bx-dots-vertical-rounded">
-                </i>
-               </button>
-               <div aria-labelledby="cardOpt3" class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="javascript:void(0);">
-                 View More
-                </a>
-                <a class="dropdown-item" href="javascript:void(0);">
-                 Delete
-                </a>
-               </div>
-              </div>
-             </div>
-             <span class="fw-semibold d-block mb-1">
-              Profit
-             </span>
-             <h3 class="card-title mb-2">
-              $12,628
-             </h3>
-             <small class="text-success fw-semibold">
-              <i class="bx bx-up-arrow-alt">
-              </i>
-              +72.80%
-             </small>
+            <div class="col-lg-12 col-md-12 col-6 mb-4">
+                  <div class="card h-100">
+                        <div class="card-body">
+                              <div class="card-title d-flex align-items-start justify-content-between">
+                                    <div class="avatar flex-shrink-0">
+                                          <img src="/static/img/icons/unicons/chart-success.png" alt="chart success"
+                                                class="rounded" />
+                                    </div>
+                                    <div class="dropdown">
+                                          <button type="button" class="btn p-0" id="cardOpt3" data-bs-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                          </button>
+                                          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                                                <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                                                <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                                          </div>
+                                    </div>
+                              </div>
+            
+                              <span class="fw-semibold d-block mb-1">Stato del Servizio</span>
+                              <span class="badge bg-success">Attivo</span>
+            
+                              <small class="text-success fw-semibold d-block mt-2">
+                                    <i class="bx bx-up-arrow-alt"></i>
+                                    {{ len_mese_records }} Ingressi Questo Mese
+                              </small>
+                        </div>
+                  </div>
             </div>
-           </div>
-          </div>
-          <div class="col-lg-6 col-md-12 col-6 mb-4">
-           <div class="card">
-            <div class="card-body">
-             <div class="card-title d-flex align-items-start justify-content-between">
-              <div class="avatar flex-shrink-0">
-               <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/wallet-info.png"/>
-              </div>
-              <div class="dropdown">
-               <button aria-expanded="false" aria-haspopup="true" class="btn p-0" data-bs-toggle="dropdown" id="cardOpt6" type="button">
-                <i class="bx bx-dots-vertical-rounded">
-                </i>
-               </button>
-               <div aria-labelledby="cardOpt6" class="dropdown-menu dropdown-menu-end">
-                <a class="dropdown-item" href="javascript:void(0);">
-                 View More
-                </a>
-                <a class="dropdown-item" href="javascript:void(0);">
-                 Delete
-                </a>
-               </div>
-              </div>
-             </div>
-             <span>
-              Sales
-             </span>
-             <h3 class="card-title text-nowrap mb-1">
-              $4,679
-             </h3>
-             <small class="text-success fw-semibold">
-              <i class="bx bx-up-arrow-alt">
-              </i>
-              +28.42%
-             </small>
-            </div>
-           </div>
-          </div>
+                
+                
          </div>
         </div>
         <!-- Total Revenue -->
@@ -432,7 +408,7 @@
           <div class="row row-bordered g-0">
            <div class="col-md-8">
             <h5 class="card-header m-0 me-2 pb-3">
-             Total Revenue
+             Totale Ingressi Di Oggi
             </h5>
             <div class="px-2" id="totalRevenueChart">
             </div>
@@ -461,38 +437,40 @@
             <div id="growthChart">
             </div>
             <div class="text-center fw-semibold pt-3 mb-2">
-             62% Company Growth
+                  Numero Entrate: {{ len_records }}
+                  </div>
+            <div class="text-center fw-semibold pt-3 mb-2">
+             Capienza Massima: {{ data['Max Rows'] }}
             </div>
             <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
              <div class="d-flex">
               <div class="me-2">
                <span class="badge bg-label-primary p-2">
-                <i class="bx bx-dollar text-primary">
-                </i>
+                  <i class='bx bx-user'></i>
                </span>
               </div>
               <div class="d-flex flex-column">
                <small>
-                2022
+                Entrate Oggi
                </small>
                <h6 class="mb-0">
-                $32.5k
+                {{ len_oggi_records }}
                </h6>
               </div>
              </div>
              <div class="d-flex">
               <div class="me-2">
                <span class="badge bg-label-info p-2">
-                <i class="bx bx-wallet text-info">
+                <i class="bx bx-door-open">
                 </i>
                </span>
               </div>
               <div class="d-flex flex-column">
                <small>
-                2021
+                A Lavoro
                </small>
                <h6 class="mb-0">
-                $41.2k
+                {{ counter_al_lavoro }}
                </h6>
               </div>
              </div>
@@ -509,7 +487,7 @@
             <div class="card-body">
              <div class="card-title d-flex align-items-start justify-content-between">
               <div class="avatar flex-shrink-0">
-            <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/paypal.png" />
+            <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/today.png" />
 
               </div>
               <div class="dropdown">
@@ -528,15 +506,13 @@
               </div>
              </div>
              <span class="d-block mb-1">
-              Payments
+              Oggi
              </span>
              <h3 class="card-title text-nowrap mb-2">
-              $2,456
+              {{ counter_ore_lavorate_oggi }}
              </h3>
-             <small class="text-danger fw-semibold">
-              <i class="bx bx-down-arrow-alt">
-              </i>
-              -14.82%
+             <small class="d-block mb-1">
+              Ore Lavorate
              </small>
             </div>
            </div>
@@ -546,7 +522,7 @@
             <div class="card-body">
              <div class="card-title d-flex align-items-start justify-content-between">
               <div class="avatar flex-shrink-0">
-               <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/cc-primary.png"/>
+               <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/month.png"/>
               </div>
               <div class="dropdown">
                <button aria-expanded="false" aria-haspopup="true" class="btn p-0" data-bs-toggle="dropdown" id="cardOpt1" type="button">
@@ -563,52 +539,90 @@
                </div>
               </div>
              </div>
-             <span class="fw-semibold d-block mb-1">
-              Transactions
-             </span>
+            <span class="d-block mb-1">
+                  Questo Mese
+            </span>
              <h3 class="card-title mb-2">
-              $14,857
+              {{ counter_ore_lavorate_mese }}
              </h3>
-             <small class="text-success fw-semibold">
-              <i class="bx bx-up-arrow-alt">
-              </i>
-              +28.14%
+             <small class="d-block mb-1">
+              Ore Lavorate
              </small>
             </div>
            </div>
           </div>
           <!-- </div>
     <div class="row"> -->
-          <div class="col-12 mb-4">
-           <div class="card">
-            <div class="card-body">
-             <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
-              <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-               <div class="card-title">
-                <h5 class="text-nowrap mb-2">
-                 Profile Report
-                </h5>
-                <span class="badge bg-label-warning rounded-pill">
-                 Year 2021
-                </span>
+      <div class="col-6 mb-4">
+            <div class="card">
+             <div class="card-body">
+              <div class="card-title d-flex align-items-start justify-content-between">
+               <div class="avatar flex-shrink-0">
+                <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/today.png"/>
                </div>
-               <div class="mt-sm-auto">
-                <small class="text-success text-nowrap fw-semibold">
-                 <i class="bx bx-chevron-up">
+               <div class="dropdown">
+                <button aria-expanded="false" aria-haspopup="true" class="btn p-0" data-bs-toggle="dropdown" id="cardOpt1" type="button">
+                 <i class="bx bx-dots-vertical-rounded">
                  </i>
-                 68.2%
-                </small>
-                <h3 class="mb-0">
-                 $84,686k
-                </h3>
+                </button>
+                <div aria-labelledby="cardOpt1" class="dropdown-menu">
+                 <a class="dropdown-item" href="javascript:void(0);">
+                  View More
+                 </a>
+                 <a class="dropdown-item" href="javascript:void(0);">
+                  Delete
+                 </a>
+                </div>
                </div>
               </div>
-              <div id="profileReportChart">
-              </div>
+             <span class="d-block mb-1">
+              Media di Oggi
+             </span>
+              <h3 class="card-title mb-2">
+                  {{ "%.2f"|format((counter_ore_lavorate_oggi / len_oggi_records)
+                  if counter_ore_lavorate_oggi and len_oggi_records and len_oggi_records != 0     else 0) }}
+              </h3>
+              <small class="d-block mb-1">
+               Ore Lavorate
+              </small>
              </div>
             </div>
            </div>
-          </div>
+      <div class="col-6 mb-4">
+            <div class="card">
+                  <div class="card-body">
+                        <div class="card-title d-flex align-items-start justify-content-between">
+                              <div class="avatar flex-shrink-0">
+                                    <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/month.png" />
+                              </div>
+                              <div class="dropdown">
+                                    <button aria-expanded="false" aria-haspopup="true" class="btn p-0"
+                                          data-bs-toggle="dropdown" id="cardOpt1" type="button">
+                                          <i class="bx bx-dots-vertical-rounded">
+                                          </i>
+                                    </button>
+                                    <div aria-labelledby="cardOpt1" class="dropdown-menu">
+                                          <a class="dropdown-item" href="javascript:void(0);">
+                                                View More
+                                          </a>
+                                          <a class="dropdown-item" href="javascript:void(0);">
+                                                Delete
+                                          </a>
+                                    </div>
+                              </div>
+                        </div>
+                        <span class="d-block mb-1">
+                              Media Mensile
+                        </span>
+                        <h3 class="card-title mb-2">
+                              {{ media_ore_mese }}
+                        </h3>
+                        <small class="d-block mb-1">
+                              Ore Lavorate
+                        </small>
+                  </div>
+            </div>
+      </div>
          </div>
         </div>
        </div>
@@ -619,10 +633,10 @@
           <div class="card-header d-flex align-items-center justify-content-between pb-0">
            <div class="card-title mb-0">
             <h5 class="m-0 me-2">
-             Order Statistics
+             Registrazioni GPS Mensile
             </h5>
             <small class="text-muted">
-             42.82k Total Sales
+             In ottemperanza delle norme di privacy vigenti
             </small>
            </div>
            <div class="dropdown">
@@ -647,16 +661,39 @@
            <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="d-flex flex-column align-items-center gap-1">
              <h2 class="mb-2">
-              8,258
+              {{ len_mese_records }}
              </h2>
              <span>
-              Total Orders
+              Totale Registrazioni
              </span>
             </div>
             <div id="orderStatisticsChart">
             </div>
            </div>
            <ul class="p-0 m-0">
+            <li class="d-flex mb-4 pb-1">
+             <div class="avatar flex-shrink-0 me-3">
+              <span class="avatar-initial rounded bg-label-danger">
+               <i class="bx bx-mobile-alt">
+               </i>
+              </span>
+             </div>
+             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+              <div class="me-2">
+               <h6 class="mb-0">
+                {{ GPS_labels.0 }}
+               </h6>
+               <small class="text-muted">
+                  {{ GPS_labels.0 }}
+               </small>
+              </div>
+              <div class="user-progress">
+               <small class="fw-semibold">
+                  {{ GPS_series.0 }}
+               </small>
+              </div>
+             </div>
+            </li>
             <li class="d-flex mb-4 pb-1">
              <div class="avatar flex-shrink-0 me-3">
               <span class="avatar-initial rounded bg-label-primary">
@@ -667,61 +704,38 @@
              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
               <div class="me-2">
                <h6 class="mb-0">
-                Electronic
+                  {{ GPS_labels.1 }}
                </h6>
                <small class="text-muted">
-                Mobile, Earbuds, TV
+                  {{ GPS_labels.1 }}
                </small>
               </div>
               <div class="user-progress">
                <small class="fw-semibold">
-                82.5k
+                  {{ GPS_series.1 }}
                </small>
               </div>
              </div>
             </li>
             <li class="d-flex mb-4 pb-1">
              <div class="avatar flex-shrink-0 me-3">
-              <span class="avatar-initial rounded bg-label-success">
-               <i class="bx bx-closet">
+              <span class="avatar-initial rounded bg-label-warning">
+               <i class="bx bx-mobile-alt">
                </i>
               </span>
              </div>
              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
               <div class="me-2">
                <h6 class="mb-0">
-                Fashion
+                  {{ GPS_labels.2 }}
                </h6>
                <small class="text-muted">
-                T-shirt, Jeans, Shoes
+                  {{ GPS_labels.2 }}
                </small>
               </div>
               <div class="user-progress">
                <small class="fw-semibold">
-                23.8k
-               </small>
-              </div>
-             </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <span class="avatar-initial rounded bg-label-info">
-               <i class="bx bx-home-alt">
-               </i>
-              </span>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <h6 class="mb-0">
-                Decor
-               </h6>
-               <small class="text-muted">
-                Fine Art, Dining
-               </small>
-              </div>
-              <div class="user-progress">
-               <small class="fw-semibold">
-                849k
+                  {{ GPS_series.2 }}
                </small>
               </div>
              </div>
@@ -729,22 +743,22 @@
             <li class="d-flex">
              <div class="avatar flex-shrink-0 me-3">
               <span class="avatar-initial rounded bg-label-secondary">
-               <i class="bx bx-football">
+               <i class="bx bx-mobile-alt">
                </i>
               </span>
              </div>
              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
               <div class="me-2">
                <h6 class="mb-0">
-                Sports
+                Altro
                </h6>
                <small class="text-muted">
-                Football, Cricket Kit
+                Altro
                </small>
               </div>
               <div class="user-progress">
                <small class="fw-semibold">
-                99
+                -
                </small>
               </div>
              </div>
@@ -826,7 +840,7 @@
          <div class="card h-100">
           <div class="card-header d-flex align-items-center justify-content-between">
            <h5 class="card-title m-0 me-2">
-            Transactions
+            Ultime Attività
            </h5>
            <div class="dropdown">
             <button aria-expanded="false" aria-haspopup="true" class="btn p-0" data-bs-toggle="dropdown" id="transactionID" type="button">
@@ -850,141 +864,141 @@
            <ul class="p-0 m-0">
             <li class="d-flex mb-4 pb-1">
              <div class="avatar flex-shrink-0 me-3">
-              <img alt="User" class="rounded" src="/static/img/icons/unicons/paypal.png"/>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <small class="text-muted d-block mb-1">
-                Paypal
-               </small>
-               <h6 class="mb-0">
-                Send money
-               </h6>
-              </div>
-              <div class="user-progress d-flex align-items-center gap-1">
-               <h6 class="mb-0">
-                +82.6
-               </h6>
-               <span class="text-muted">
-                USD
-               </span>
-              </div>
-             </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <img alt="User" class="rounded" src="/static/img/icons/unicons/wallet.png"/>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <small class="text-muted d-block mb-1">
-                Wallet
-               </small>
-               <h6 class="mb-0">
-                Mac'D
-               </h6>
-              </div>
-              <div class="user-progress d-flex align-items-center gap-1">
-               <h6 class="mb-0">
-                +270.69
-               </h6>
-               <span class="text-muted">
-                USD
-               </span>
-              </div>
-             </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
               <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png"/>
              </div>
              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
               <div class="me-2">
                <small class="text-muted d-block mb-1">
-                Transfer
+                {{ ultimi6_records.0.fields.Created | default("-") }}
                </small>
                <h6 class="mb-0">
-                Refund
+                  {{ ultimi6_records.0.fields.Nome | default("-") }}
                </h6>
               </div>
               <div class="user-progress d-flex align-items-center gap-1">
                <h6 class="mb-0">
-                +637.91
+                  {{ ultimi6_records.0.fields.Entrata | default("-") }}
                </h6>
                <span class="text-muted">
-                USD
+                  {{ ultimi6_records.0.fields.Uscita | default("-") }}
                </span>
               </div>
              </div>
             </li>
             <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <img alt="User" class="rounded" src="/static/img/icons/unicons/cc-success.png"/>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <small class="text-muted d-block mb-1">
-                Credit Card
-               </small>
-               <h6 class="mb-0">
-                Ordered Food
-               </h6>
-              </div>
-              <div class="user-progress d-flex align-items-center gap-1">
-               <h6 class="mb-0">
-                -838.71
-               </h6>
-               <span class="text-muted">
-                USD
-               </span>
-              </div>
-             </div>
+                  <div class="avatar flex-shrink-0 me-3">
+                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
+                  </div>
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="me-2">
+                              <small class="text-muted d-block mb-1">
+                                    {{ ultimi6_records.1.fields.Created | default("-") }}
+                              </small>
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.1.fields.Nome | default("-") }}
+                              </h6>
+                        </div>
+                        <div class="user-progress d-flex align-items-center gap-1">
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.1.fields.Entrata | default("-") }}
+                              </h6>
+                              <span class="text-muted">
+                                    {{ ultimi6_records.1.fields.Uscita | default("-") }}
+                              </span>
+                        </div>
+                  </div>
             </li>
             <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <img alt="User" class="rounded" src="/static/img/icons/unicons/wallet.png"/>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <small class="text-muted d-block mb-1">
-                Wallet
-               </small>
-               <h6 class="mb-0">
-                Starbucks
-               </h6>
-              </div>
-              <div class="user-progress d-flex align-items-center gap-1">
-               <h6 class="mb-0">
-                +203.33
-               </h6>
-               <span class="text-muted">
-                USD
-               </span>
-              </div>
-             </div>
+                  <div class="avatar flex-shrink-0 me-3">
+                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
+                  </div>
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="me-2">
+                              <small class="text-muted d-block mb-1">
+                                    {{ ultimi6_records.2.fields.Created | default("-") }}
+                              </small>
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.2.fields.Nome | default("-") }}
+                              </h6>
+                        </div>
+                        <div class="user-progress d-flex align-items-center gap-1">
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.2.fields.Entrata | default("-") }}
+                              </h6>
+                              <span class="text-muted">
+                                    {{ ultimi6_records.2.fields.Uscita | default("-") }}
+                              </span>
+                        </div>
+                  </div>
             </li>
-            <li class="d-flex">
-             <div class="avatar flex-shrink-0 me-3">
-              <img alt="User" class="rounded" src="/static/img/icons/unicons/cc-warning.png"/>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <small class="text-muted d-block mb-1">
-                Mastercard
-               </small>
-               <h6 class="mb-0">
-                Ordered Food
-               </h6>
-              </div>
-              <div class="user-progress d-flex align-items-center gap-1">
-               <h6 class="mb-0">
-                -92.45
-               </h6>
-               <span class="text-muted">
-                USD
-               </span>
-              </div>
-             </div>
+            <li class="d-flex mb-4 pb-1">
+                  <div class="avatar flex-shrink-0 me-3">
+                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
+                  </div>
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="me-2">
+                              <small class="text-muted d-block mb-1">
+                                    {{ ultimi6_records.3.fields.Created | default("-") }}
+                              </small>
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.3.fields.Nome | default("-") }}
+                              </h6>
+                        </div>
+                        <div class="user-progress d-flex align-items-center gap-1">
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.3.fields.Entrata | default("-") }}
+                              </h6>
+                              <span class="text-muted">
+                                    {{ ultimi6_records.3.fields.Uscita | default("-") }}
+                              </span>
+                        </div>
+                  </div>
+            </li>
+            <li class="d-flex mb-4 pb-1">
+                  <div class="avatar flex-shrink-0 me-3">
+                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
+                  </div>
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="me-2">
+                              <small class="text-muted d-block mb-1">
+                                    {{ ultimi6_records.4.fields.Created | default("-") }}
+                              </small>
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.4.fields.Nome | default("-") }}
+                              </h6>
+                        </div>
+                        <div class="user-progress d-flex align-items-center gap-1">
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.4.fields.Entrata | default("-") }}
+                              </h6>
+                              <span class="text-muted">
+                                    {{ ultimi6_records.4.fields.Uscita | default("-") }}
+                              </span>
+                        </div>
+                  </div>
+            </li>
+            <li class="d-flex mb-4 pb-1">
+                  <div class="avatar flex-shrink-0 me-3">
+                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
+                  </div>
+                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                        <div class="me-2">
+                              <small class="text-muted d-block mb-1">
+                                    {{ ultimi6_records.5.fields.Created | default("-") }}
+                              </small>
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.5.fields.Nome | default("-") }}
+                              </h6>
+                        </div>
+                        <div class="user-progress d-flex align-items-center gap-1">
+                              <h6 class="mb-0">
+                                    {{ ultimi6_records.5.fields.Entrata | default("-") }}
+                              </h6>
+                              <span class="text-muted">
+                                    {{ ultimi6_records.5.fields.Uscita | default("-") }}
+                              </span>
+                        </div>
+                  </div>
             </li>
            </ul>
           </div>
@@ -1038,7 +1052,7 @@
   <!-- / Layout wrapper -->
   <div class="buy-now">
    <a class="btn btn-danger btn-buy-now" href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/" target="_blank">
-    Piani Disponibili
+    Guadagna Invitando un Amico
    </a>
   </div>
 <!-- Core JS -->
@@ -1061,6 +1075,261 @@
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+            const categorieOrarie = {{ grafico_etichette_ore | tojson
+      }};
+      const datiIngressi = {{ grafico_valori | tojson }};
+
+      console.log("Categorie:", categorieOrarie);
+      console.log("Ingressi:", datiIngressi);
+
+      const totalRevenueChartEl = document.querySelector('#totalRevenueChart');
+
+      if (totalRevenueChartEl) {
+            const totalRevenueChartOptions = {
+                  series: [{
+                        name: 'Ingressi',
+                        data: datiIngressi
+                  }],
+                  chart: {
+                        height: 300,
+                        stacked: true,
+                        type: 'bar',
+                        toolbar: { show: false }
+                  },
+                  plotOptions: {
+                        bar: {
+                              horizontal: false,
+                              columnWidth: '33%',
+                              borderRadius: 12,
+                              startingShape: 'rounded',
+                              endingShape: 'rounded'
+                        }
+                  },
+                  colors: ['#696CFF'],  // oppure usa config.colors.primary se lo hai definito
+                  dataLabels: {
+                        enabled: false
+                  },
+                  legend: {
+                        show: true,
+                        horizontalAlign: 'left',
+                        position: 'top',
+                        markers: {
+                              height: 8,
+                              width: 8,
+                              radius: 12,
+                              offsetX: -3
+                        },
+                        labels: {
+                              colors: '#888'
+                        },
+                        itemMargin: {
+                              horizontal: 10
+                        }
+                  },
+                  grid: {
+                        borderColor: '#e0e0e0',
+                        padding: {
+                              top: 0,
+                              bottom: -8,
+                              left: 20,
+                              right: 20
+                        }
+                  },
+                  xaxis: {
+                        categories: categorieOrarie,
+                        labels: {
+                              style: {
+                                    fontSize: '13px',
+                                    colors: '#888'
+                              }
+                        },
+                        axisTicks: {
+                              show: false
+                        },
+                        axisBorder: {
+                              show: false
+                        }
+                  },
+                  yaxis: {
+                        labels: {
+                              style: {
+                                    fontSize: '13px',
+                                    colors: '#888'
+                              }
+                        }
+                  },
+                  states: {
+                        hover: {
+                              filter: { type: 'none' }
+                        },
+                        active: {
+                              filter: { type: 'none' }
+                        }
+                  }
+            };
+
+            const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
+            totalRevenueChart.render();
+      }
+      });
+</script>
+
+<!-- Capienza Database -->
+<script>
+      const growthChartOptions = {
+            series: [ {{ percentage }} ],
+            labels: ['Database'],
+            chart: {
+                  height: 240,
+                  type: 'radialBar'
+            },
+            plotOptions: {
+                  radialBar: {
+                        size: 150,
+                        offsetY: 10,
+                        startAngle: -150,
+                        endAngle: 150,
+                        hollow: {
+                              size: '55%'
+                        },
+                        track: {
+                              background: '#f3f3f3',
+                              strokeWidth: '100%'
+                        },
+                        dataLabels: {
+                              name: {
+                                    offsetY: 15,
+                                    color: '#333',
+                                    fontSize: '15px',
+                                    fontWeight: '600',
+                                    fontFamily: 'Public Sans'
+                              },
+                              value: {
+                                    offsetY: -25,
+                                    color: '#333',
+                                    fontSize: '22px',
+                                    fontWeight: '500',
+                                    fontFamily: 'Public Sans',
+                                    formatter: function (val) {
+                                          return val + '%';
+                }
+              }
+            }
+          }
+        },
+      colors: ['#7367F0'],  // esempio colore
+            fill: {
+            type: 'gradient',
+                  gradient: {
+                  shade: 'dark',
+                        shadeIntensity: 0.5,
+                              gradientToColors: ['#7367F0'],
+                                    inverseColors: true,
+                                          opacityFrom: 1,
+                                                opacityTo: 0.6,
+                                                      stops: [30, 70, 100]
+            }
+      },
+      stroke: {
+            dashArray: 5
+      },
+      grid: {
+            padding: {
+                  top: -35,
+                        bottom: -10
+            }
+      },
+      states: {
+            hover: { filter: { type: 'none' } },
+            active: { filter: { type: 'none' } }
+      }
+      };
+
+      const growthChart = new ApexCharts(document.querySelector("#growthChart"), growthChartOptions);
+      growthChart.render();
+</script>
+
+<!-- GPS Locations -->
+<script>
+      document.addEventListener("DOMContentLoaded", function () {
+      const chartOrderStatistics = document.querySelector('#orderStatisticsChart');
+
+      const orderChartConfig = {
+            chart: {
+                  height: 165,
+                  width: 130,
+                  type: 'donut'
+            },
+            labels: {{ GPS_labels | tojson }},
+      series: {{ GPS_series | tojson }},
+      colors: ['#FF4C4C', '#4C8EFF', '#FFD644', '#28C76F'],
+            stroke: {
+            width: 0.3,
+                  colors: ['#000000', '#000000', '#000000', '#000000']
+      },
+      dataLabels: {
+            enabled: false,
+                  formatter: function (val) {
+                        return parseInt(val) + '%';
+                  }
+      },
+      legend: { show: false },
+      grid: {
+            padding: {
+                  top: 0,
+                        bottom: 0,
+                              right: 15
+            }
+      },
+      plotOptions: {
+            pie: {
+                  donut: {
+                        size: '75%',
+                              labels: {
+                              show: true,
+                                    value: {
+                                    fontSize: '1.5rem',
+                                          fontFamily: 'Public Sans',
+                                                color: '#333',
+                                                      offsetY: -15,
+                                                            formatter: function (val) {
+                                                                  return parseInt(val) + '%';
+                                                            }
+                              },
+                              name: {
+                                    offsetY: 20,
+                                          fontFamily: 'Public Sans'
+                              },
+                              total: {
+                                    show: true,
+                                          fontSize: '0.8125rem',
+                                                color: '#333',
+                                                      label: 'Totale',
+                                                            formatter: function (w) {
+                                                                  const total = w.globals.series.reduce((a, b) => a + b, 0);
+                                                                  return total + '';
+                                                            }
+                              }
+                        }
+                  }
+            }
+      }
+      };
+
+      if (chartOrderStatistics !== null) {
+            const statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
+            statisticsChart.render();
+      }
+});
+</script>
+    
+
+
 </body>
 
 </html>
