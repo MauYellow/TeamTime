@@ -139,6 +139,7 @@ def login():
         
         # Logica di autenticazione
         if email == data['fields']['Mail'] and password == user_password:
+            print(f"Data Fields {data['fields']}")
             session['data'] = data['fields']
             print(f"Session: {session['data']}")
             return redirect(url_for('dashboard')) 
