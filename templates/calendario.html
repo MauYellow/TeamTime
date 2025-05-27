@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" class="light-style layout-menu-fixed" data-theme="theme-default">
+
+<head>
+      <meta charset="UTF-8" />
+      <link href="https://fonts.googleapis.com" rel="preconnect" />
+      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+      <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap"
+            rel="stylesheet" />
+
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Calendario - TeamTime</title>
+      <link rel="icon" type="image/png" href="/static/img/favicon/favicon-96x96.png" />
+      <link rel="stylesheet" href="/static/vendor/fonts/boxicons.css" />
+      <link rel="stylesheet" href="/static/vendor/css/core.css" />
+      <link rel="stylesheet" href="/static/vendor/css/theme-default.css" />
+      <link rel="stylesheet" href="/static/css/demo.css" />
+      <script src="/static/vendor/js/helpers.js"></script>
+      <script src="/static/js/config.js"></script>
+      <style>
+            html,
+            body {
+                  height: 100%;
+                  margin: 0;
+            }
+
+            .layout-wrapper {
+                  min-height: 100vh;
+            }
+
+            .iframe-container {
+                  flex-grow: 1;
+                  display: flex;
+                  flex-direction: column;
+                  height: 100%;
+            }
+
+            iframe {
+                  flex: 1;
+                  width: 100%;
+                  border: none;
+            }
+
+            .content-wrapper {
+                  padding-top: 0 !important;
+                  height: calc(100vh - 64px);
+            }
+
+            .container-xxl {
+                  height: 100%;
+            }
+      </style>
+</head>
+
+<body>
+      <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                  <!-- Menu -->
+                  <aside class="layout-menu menu-vertical menu bg-menu-theme" id="layout-menu">
+                        <div class="app-brand demo">
+                              <a class="app-brand-link" href="/">
+                                    <span class="app-brand-logo demo">
+                                          <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}"
+                                                alt="TeamTime Logo" height="32">
+                                    </span>
+                                    <span class="app-brand-text demo menu-text fw-bolder ms-2">
+                                          TeamTime
+                                    </span>
+                              </a>
+                              <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" href="javascript:void(0);">
+                                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                              </a>
+                        </div>
+                  
+                        <div class="menu-inner-shadow">
+                        </div>
+                        <ul class="menu-inner py-1">
+                              <!-- Dashboard -->
+                              <li class="menu-item active">
+                                    <a class="menu-link" href="{{ url_for('dashboard') }}">
+                                          <i class="menu-icon tf-icons bx bx-home-circle">
+                                          </i>
+                                          <div data-i18n="Analytics">
+                                                Dashboard
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-header small text-uppercase">
+                                    <span class="menu-header-text">
+                                          Dipendenti
+                                    </span>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="{{ url_for('calendario') }}">
+                                          <i class="menu-icon tf-icons bx bx-calendar"></i>
+                                          <div data-i18n="Authentications">
+                                                Calendario
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="{{ url_for('staff') }}">
+                                          <i class="menu-icon tf-icons bx bx-group"></i>
+                                          <div data-i18n="Support">
+                                                Staff
+                                          </div>
+                                    </a>
+                              </li>
+                  
+                  
+                              <!-- Documenti -->
+                              <li class="menu-header small text-uppercase">
+                                    <span class="menu-header-text">
+                                          Documenti
+                                    </span>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link menu-toggle" href="javascript:void(0);">
+                                          <i class="menu-icon tf-icons bx bx-euro">
+                                          </i>
+                                          <div data-i18n="Account Settings">
+                                                Piani
+                                          </div>
+                                    </a>
+                                    <ul class="menu-sub">
+                                          <li class="menu-item">
+                                                <a class="menu-link" href="piani" target="_blank">
+                                                      <div data-i18n="Account">
+                                                            Piano Start
+                                                      </div>
+                                                </a>
+                                          </li>
+                                          <li class="menu-item">
+                                                <a class="menu-link" href="piani" target="_blank">
+                                                      <div data-i18n="Notifications">
+                                                            Piano Teams
+                                                      </div>
+                                                </a>
+                                          </li>
+                                          <li class="menu-item">
+                                                <a class="menu-link" href="piani" target="_blank">
+                                                      <div data-i18n="Connections">
+                                                            Piano Business
+                                                      </div>
+                                                </a>
+                                          </li>
+                                    </ul>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="/report">
+                                          <i class="menu-icon tf-icons bx bx-file">
+                                          </i>
+                                          <div data-i18n="Support">
+                                                Report
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-header small text-uppercase">
+                                    <span class="menu-header-text">
+                                          Profilo
+                                    </span>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="{{ url_for('logout') }}">
+                                          <i class="menu-icon tf-icons bx bx-log-out"></i>
+                                          </i>
+                                          <div data-i18n="Documentation">
+                                                Log Out
+                                          </div>
+                                    </a>
+                              </li>
+                        </ul>
+                  </aside>
+                  <!-- / Menu -->
+
+                  <!-- Main content -->
+                  <div class="layout-page">
+                        <div class="content-wrapper">
+                              <div class="container-xxl flex-grow-1 container-p-y">
+                                    <div class="iframe-container">
+                                          <iframe
+                                                src="{{ full_url }}"
+                                                allowfullscreen></iframe>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <!-- /Main content -->
+                  <div class="buy-now">
+                        <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="blank">
+                              Assistenza
+                        </a>            </div>
+            </div>
+      </div>
+      <!-- Core JS -->
+      <script src="/static/vendor/libs/jquery/jquery.js"></script>
+      <script src="/static/vendor/libs/popper/popper.js"></script>
+      <script src="/static/vendor/js/bootstrap.js"></script>
+      <script src="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+      <script src="/static/vendor/js/menu.js"></script>
+      <script src="/static/js/main.js"></script>
+</body>
+
+</html>

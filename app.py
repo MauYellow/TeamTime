@@ -1,7 +1,6 @@
 import stripe
-#import locale
 import os
-from flask import Flask, render_template, redirect, url_for, request, jsonify, send_from_directory, session
+from flask import Flask, render_template, redirect, url_for, request, jsonify, send_from_directory, session, send_file
 from flask_mail import Mail, Message
 from config import STRIPE_SECRET_KEY, STRIPE_PRICE_ID, STRIPE_WEBHOOK_SECRET, MAIL_USERNAME, MAIL_PASSWORD
 from pyairtable import Table, Api
@@ -10,6 +9,10 @@ from dotenv import load_dotenv
 from datetime import datetime
 from collections import Counter, defaultdict
 from babel.dates import format_date
+import pandas as pd
+import io
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
 load_dotenv()
 
 # locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8') #Non supportato da Koyeb
@@ -146,7 +149,7 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     data = session.get("data")
-    #print(f"Data da Login: {data}")
+    print(f"Data da Login: {data}")
     oggi = datetime.now().strftime('%Y-%m-%d')
     mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
     if not data:
@@ -157,14 +160,14 @@ def dashboard():
 
     #records = table.all()
     records = table.all(sort=["-Created"])
-    #print(records)
+    #print(f"Records: {records}")
     len_records = len(records)
     oggi_records = [r for r in records if r["fields"].get("Created") == oggi]
     mese_records = [r for r in records if r["fields"].get("Mese Nome") == mese_corrente]
     len_oggi_records = len(oggi_records)
     len_mese_records = len(mese_records)
     ultimi6_records = records[:6]
-    print(ultimi6_records)
+    #print(ultimi6_records)
     #print(len_mese_records)
     #print(f"Record di Oggi: {oggi_records}")
     #print(f"Record trovati: {len(records)}")
@@ -219,10 +222,188 @@ def dashboard():
     top_3_locations = Counter(location_counter).most_common(3)
     GPS_labels = [item[0] for item in top_3_locations]
     GPS_series = [item[1] for item in top_3_locations]
-    print(GPS_labels)
+    #print(GPS_labels)
+    session['monitor_url'] = data.get('Monitor URL')
+    session['staff_url'] = data.get('Monitor Ore Mensili')
 
     return render_template("dashboard.html", data=data, GPS_labels=GPS_labels, GPS_series=GPS_series, ultimi6_records=ultimi6_records, media_ore_mese=media_ore_mese, mese_corrente=mese_corrente, counter_ore_lavorate_oggi=counter_ore_lavorate_oggi, counter_ore_lavorate_mese=counter_ore_lavorate_mese, counter_al_lavoro=counter_al_lavoro, percentage=percentage, len_records=len_records, len_mese_records=len_mese_records, len_oggi_records=len_oggi_records, records=records, oggi_records=oggi_records, grafico_etichette_ore=grafico_etichette_ore,
     grafico_valori=grafico_valori)
+
+@app.route('/calendario')
+def calendario():
+    data = session.get("data")
+    if not data:
+        return redirect(url_for('login'))
+    monitor_url = data.get('URL Monitor')
+    monitor_url = monitor_url.replace("https://airtable.com/", "https://airtable.com/embed/")
+    full_url = monitor_url + "?viewControls=on"
+    print(full_url)
+
+    return render_template('calendario.html', full_url=full_url)
+
+@app.route('/staff')
+def staff():
+    data = session.get("data")
+    print(data)
+    if not data:
+        return redirect(url_for('login'))
+    staff_url = data.get('Monitor Ore Mensili')
+    print(staff_url)
+    staff_url = staff_url.replace("https://airtable.com/", "https://airtable.com/embed/")
+    full_url = staff_url + "?viewControls=on"
+    print(full_url)
+
+    return render_template('staff.html', full_url=full_url)
+
+@app.route('/report', methods=['GET', 'POST'])
+def report():
+    data = session.get("data")
+    records = session.get("records") #**da togliere?
+
+    if not data:
+        return redirect(url_for('login'))
+    
+    TABLE_NAME = data['Locale']
+    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+
+    #records = table.all()
+    records = table.all(sort=["-Created"])
+    # Estrai tutti i mesi unici
+    mesi_disponibili = sorted(set(r['fields'].get("Mese Nome", "").lower() for r in records if "Mese Nome" in r['fields']))
+
+    if request.method == 'POST':
+        mese_selezionato = request.form.get("mese")
+        if not mese_selezionato:
+            return "Errore: mese non selezionato", 400
+
+        # Filtra i record per il mese selezionato
+        filtered = [r for r in records if r['fields'].get('Mese Nome', '').lower() == mese_selezionato.lower()]
+
+        # Organizza i dati: mappa → nome → giorno → ore
+        data_dict = {}
+        for r in filtered:
+            f = r['fields']
+            nome = f.get("Nome", "Sconosciuto")
+            giorno = str(f.get("Giorni"))
+            ore = f.get("Ore Lavorate", 0)
+            if isinstance(ore, dict):  # Gestione di {'specialValue': 'NaN'}
+                ore = 0
+            
+            if nome not in data_dict:
+              data_dict[nome] = {}
+            if giorno not in data_dict[nome]:
+              data_dict[nome][giorno] = 0
+            data_dict[nome][giorno] += round(ore, 2)
+
+
+        # Crea intestazione colonne: 1...31 + mese + anno
+        giorni_colonne = [str(i) for i in range(1, 32)]
+        header = giorni_colonne + ['Totale', 'Mese', 'Anno']
+
+        # Costruzione righe
+        rows = []
+        for nome, giorni in data_dict.items():
+            giornaliere = [giorni.get(day, 0) for day in giorni_colonne]
+            totale = round(sum(giornaliere), 2)
+            mese = mese_selezionato
+            anno = filtered[0]['fields'].get("Anno", "") if filtered else ""
+            rows.append([nome] + giornaliere + [totale, mese, anno])
+
+        # Crea DataFrame
+        df = pd.DataFrame(rows, columns=["Nome Cognome"] + header)
+
+        # Genera file Excel in memoria
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name="Report", index=False)
+            workbook  = writer.book
+            worksheet = writer.sheets["Report"]
+            worksheet.set_column(0, 0, 30)  # Colonna 0 = prima colonna, larghezza 30
+        output.seek(0)
+
+        return send_file(output, download_name="report.xlsx", as_attachment=True)
+
+    return render_template("report.html", mesi_disponibili=mesi_disponibili)
+
+@app.route('/logout')
+def logout():
+    session.clear()  # Rimuove tutti i dati salvati nella sessione
+    return redirect(url_for('login'))
+
+@app.route('/download-pdf', methods=['POST']) #** da vedere
+def download_pdf():
+    data = session.get("data")
+    if not data:
+      return redirect(url_for("login"))
+
+    TABLE_NAME = data['Locale']
+    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+    records = table.all(sort=["-Created"])
+
+    mese_selezionato = request.form.get("mese")
+    if not mese_selezionato:
+        return "Errore: mese non selezionato", 400
+
+    # Filtra i dati
+    filtered = [r for r in records if r['fields'].get('Mese Nome', '').lower() == mese_selezionato.lower()]
+
+    # Aggrega ore per giorno
+    data_dict = {}
+    for r in filtered:
+        f = r['fields']
+        nome = f.get("Nome", "Sconosciuto")
+        giorno = str(f.get("Giorni"))
+        ore = f.get("Ore Lavorate", 0)
+        if isinstance(ore, dict):
+            ore = 0
+        if nome not in data_dict:
+            data_dict[nome] = {}
+        if giorno not in data_dict[nome]:
+            data_dict[nome][giorno] = 0
+        data_dict[nome][giorno] += round(ore, 2)
+
+    giorni_colonne = [str(i) for i in range(1, 32)]
+
+    # Crea il PDF
+    output = io.BytesIO()
+    p = canvas.Canvas(output, pagesize=A4)
+    width, height = A4
+
+    x = 40
+    y = height - 40
+    p.setFont("Helvetica-Bold", 12)
+    p.drawString(x, y, f"Report ore lavorate - Mese: {mese_selezionato.title()}")
+    y -= 30
+
+    p.setFont("Helvetica", 10)
+    for nome, giorni in data_dict.items():
+        riga = f"{nome}:"
+        p.drawString(x, y, riga)
+        y -= 15
+
+        dettagli = ""
+        totale = 0
+        for g in giorni_colonne:
+            ore = giorni.get(g, 0)
+            if ore:
+                dettagli += f"{g}:{ore}  "
+                totale += ore
+        dettagli += f" | Totale: {round(totale, 2)}"
+        p.drawString(x + 20, y, dettagli)
+        y -= 25
+        if y < 50:
+            p.showPage()
+            y = height - 40
+
+    p.save()
+    output.seek(0)
+
+    return send_file(output, download_name="report.pdf", as_attachment=True)
+
+@app.route('/privacy')  
+def privacy():
+    return render_template("privacy.html")
+
 
 if __name__ == '__main__':
     app.run(debug=True)
