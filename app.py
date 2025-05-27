@@ -133,12 +133,14 @@ def login():
         try:
           data = table.first(formula=match({"Mail": email}))
           user_password = data['fields']['Password']
+          print(f"User Password da Airtable: {user_password}")
         except Exception as e:
           print(f"Errore: {e}")
         
         # Logica di autenticazione
         if email == data['fields']['Mail'] and password == user_password:
             session['data'] = data['fields']
+            print(f"Session: {session['data']}")
             return redirect(url_for('dashboard')) 
         else:
             return "Credenziali non valide", 401
