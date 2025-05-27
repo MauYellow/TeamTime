@@ -18,7 +18,7 @@ load_dotenv()
 # locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8') #Non supportato da Koyeb
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.getenv("FLASK_SECRET_KEY") #, "una-chiave-molto-segreta-e-lunga")  # <-- Cambia qui
 
 stripe.api_key = STRIPE_SECRET_KEY
 STRIPE_PRICE_ID = STRIPE_PRICE_ID #"price_1RN9mhEF8NjwgIEO4ZGym71S" #reale > "price_1RN9QQEF8NjwgIEOh6LgsLD4"
