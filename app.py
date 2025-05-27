@@ -323,8 +323,15 @@ def report():
             worksheet = writer.sheets["Report"]
             worksheet.set_column(0, 0, 30)  # Colonna 0 = prima colonna, larghezza 30
         output.seek(0)
+        msg = Message(subject=f"[TeamTimeWeb Report] {data['Locale']}, {mese_selezionato}",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=["help.teamtime@gmail.com"],
+                  body=f"""Richiesto Report Excel Mensile:
+                  Locale: {data['Locale']}
+                  Mese: {mese_selezionato}""")
+        mail.send(msg)
 
-        return send_file(output, download_name="report.xlsx", as_attachment=True)
+        return send_file(output, download_name=f"{data['Locale']}_{mese_selezionato}_{anno}_report.xlsx", as_attachment=True)
 
     return render_template("report.html", mesi_disponibili=mesi_disponibili)
 
