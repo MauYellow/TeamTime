@@ -136,6 +136,7 @@ def login():
           print(f"User Password da Airtable: {user_password}")
         except Exception as e:
           print(f"Errore: {e}")
+          return redirect(url_for('login_failed')) 
         
         # Logica di autenticazione
         if email == data['fields']['Mail'] and password == user_password:
@@ -144,10 +145,35 @@ def login():
             print(f"Session: {session['data']}")
             return redirect(url_for('dashboard')) 
         else:
-            return "Credenziali non valide", 401
+            return redirect(url_for('login_failed')) 
 
     # Se è una richiesta GET → mostra il form
     return render_template('auth-login-basic.html')
+
+@app.route('/login-failed')
+def login_failed():
+    TABLE_NAME = "Locali Approvati"
+    table = Table(AIRTABLE_TOKEN, AIRTABLE_BASE_ID, TABLE_NAME)
+    if request.method == 'POST':
+        email = request.form.get('email-username')
+        password = request.form.get('password')
+        try:
+          data = table.first(formula=match({"Mail": email}))
+          user_password = data['fields']['Password']
+          print(f"User Password da Airtable: {user_password}")
+        except Exception as e:
+          print(f"Errore: {e}")
+          return redirect(url_for('login_failed'))
+        
+        # Logica di autenticazione
+        if email == data['fields']['Mail'] and password == user_password:
+            print(f"Data Fields {data['fields']}")
+            session['data'] = data['fields']
+            print(f"Session: {session['data']}")
+            return redirect(url_for('dashboard')) 
+        else:
+            return redirect(url_for('login_failed')) 
+    return render_template('auth-login-failed.html')
 
 @app.route('/dashboard')
 def dashboard():
@@ -413,6 +439,7 @@ def download_pdf():
 @app.route('/privacy')  
 def privacy():
     return render_template("privacy.html")
+
 
 
 if __name__ == '__main__':
