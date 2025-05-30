@@ -87,7 +87,8 @@
               </div>
               <!-- /Logo -->
               <h4 class="mb-2">Benvenuto su TeamTime! 👋</h4>
-              <p class="mb-4">Accedi con i tuoi dati per continuare</p>
+              <p class="mb-4">Accedi con i tuoi dati per continuare o esplora la <a href="{{ url_for('dashboard_demo') }}">DEMO
+                  gratuita</a>.</p>
 
               <form id="formAuthentication" class="mb-3" action="/login" method="POST">
                 <div class="mb-3">
@@ -172,10 +173,10 @@
 
     <div class="buy-now">
       <a
-        href="{{ url_for('home') }}#contact"
+        href="{{ url_for('dashboard_demo') }}"
         target="_blank"
         class="btn btn-danger btn-buy-now"
-        >Richiedi una DEMO</a
+        >Prova Ora la DEMO</a
       >
     </div>
 

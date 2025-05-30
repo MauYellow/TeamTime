@@ -440,6 +440,13 @@ def download_pdf():
 def privacy():
     return render_template("privacy.html")
 
+@app.route('/dashboard_demo')
+def dashboard_demo():
+    return render_template('dashboard_demo.html')
+
+@app.route('/calendario_demo')
+def calendario_demo():
+    return render_template('calendario_demo.html')
 
 
 if __name__ == '__main__':
