@@ -92,26 +92,11 @@
                 </div>
             </div>
         </div>
-    </header>
-    <!-- ***** Header Area End ***** -->
-    <div id="promo-banner"
-        style="background-color: #e63946; color: white; padding: 15px 0; text-align: center; z-index: 1000; position: relative;">
-        <strong>🎁 Offerta "STARTUP" -50% valida fino alla fine del mese corrente</strong><br>
-        <span id="countdown-text">Tempo rimasto: <span id="countdown" style="font-weight: bold;"></span></span>
-    </div>
 
-
-
-    <!DOCTYPE html>
-    <html lang="it">
-    
-    <head>
-        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Piani Tariffari</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-        <!-- INCOLLA QUESTO BLOCCO CSS nel <style> esistente nel <head> -->
         <style>
             @media (max-width: 767px) {
                 .hide-on-mobile {
@@ -195,11 +180,17 @@
             }
         </style>
 
-    </head>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <div id="promo-banner"
+        style="background-color: #e63946; color: white; padding: 15px 0; text-align: center; z-index: 1000; position: relative;">
+        <strong>🎁 Offerta "STARTUP" -50% valida fino alla fine del mese corrente</strong><br>
+        <span id="countdown-text">Tempo rimasto: <span id="countdown" style="font-weight: bold;"></span></span>
+    </div>
+
+
     
     <body>
-    
-    <!-- ***** Pricing Section Start ***** -->
     <!-- ***** Pricing Section Start ***** -->
     <section id="portfolio" class="pricing-section">
         <div class="container">
@@ -276,6 +267,82 @@
             </div>
         </div>
     </section>
+
+    <section class="container mt-5 mb-5" id="faq">
+        <h2 class="text-center text-4xl font-bold mb-4">Domande Frequenti</h2>
+        <p class="text-center text-muted mb-5">Risposte ai dubbi più comuni sui nostri piani e funzioni</p>
+
+        <div class="accordion-item border rounded mb-2">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed w-100 text-start p-3" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#faq4">
+                    Perché scegliere TeamTime?
+                </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body p-3">
+                    TeamTime ti aiuta ad automatizzare il processo di gestione del personale, guadagnando tempo importante che
+                    puoi investire per altre aree importanti del tuo business.</div>
+            </div>
+        </div>
+   
+            <div class="accordion-item border rounded mb-2">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed w-100 text-start p-3" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#faq2">
+                        Come funziona il QR code?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body p-3">
+                        Viene creato un QR Code unico per ogni azienda. Il dipendente all'entrata e all'uscita scannerizzerà questo QR Code registrando la propria presenza all'interno di un database protetto.
+                    </div>
+                </div>
+            </div>
+    
+            <div class="accordion-item border rounded mb-2">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed w-100 text-start p-3" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#faq3">
+                        Posso esportare i dati in Excel per il mio commercialista?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body p-3">
+                        Sì, puoi esportare i dati in formato Excel o PDF in qualsiasi momento, sia dall'app che tramite il gestionale operativo.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item border rounded mb-2">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed w-100 text-start p-3" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#faq5">
+                        Come fare se i dipendenti stampano il QR Code e lo scannerizzano per conto loro?
+                    </button>
+                </h2>
+                <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body p-3">
+                        Facile, basta attivare la funzione GPS. In questo modo potrai vedere dove è stato realizzato lo scan, togliendo ogni dubbio.</div>
+                </div>
+            </div>
+
+            <div class="accordion-item border rounded mb-2">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed w-100 text-start p-3" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#faq6">
+                        Ho dipendenti sparsi in diversi locali e non in un posto fisso, come fare?
+                    </button>
+                </h2>
+                <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body p-3">
+                        Attivare la funzione "Intercambio" permetterà ai tuoi dipendenti di registrarsi anche ad altri QR Code della tua azienda. Perfetto per cantieri o per lavoratori che si spostano spesso.</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+      
 
 
     <div id="contact" class="contact-us section">
