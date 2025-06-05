@@ -255,6 +255,10 @@
                         </select>
                       </div>
                       <button type="submit" class="btn btn-primary d-grid w-100">Download Report Excel</button>
+                      <div id="excel-spinner" class="text-center mt-2" style="display: none;">
+                        <div class="spinner-border text-primary" role="status" style="width: 1.5rem; height: 1.5rem;">
+                          <span class="visually-hidden">Caricamento...</span>
+                        </div>                </div>
                     </form>
                     
                     <!-- FORM PER PDF -->
@@ -271,6 +275,29 @@
                         document.getElementById("mese_hidden").value = selectedMese;
                       });
                     </script>
+
+<script>
+  document.getElementById('form-excel').addEventListener('submit', function (e) {
+    var mese = document.getElementById('mese').value.trim();
+    var spinner = document.getElementById('excel-spinner');
+
+    spinner.style.display = 'none'; // reset iniziale
+
+    if (mese) {
+      spinner.style.display = 'block';
+
+      // Nasconde lo spinner dopo 5 secondi
+      setTimeout(function () {
+        spinner.style.display = 'none';
+      }, 5000);
+    } else {
+      e.preventDefault();
+      alert('Seleziona un mese per scaricare il report.');
+    }
+  });
+</script>
+
+
 
 
 
