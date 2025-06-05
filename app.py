@@ -284,8 +284,83 @@ def staff():
 
     return render_template('staff.html', full_url=full_url)
 
-@app.route('/report', methods=['GET', 'POST'])
+@app.route('/report', methods=['GET', 'POST']) #Se qualcosa non funziona, ripristinare def report_old poco più sotto
 def report():
+    data = session.get("data")
+    records = session.get("records") #**da togliere?
+
+    if not data:
+        return redirect(url_for('login'))
+    
+    TABLE_NAME = data['Locale']
+    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+
+    #records = table.all()
+    records = table.all(sort=["-Created"])
+    # Estrai tutti i mesi unici
+    mesi_disponibili = sorted(set(r['fields'].get("Mese Nome", "").lower() for r in records if "Mese Nome" in r['fields']))
+
+    if request.method == 'POST':
+        mese_selezionato = request.form.get("mese")
+        if not mese_selezionato:
+            return "Errore: mese non selezionato", 400
+
+        # Filtra i record per il mese selezionato
+        filtered = [r for r in records if r['fields'].get('Mese Nome', '').lower() == mese_selezionato.lower()]
+
+        # Organizza i dati: mappa → nome → giorno → ore
+        data_dict = {}
+        for r in filtered:
+            f = r['fields']
+            nome = f.get("Nome", "Sconosciuto")
+            giorno = str(f.get("Giorni"))
+            ore = f.get("Ore Lavorate", 0)
+            if isinstance(ore, dict):  # Gestione di {'specialValue': 'NaN'}
+                ore = 0
+            
+            if nome not in data_dict:
+              data_dict[nome] = {}
+            if giorno not in data_dict[nome]:
+              data_dict[nome][giorno] = 0
+            data_dict[nome][giorno] += round(ore, 2)
+
+
+        # Crea intestazione colonne: 1...31 + mese + anno
+        giorni_colonne = [str(i) for i in range(1, 32)]
+        header = giorni_colonne + ['Totale', 'Mese', 'Anno']
+
+        # Costruzione righe
+        rows = []
+        for nome, giorni in data_dict.items():
+            giornaliere = [giorni.get(day, 0) for day in giorni_colonne]
+            mese = mese_selezionato
+            anno = filtered[0]['fields'].get("Anno", "") if filtered else ""
+            rows.append([nome] + giornaliere + ["=SUM(B{0}:AF{0})".format(len(rows)+2), mese, anno])
+
+        # Crea DataFrame
+        df = pd.DataFrame(rows, columns=["Nome Cognome"] + header)
+
+        # Genera file Excel in memoria
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name="Report", index=False)
+            workbook  = writer.book
+            worksheet = writer.sheets["Report"]
+            worksheet.set_column(0, 0, 30)  # Colonna 0 = prima colonna, larghezza 30
+        output.seek(0)
+        msg = Message(subject=f"[TeamTimeWeb Report] {data['Locale']}, {mese_selezionato}",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=["help.teamtime@gmail.com"],
+                  body=f"""Richiesto Report Excel Mensile:
+                  Locale: {data['Locale']}
+                  Mese: {mese_selezionato}""")
+        mail.send(msg)
+
+        return send_file(output, download_name=f"{data['Locale']}_{mese_selezionato}_{anno}_report.xlsx", as_attachment=True)
+
+    return render_template("report.html", mesi_disponibili=mesi_disponibili)
+
+def report_old(): #**
     data = session.get("data")
     records = session.get("records") #**da togliere?
 
@@ -360,6 +435,7 @@ def report():
         return send_file(output, download_name=f"{data['Locale']}_{mese_selezionato}_{anno}_report.xlsx", as_attachment=True)
 
     return render_template("report.html", mesi_disponibili=mesi_disponibili)
+
 
 @app.route('/logout')
 def logout():
@@ -447,6 +523,57 @@ def dashboard_demo():
 @app.route('/calendario_demo')
 def calendario_demo():
     return render_template('calendario_demo.html')
+
+@app.route('/correggi_orari')
+def dipendenti_al_lavoro():
+    data = session.get("data")
+
+    if not data:
+        return redirect(url_for('login'))
+    
+    TABLE_NAME = data['Locale']
+    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+
+    records = table.all(sort=["-Created"])
+
+    dipendenti_a_lavoro = []
+    for r in records:
+        fields = r.get("fields", {})
+        if fields.get("Uscita", "").strip().lower() == "al lavoro":
+            dipendenti_a_lavoro.append({
+                "nome": fields.get("Nome", "Sconosciuto"),
+                "entrata": fields.get("Entrata", "—"),
+                "created": r.get("createdTime", "—"),
+                "gps": fields.get("GPS", "—"),
+                "record_id": r.get("id")
+            })
+
+    return render_template("correggi_orari.html", dipendenti_a_lavoro=dipendenti_a_lavoro)
+
+
+@app.route('/correggi_uscita', methods=['POST'])
+def correggi_uscita():
+    data = request.get_json()
+    record_id = data.get('record_id')
+    uscita = data.get('uscita')
+
+    if not record_id or not uscita:
+        return "Dati mancanti", 400
+
+    session_data = session.get("data")
+    if not session_data:
+        return "Non autorizzato", 403
+
+    TABLE_NAME = session_data['Locale']
+    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+
+    try:
+        table.update(record_id, {"Uscita": uscita})
+        return "✅ Modifica salvata, attendi l'aggiornamento della pagina", 200
+    except Exception as e:
+        return f"Errore: {e}", 500
+
+
 
 
 if __name__ == '__main__':

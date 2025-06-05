@@ -168,6 +168,7 @@
         </ul>
       </aside>
       <!-- / Menu -->
+
       <!-- Layout container -->
       <div class="layout-page">
         <!-- Navbar -->
@@ -231,88 +232,91 @@
         
         </nav>
         <!-- / Navbar -->
+        
         <!-- Content wrapper -->
         <div class="content-wrapper">
+          
+
           <!-- Content -->
           <div class="container-xxl">
             <div class="authentication-wrapper authentication-basic container-p-y">
               <div class="authentication-inner py-4">
                 <!-- Forgot Password -->
-                <div class="card">
+
                   <div class="card-body">
-                    <!-- Logo -->
-                    <div class="app-brand justify-content-center">
-                      <a href="/" class="app-brand-link gap-2" target="blank">
-                        <span class="app-brand-logo demo">
-                          <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}" alt="TeamTime Logo" height="32">
-                        </span>
-                        <span class="app-brand-text demo text-body fw-bolder ms-2">TeamTime Report</span>
-                      </a>
-                    </div>
-                    <!-- /Logo -->
-                    <h4 class="mb-2">Report Completo 📋</h4>
-                    <p class="mb-4">Scegli il formato del tuo report mensile e ricevilo subito</p>
-                    
-                    <!-- FORM PER EXCEL -->
-                    <form method="POST" action="{{ url_for('report') }}" id="form-excel">
-                      <div class="mb-3">
-                        <label for="mese" class="form-label">Seleziona il mese:</label>
-                        <select id="mese" name="mese" class="form-select">
-                          {% for mese in mesi_disponibili %}
-                          <option value="{{ mese }}" {% if mese==mese_corrente %}selected{% endif %}>{{ mese.title() }}</option>
-                          {% endfor %}
-                        </select>
+
+                    <!-- Dipendenti a lavoro -->
+                    <div class="col-md-6 col-lg-12 order-2 mb-4">
+                      <div class="card h-100">
+                        <div class="card-header d-flex flex-column align-items-start justify-content-between">
+                          <h5 class="card-title m-0 me-2">
+                            Questi dipendenti risultano ancora a lavoro, clicca il pulsante <button class="btn btn-primary btn-sm">
+                              Correggi
+                            </button> per terminare il loro turno.
+                          </h5>
+                        
+                          <div class="mt-2">
+                            <span class="badge bg-warning text-dark" style="font-size: 0.75rem;">Funzione in fase di collaudo finale</span>
+                            <small class="d-block mt-1 text-muted">
+                              Questa funzione è ancora in fase beta: potrebbero verificarsi lievi imperfezioni. In caso di problemi, contatta
+                              l’assistenza.
+                            </small>
+                          </div>
+                        </div>
+                        
+                        <div class="card-body">
+                          <div class="table-responsive text-nowrap">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Nome</th>
+                                  <th>Data (Anno, Mese, Giorno)</th>
+                                  <th>Entrata</th>
+                                  <th>GPS</th>
+                                  <th>Azione</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for d in dipendenti_a_lavoro %}
+                                <tr>
+                                  <td>{{ d.nome }}</td>
+                                  <td>{{ d.created[:10] }}</td>
+                                  <td>{{ d.entrata }}</td>
+                                  <td>{{ d.gps }}</td>
+                                  <td>
+                                    <button class="btn btn-primary btn-sm" onclick="apriCorrezione('{{ d.record_id }}', '{{ d.entrata }}')">
+                                      Correggi
+                                    </button>
+                                  </td>
+                                </tr>
+                                <tr id="picker-{{ d.record_id }}" style="display: none;">
+                                  <td colspan="5">
+                                    <div class="modal-body d-flex align-items-center gap-3">
+                                      <input type="hidden" id="recordIdInput-{{ d.record_id }}" value="{{ d.record_id }}">
+                                      <div>
+                                        <label for="oraUscita">Orario di entrata:</label>
+                                        <span id="entrataDipendente-{{ d.record_id }}">{{ d.entrata }}</span>
+                                      </div>
+                                      <input type="time" class="form-control form-control-sm" id="orario-{{ d.record_id }}">
+                                      <button onclick="inviaCorrezione('{{ d.record_id }}')" class="btn btn-success btn-sm">Salva</button>
+                                    </div>
+                                  </td>
+                                </tr>
+                                
+                                {% endfor %}
+                              </tbody>
+                              
+                            </table>
+                          </div>
+                        </div>
                       </div>
-                      <button type="submit" class="btn btn-primary d-grid w-100">Download Report Excel</button>
-                      <div id="excel-spinner" class="text-center mt-2" style="display: none;">
-                        <div class="spinner-border text-primary" role="status" style="width: 1.5rem; height: 1.5rem;">
-                          <span class="visually-hidden">Caricamento...</span>
-                        </div>                </div>
-                    </form>
-                    
-                    <!-- FORM PER PDF -->
-                    <form method="POST" action="{{ url_for('download_pdf') }}" id="form-pdf" class="mt-2">
-                      <input type="hidden" name="mese" id="mese_hidden">
-                      <button type="submit" class="btn btn-secondary d-grid w-100" disabled title="Funzione in fase di sviluppo">Download Report
-                        PDF (Disponibile solo all'interno dell'app)</button>
-                    </form>
-                    
-                    <script>
-                      // Copia il valore selezionato nel secondo form prima di inviarlo
-                      document.getElementById("form-pdf").addEventListener("submit", function () {
-                        const selectedMese = document.getElementById("mese").value;
-                        document.getElementById("mese_hidden").value = selectedMese;
-                      });
-                    </script>
-
-<script>
-  document.getElementById('form-excel').addEventListener('submit', function (e) {
-    var mese = document.getElementById('mese').value.trim();
-    var spinner = document.getElementById('excel-spinner');
-
-    spinner.style.display = 'none'; // reset iniziale
-
-    if (mese) {
-      spinner.style.display = 'block';
-
-      // Nasconde lo spinner dopo 5 secondi
-      setTimeout(function () {
-        spinner.style.display = 'none';
-      }, 5000);
-    } else {
-      e.preventDefault();
-      alert('Seleziona un mese per scaricare il report.');
-    }
-  });
-</script>
+                    </div>
+                    <!-- / Dipendenti a lavoro -->
 
 
 
-
-
-                    
                   </div>
-                </div>
+
                 <!-- /Forgot Password -->
               </div>
             </div></div>
@@ -354,7 +358,7 @@
   </div>
   <!-- / Layout wrapper -->
   <div class="buy-now">
-    <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="blank">
+    <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="_blank">
       Assistenza
     </a>
   </div>
@@ -389,4 +393,57 @@
 
 </body>
 
+<!-- MODAL CORREGGI USCITA -->
+<div class="modal fade" id="correggiModal" tabindex="-1" aria-labelledby="correggiModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="correggiForm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Correggi Orario di Uscita per <span id="nomeDipendente"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="recordIdInput">
+          <label for="oraUscita">Orario di entrata:</label>
+          <span id="entrataDipendente"></span>
+        </div>
+      
+        <div class="modal-body">
+          <input type="hidden" id="recordIdInput">
+          <label for="oraUscita">Orario di uscita:</label>
+          <input type="time" id="oraUscita" class="form-control" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Salva</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  function apriCorrezione(recordId, entrata) {
+    document.getElementById(`picker-${recordId}`).style.display = 'table-row';
+    document.getElementById(`entrataDipendente-${recordId}`).textContent = entrata;
+  }
+
+  function inviaCorrezione(recordId) {
+    const orarioScelto = document.getElementById(`orario-${recordId}`).value;
+
+    fetch('/correggi_uscita', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ record_id: recordId, uscita: orarioScelto })
+    })
+      .then(response => response.text())
+      .then(msg => {
+        alert(msg);
+        document.getElementById(`picker-${recordId}`).style.display = 'none';
+        document.getElementById(`orario-${recordId}`).value = "";
+        window.location.reload();
+      });
+  }
+</script>
+  
+  
 </html>
