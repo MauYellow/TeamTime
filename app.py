@@ -178,7 +178,7 @@ def login_failed():
 @app.route('/dashboard')
 def dashboard():
     data = session.get("data")
-    print(f"Data da Login: {data}")
+    #print(f"Data da Login: {data}")
     oggi = datetime.now().strftime('%Y-%m-%d')
     mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
     if not data:
@@ -234,7 +234,7 @@ def dashboard():
     #print(counter_ore_lavorate_oggi)
     try:
        media_ore_mese = round(counter_ore_lavorate_mese / len_mese_records, 2) #counter_ore_lavorate_mese
-       print(f"Media Mese Giornaliera: {media_ore_mese}")
+       #print(f"Media Mese Giornaliera: {media_ore_mese}")
     except Exception as e:
        print(f"Errore Media Mese Giornaliera: {e}")
        return "N/A"
@@ -307,6 +307,12 @@ def report():
 
         # Filtra i record per il mese selezionato
         filtered = [r for r in records if r['fields'].get('Mese Nome', '').lower() == mese_selezionato.lower()]
+
+        forza_generazione = request.form.get("forza_generazione") == "1"
+        check_dipendenti_lavoro = any(r['fields'].get("Uscita", "").strip().lower() == "al lavoro" for r in filtered)
+        if check_dipendenti_lavoro and not forza_generazione:
+          return render_template("report.html", mesi_disponibili=mesi_disponibili, show_popup=True, mese_preselezionato=mese_selezionato)
+
 
         # Organizza i dati: mappa → nome → giorno → ore
         data_dict = {}
