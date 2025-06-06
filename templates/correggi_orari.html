@@ -359,11 +359,76 @@
     </div>
   </div>
   <!-- / Layout wrapper -->
-  <div class="buy-now">
-    <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="_blank">
+  -- Pulsante Assistenza -->
+  <div class="buy-now" id="assistenza-button">
+    <button class="btn btn-danger btn-buy-now" onclick="apriChat()">
       Assistenza
-    </a>
+    </button>
   </div>
+  
+  <!-- Chat Assistenza -->
+  <div id="chat-assistenza" class="card p-3 mb-4 position-fixed end-0 bottom-0 m-4 shadow"
+    style="width: 350px; max-width: 90vw; display: none; z-index: 9999;">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="mb-0">🤖 Assistenza TeamTime</h6>
+      <button class="btn-close" aria-label="Close" onclick="toggleChat()"></button>
+    </div>
+  
+    <div id="chat-box" class="border rounded bg-light p-3 mb-3"
+      style="min-height: 150px; max-height: 200px; overflow-y: auto;">
+      <p><i>Benvenuto! Seleziona una domanda per ricevere assistenza.</i></p>
+    </div>
+  
+    <div class="d-grid gap-2">
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('correggi')">👤 Un dipendente si è dimenticato di
+        timbrare l'uscita</button>
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('report')">📊 Come scarico il report
+        mensile?</button>
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('alLavoro')">📌 Cosa significa “al
+        lavoro”?</button>
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('Assistenza')">Contatta il servizio
+        clienti</button>
+    </div>
+  </div>
+  
+  <!-- Script -->
+  <script>
+    function apriChat() {
+      document.getElementById("chat-assistenza").style.display = "block";
+      document.getElementById("assistenza-button").style.display = "none";
+    }
+
+    function toggleChat() {
+      const chat = document.getElementById("chat-assistenza");
+      if (chat.style.display === "none") {
+        chat.style.display = "block";
+        document.getElementById("assistenza-button").style.display = "none";
+      } else {
+        chat.style.display = "none";
+        document.getElementById("assistenza-button").style.display = "block";
+      }
+    }
+
+    function showAnswer(type) {
+      const chatBox = document.getElementById("chat-box");
+      let answer = "";
+
+      if (type === 'correggi') {
+        answer = "Nessun problema! Vai su <strong>Correggi Orari</strong> (nel menu a sinistra) > Cerca il dipendente > Clicca '<strong>Correggi</strong>' > Immetti l'orario di uscita > clicca '<strong>Salva</strong>'";
+      } else if (type === 'report') {
+        answer = "Puoi scaricare il report mensile accedendo alla sezione 'Report' e selezionando il mese desiderato.";
+      } else if (type === 'alLavoro') {
+        answer = "Quando un dipendente risulta 'Al lavoro', significa che non ha ancora registrato l'orario di uscita.";
+      } else if (type === 'Assistenza') {
+        answer = `Per ricevere ulteriore supporto, <a href="/#contact" class="text-primary" target="_blank">clicca qui</a>.`;
+      }
+
+      const domanda = document.querySelector(`button[onclick*="${type}"]`).innerText;
+      chatBox.innerHTML += `<p><b> Tu :</b> ${domanda}</p>`;
+      chatBox.innerHTML += `<p><b>TeamTimeBot:</b> ${answer}</p>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
   <!-- Core JS -->
   <!-- build:js /vendor/js/core.js -->
   <script src="/static/vendor/libs/jquery/jquery.js"></script>
