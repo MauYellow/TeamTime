@@ -273,6 +273,7 @@
                                   <th>Data (Anno, Mese, Giorno)</th>
                                   <th>Entrata</th>
                                   <th>GPS</th>
+                                  <th>Status</th>
                                   <th>Azione</th>
                                 </tr>
                               </thead>
@@ -283,6 +284,7 @@
                                   <td>{{ d.created[:10] }}</td>
                                   <td>{{ d.entrata }}</td>
                                   <td>{{ d.gps }}</td>
+                                  <td><span class="badge bg-label-warning me-1">Al Lavoro</span></td>
                                   <td>
                                     <button class="btn btn-primary btn-sm" onclick="apriCorrezione('{{ d.record_id }}', '{{ d.entrata }}')">
                                       Correggi

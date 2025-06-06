@@ -169,6 +169,7 @@
                    
                   <!-- Main content -->
                   <div class="layout-page">
+                        
                         <div class="content-wrapper">
                               <div class="container-xxl flex-grow-1 container-p-y">
                   
@@ -183,13 +184,230 @@
                                                 </div>
                                           </div>
                                     </div>
-                  
-                                    <!-- IFRAME AIRTABLE -->
-                                    <div class="iframe-container">
-                                          <iframe src="https://airtable.com/embed/appOwBv51ihqoT7Cx/shrhRwK1Gl15ilefp?viewControls=on"
-                                                allowfullscreen></iframe>
-                                    </div>
-                  
+                                    <style>
+                                          .dot {
+                                                height: 12px;
+                                                width: 12px;
+                                                background-color: #4CAF50;
+                                                border-radius: 50%;
+                                                display: inline-block;
+                                                animation: blink 1s infinite;
+                                                box-shadow: 0 0 3px #4CAF50;
+                                          }
+                                    
+                                          @keyframes blink {
+                                                0% {
+                                                      opacity: 1;
+                                                }
+                                    
+                                                50% {
+                                                      opacity: 0.2;
+                                                }
+                                    
+                                                100% {
+                                                      opacity: 1;
+                                                }
+                                          }
+                                    </style>
+                                                                         
+                                                                        <style>
+                                                                              .calendar {
+                                                                                    width: 100%;
+                                                                                    border-collapse: separate;
+                                                                                    border-spacing: 10px;
+                                                                                    font-family: 'Public Sans', sans-serif;
+                                                                                    table-layout: fixed;
+                                                                              }
+                                                                        
+                                                                              .calendar th {
+                                                                                    background-color: #f0f4f8;
+                                                                                    color: #2c3e50;
+                                                                                    font-weight: 600;
+                                                                                    text-align: center;
+                                                                                    padding: 10px 0;
+                                                                                    border-radius: 10px;
+                                                                                    font-size: 1rem;
+                                                                              }
+                                                                        
+                                                                              .calendar td {
+                                                                                    background: #fff;
+                                                                                    border: 1px solid #e0e0e0;
+                                                                                    height: 120px;
+                                                                                    vertical-align: top;
+                                                                                    padding: 8px;
+                                                                                    border-radius: 12px;
+                                                                                    box-shadow: 0 0 8px rgba(0, 0, 0, 0.04);
+                                                                                    transition: transform 0.2s;
+                                                                              }
+                                                                        
+                                                                              .calendar td:hover {
+                                                                                    transform: scale(1.03);
+                                                                                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                                                                              }
+                                                                        
+                                                                              .event {
+                                                                                    background: linear-gradient(135deg, #6fb1fc, #4364f7);
+                                                                                    color: #fff;
+                                                                                    padding: 6px 8px;
+                                                                                    border-radius: 8px;
+                                                                                    font-size: 0.85rem;
+                                                                                    margin-bottom: 6px;
+                                                                                    display: inline-block;
+                                                                                    width: 100%;
+                                                                                    box-sizing: border-box;
+                                                                              }
+                                                                        
+                                                                              .dot {
+                                                                                    height: 12px;
+                                                                                    width: 12px;
+                                                                                    background-color: #4CAF50;
+                                                                                    border-radius: 50%;
+                                                                                    display: inline-block;
+                                                                                    animation: blink 1s infinite;
+                                                                                    box-shadow: 0 0 3px #4CAF50;
+                                                                                    margin-right: 8px;
+                                                                              }
+                                                                        
+                                                                              @keyframes blink {
+                                                                        
+                                                                                    0%,
+                                                                                    100% {
+                                                                                          opacity: 1;
+                                                                                    }
+                                                                        
+                                                                                    50% {
+                                                                                          opacity: 0.2;
+                                                                                    }
+                                                                              }
+                                                                        
+                                                                              .calendar-header {
+                                                                                    font-size: 1.25rem;
+                                                                                    font-weight: bold;
+                                                                                    text-align: center;
+                                                                                    padding: 1rem 0;
+                                                                                    color: #2c3e50;
+                                                                              }
+                                                                        
+                                                                              .calendar-wrapper {
+                                                                                    padding: 1rem;
+                                                                                    background: #f9fbfc;
+                                                                                    border-radius: 16px;
+                                                                                    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+                                                                              }
+                                                                        </style>
+                                                                        
+                                                                        <div class="calendar-wrapper">
+                                                                              <div class="calendar-header">
+                                                                                    <span class="dot"></span> Gli aggiornamenti saranno in tempo reale
+                                                                              </div>
+                                                                              <table class="calendar">
+                                                                                    <thead>
+                                                                                          <tr>
+                                                                                                <th>Lun</th>
+                                                                                                <th>Mar</th>
+                                                                                                <th>Mer</th>
+                                                                                                <th>Gio</th>
+                                                                                                <th>Ven</th>
+                                                                                                <th>Sab</th>
+                                                                                                <th>Dom</th>
+                                                                                          </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                          <tr>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td></td>
+                                                                                                <td>
+                                                                                                      30
+                                                                                                      <div class="event">Mario Rossi: 9:00–18:00</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>31</td>
+                                                                                                <td>1</td>
+                                                                                          </tr>
+                                                                                          <tr>
+                                                                                                <td>
+                                                                                                      2
+                                                                                                      <div class="event">Mario Rossi: 9:10–18:02</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                      3
+                                                                                                      <div class="event">Mario Rossi: 9:00–18:00</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                      4
+                                                                                                      <div class="event">Mario Rossi: 9:00–18:00</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                      5
+                                                                                                      <div class="event">Mario Rossi: 9:00–18:00</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                      6
+                                                                                                      <div class="event">Mario Rossi: 9:00–18:00</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                      7
+                                                                                                </td>
+                                                                                                <td>8</td>
+                                                                                          </tr>
+                                                                                          <tr>
+                                                                                                <td>
+                                                                                                      9
+                                                                                                      <div class="event">Mario Rossi: 9:00–18:00</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                      10
+                                                                                                      <div class="event">Mario Rossi: 9:00–18:00</div>
+                                                                                                      <div class="event">Laura Marino: 9:00–18:00</div>
+                                                                                                      <div class="event">Giuseppe India: 18:00–21:00</div>
+                                                                                                </td>
+                                                                                                <td>11
+                                                                                                <div class="event">Mario Rossi: 9:00– A lavoro</div>
+                                                                                                <div class="event">Laura Marino: 9:00– A lavoro</div></td>
+                                                                                                <td>12</td>
+                                                                                                <td>13</td>
+                                                                                                <td>14</td>
+                                                                                                <td>15</td>
+                                                                                          </tr>
+                                                                                          <tr>
+                                                                                                <td>16</td>
+                                                                                                <td>17</td>
+                                                                                                <td>18</td>
+                                                                                                <td>19</td>
+                                                                                                <td>20</td>
+                                                                                                <td>21</td>
+                                                                                                <td>22</td>
+                                                                                          </tr>
+                                                                                          <tr>
+                                                                                                <td>23</td>
+                                                                                                <td>24</td>
+                                                                                                <td>25</td>
+                                                                                                <td>26</td>
+                                                                                                <td>27</td>
+                                                                                                <td>28</td>
+                                                                                                <td>29</td>
+                                                                                          </tr>
+                                                                                          <tr>
+                                                                                                <td>30</td>
+                                                                                          </tr>
+                                                                                    </tbody>
+                                    </table>  
+                                    </div>                
                               </div>
                         </div>
                   </div>
