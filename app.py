@@ -530,6 +530,10 @@ def dashboard_demo():
 def calendario_demo():
     return render_template('calendario_demo.html')
 
+@app.route('/report_demo')
+def report_demo():
+    return render_template('/report_demo.html')
+
 @app.route('/correggi_orari')
 def dipendenti_al_lavoro():
     data = session.get("data")

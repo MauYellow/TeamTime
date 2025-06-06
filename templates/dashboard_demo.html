@@ -92,16 +92,6 @@
                   <div data-i18n="Support">Staff</div>
             </a>
       </li>
-      <li class="menu-item">
-            <a class="menu-link" href="#" onclick="alert('Dati dei dipendenti! Non disponibile in versione demo'); return false;"></a>>
-                  <i class="menu-icon tf-icons bx bx-edit"></i>
-                  <div data-i18n="Support">
-                        Correggi Orari
-                        <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
-                  </div>
-            </a>
-      </li>
-
 
       <!-- Documenti -->
       <li class="menu-header small text-uppercase">
@@ -141,8 +131,7 @@
                   </li>
             </ul></li>
             <li class="menu-item">
-                  <a class="menu-link" href="#"
-                        onclick="alert('Report Excel per commercialista! Non disponibile in versione demo'); return false;">
+                  <a class="menu-link" href="{{ url_for('report_demo') }}">
                         <i class="menu-icon tf-icons bx bx-file"></i>
                         <div data-i18n="Support">Report</div>
                   </a> </li>
@@ -243,10 +232,10 @@
               </span>
               dipendenti a lavoro
              </p>
-             <a class="btn btn-sm btn-outline-primary" href="https://apps.apple.com/us/app/teamtime-registro-presenze/id6443974498" target="blank">
+             <a class="btn btn-sm btn-outline-primary" href="https://apps.apple.com/us/app/teamtime-registro-presenze/id6443974498" target="_blank">
               Lascia Recensione su Apple
              </a>
-            <a class="btn btn-sm btn-outline-primary" href="https://play.google.com/store/apps/details?id=com.gmail.mauriziopolverini89.teamtime" target="blank">
+            <a class="btn btn-sm btn-outline-primary" href="https://play.google.com/store/apps/details?id=com.gmail.mauriziopolverini89.teamtime" target="_blank">
                   Lascia Recensione su Android</a>
             </div>
            </div>
@@ -862,7 +851,7 @@
   </div>
   <!-- / Layout wrapper -->
 <div class="buy-now">
-      <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="blank">
+      <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="_blank">
             Assistenza
       </a>
       </div>

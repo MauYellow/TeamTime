@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html class="light-style layout-menu-fixed" data-assets-path="/static/" data-template="vertical-menu-template-free"
+    data-theme="theme-default" dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        name="viewport" />
+    <title>
+        Dashboard - Analytics | TeamTime
+    </title>
+    <meta content="" name="description" />
+    <!-- Favicon -->
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/static/img/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/static/img/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Icons. Uncomment required icon fonts -->
+    <link href="/static/vendor/fonts/boxicons.css" rel="stylesheet" />
+    <!-- Core CSS -->
+    <link class="template-customizer-core-css" href="/static/vendor/css/core.css" rel="stylesheet" />
+    <link class="template-customizer-theme-css" href="/static/vendor/css/theme-default.css" rel="stylesheet" />
+    <link href="/static/css/demo.css" rel="stylesheet" />
+    <!-- Vendors CSS -->
+    <link href="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="/static/vendor/libs/apex-charts/apex-charts.css" rel="stylesheet" />
+    <!-- Page CSS -->
+    <!-- Helpers -->
+    <script src="/static/vendor/js/helpers.js"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config: Mandatory theme config file containing global vars & default theme options -->
+    <script src="/static/js/config.js"></script>
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+            <aside class="layout-menu menu-vertical menu bg-menu-theme" id="layout-menu">
+                <div class="app-brand demo">
+                    <a class="app-brand-link" href="/">
+                        <span class="app-brand-logo demo">
+                            <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}"
+                                alt="TeamTime Logo" height="32">
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bolder ms-2">
+                            TeamTime
+                        </span>
+                    </a>
+                    <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
+                        href="javascript:void(0);">
+                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow">
+                </div>
+                <ul class="menu-inner py-1">
+                    <!-- Dashboard -->
+                    <li class="menu-item active">
+                        <a class="menu-link" href="{{ url_for('dashboard_demo') }}">
+                            <i class="menu-icon tf-icons bx bx-home-circle">
+                            </i>
+                            <div data-i18n="Analytics">
+                                Dashboard
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">
+                            Dipendenti
+                        </span>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('calendario_demo') }}">
+                            <i class="menu-icon tf-icons bx bx-calendar"></i>
+                            <div data-i18n="Authentications">
+                                Calendario
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="#"
+                            onclick="alert('Dati dei dipendenti! Non disponibile in versione demo'); return false;">
+                            <i class="menu-icon tf-icons bx bx-group"></i>
+                            <div data-i18n="Support">Staff</div>
+                        </a>
+                    </li>
+
+                    <!-- Documenti -->
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">
+                            Documenti
+                        </span>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link menu-toggle" href="javascript:void(0);">
+                            <i class="menu-icon tf-icons bx bx-euro">
+                            </i>
+                            <div data-i18n="Account Settings">
+                                Piani
+                            </div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a class="menu-link" href="piani" target="_blank">
+                                    <div data-i18n="Account">
+                                        Piano Start
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" href="piani" target="_blank">
+                                    <div data-i18n="Notifications">
+                                        Piano Teams
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a class="menu-link" href="piani" target="_blank">
+                                    <div data-i18n="Connections">
+                                        Piano Business
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('report_demo') }}">
+                            <i class="menu-icon tf-icons bx bx-file"></i>
+                            <div data-i18n="Support">Report</div>
+                        </a>
+                    </li>
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">
+                            Profilo
+                        </span>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('logout') }}">
+                            <i class="menu-icon tf-icons bx bx-log-out"></i>
+                            </i>
+                            <div data-i18n="Documentation">
+                                Log Out
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <!-- / Menu -->
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                    id="layout-navbar">
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                            <i class="bx bx-menu bx-sm">
+                            </i>
+                        </a>
+                    </div>
+                    <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <!-- Place this tag where you want the button to render. -->
+                            <a href="https://beacons.ai/teamtime" target="_blank" class="btn btn-outline-primary">
+                                <i class="bx bx-download me-1"></i> Scarica App Mobile
+                            </a>
+
+                            <!-- User -->
+                            <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                <a class="nav-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                                    href="javascript:void(0);">
+                                    <div class="avatar avatar-online">
+                                        <img alt="" class="w-px-40 h-auto rounded-circle"
+                                            src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar avatar-online">
+                                                        <img alt="" class="w-px-40 h-auto rounded-circle"
+                                                            src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <span class="fw-semibold d-block">
+                                                        Mario Rossi
+                                                    </span>
+                                                    <small class="text-muted">
+                                                        Admin
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                            <i class="bx bx-power-off me-2"></i>
+                                            <span class="align-middle">Log Out</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!--/ User -->
+
+                </nav>
+                <!-- / Navbar -->
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+                    <!-- Content -->
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <div class="row">
+                            <!-- Impostazioni -->
+                            <div class="col-md-6 col-lg-4 col-xl-12 order-0 mb-4">
+                                <div class="card h-100">
+                                    <h5 class="card-header">DEMO Report Excel</h5>
+                                    <div class="card-body">
+                                    <p>La colonna a sinistra avrà in automatico tutti i nomi dei tuoi dipendenti, quelle a destra le ore lavorare per ogni giorno lavorativo. Infine sulla destra avrai il <strong>Totale</strong> delle ore lavorate mensili</p>
+                                    <br>
+                                    <p>Il report sarà scaricabile in formato excel</p>
+
+                                                    <!-- Responsive Table -->
+                                                    <div class="card">
+                                                        <h5 class="card-header">Report Giugno</h5>
+                                                        <div class="table-responsive text-nowrap">
+                                                            <table class="table table-striped">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Nome</th>
+                                                                        <th>1</th>
+                                                                        <th>2</th>
+                                                                        <th>3</th>
+                                                                        <th>4</th>
+                                                                        <th>5</th>
+                                                                        <th>6</th>
+                                                                        <th>7</th>
+                                                                        <th>8</th>
+                                                                        <th>9</th>
+                                                                        <th>10</th>
+                                                                        <th>11</th>
+                                                                        <th>12</th>
+                                                                        <th>13</th>
+                                                                        <th>14</th>
+                                                                        <th>15</th>
+                                                                        <th>16</th>
+                                                                        <th>17</th>
+                                                                        <th>18</th>
+                                                                        <th>19</th>
+                                                                        <th>20</th>
+                                                                        <th>21</th>
+                                                                        <th>22</th>
+                                                                        <th>23</th>
+                                                                        <th>24</th>
+                                                                        <th>25</th>
+                                                                        <th>26</th>
+                                                                        <th>27</th>
+                                                                        <th>28</th>
+                                                                        <th>29</th>
+                                                                        <th>30</th>
+                                                                        <th>31</th>
+                                                                        <th style="font-weight:bold;">Totale</th>
+                                                                        <th>Mese</th>
+                                                                        <th>Anno</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>Livio Montero</td>
+                                                                        <td>7.85</td> <!-- Giorno 1 -->
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.95</td> <!-- Giorno 5 -->
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.92</td> <!-- Giorno 10 -->
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.12</td> <!-- Giorno 15 -->
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.05</td> <!-- Giorno 20 -->
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.1</td> <!-- Giorno 25 -->
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.98</td> <!-- Giorno 30 -->
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">48.07</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Mario Rossi</td>
+                                                                        <td>7.92</td> <!-- Giorno 1 -->
+                                                                        <td>8.1</td> <!-- Giorno 2 -->
+                                                                        <td>7.88</td> <!-- Giorno 3 -->
+                                                                        <td>0</td> <!-- Giorno 4 -->
+                                                                        <td>8.02</td> <!-- Giorno 5 -->
+                                                                        <td>7.97</td> <!-- Giorno 6 -->
+                                                                        <td>0</td> <!-- Giorno 7 -->
+                                                                        <td>8.15</td> <!-- Giorno 8 -->
+                                                                        <td>7.76</td> <!-- Giorno 9 -->
+                                                                        <td>8.05</td> <!-- Giorno 10 -->
+                                                                        <td>7.9</td> <!-- Giorno 11 -->
+                                                                        <td>0</td> <!-- Giorno 12 -->
+                                                                        <td>7.98</td> <!-- Giorno 13 -->
+                                                                        <td>8.04</td> <!-- Giorno 14 -->
+                                                                        <td>0</td> <!-- Giorno 15 -->
+                                                                        <td>8.1</td> <!-- Giorno 16 -->
+                                                                        <td>7.93</td> <!-- Giorno 17 -->
+                                                                        <td>8.08</td> <!-- Giorno 18 -->
+                                                                        <td>0</td> <!-- Giorno 19 -->
+                                                                        <td>7.99</td> <!-- Giorno 20 -->
+                                                                        <td>8.02</td> <!-- Giorno 21 -->
+                                                                        <td>0</td> <!-- Giorno 22 -->
+                                                                        <td>8.1</td> <!-- Giorno 23 -->
+                                                                        <td>7.95</td> <!-- Giorno 24 -->
+                                                                        <td>8.07</td> <!-- Giorno 25 -->
+                                                                        <td>0</td> <!-- Giorno 26 -->
+                                                                        <td>7.87</td> <!-- Giorno 27 -->
+                                                                        <td>8.12</td> <!-- Giorno 28 -->
+                                                                        <td>0</td> <!-- Giorno 29 -->
+                                                                        <td>8.05</td> <!-- Giorno 30 -->
+                                                                        <td>0</td> <!-- Giorno 31 -->
+                                                                        <td style="font-weight:bold;">168.12</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                      
+                                                                      
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Giovanni Sacco</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.92</td>
+                                                                        <td>7.85</td>
+                                                                        <td>8.07</td>
+                                                                        <td>7.94</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td> <!-- sab/dom -->
+                                                                        <td>7.97</td>
+                                                                        <td>7.88</td>
+                                                                        <td>8.12</td>
+                                                                        <td>7.95</td>
+                                                                        <td>7.99</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.91</td>
+                                                                        <td>8.05</td>
+                                                                        <td>7.93</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.89</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.07</td>
+                                                                        <td>7.86</td>
+                                                                        <td>7.94</td>
+                                                                        <td>8.13</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.98</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.96</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.17</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>India Merina</td>
+                                                                        <td>7.95</td>
+                                                                        <td>8.08</td>
+                                                                        <td>7.86</td>
+                                                                        <td>7.99</td>
+                                                                        <td>8.1</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.93</td>
+                                                                        <td>8.11</td>
+                                                                        <td>7.87</td>
+                                                                        <td>7.96</td>
+                                                                        <td>8.02</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.13</td>
+                                                                        <td>7.84</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.91</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.07</td>
+                                                                        <td>7.88</td>
+                                                                        <td>7.99</td>
+                                                                        <td>8.04</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.93</td>
+                                                                        <td>8.06</td>
+                                                                        <td>7.92</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.54</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>Lavinia Scossa</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.87</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.98</td>
+                                                                        <td>8.05</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.96</td>
+                                                                        <td>8.07</td>
+                                                                        <td>7.91</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.04</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.93</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.85</td>
+                                                                        <td>8.08</td>
+                                                                        <td>7.9</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.06</td>
+                                                                        <td>7.94</td>
+                                                                        <td>7.97</td>
+                                                                        <td>8.1</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.99</td>
+                                                                        <td>7.95</td>
+                                                                        <td>7.92</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.02</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Chiara Bellandi</td>
+                                                                        <td>7.88</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.93</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.97</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.12</td>
+                                                                        <td>7.91</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.05</td>
+                                                                        <td>8.07</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.92</td>
+                                                                        <td>8.08</td>
+                                                                        <td>7.94</td>
+                                                                        <td>8.04</td>
+                                                                        <td>7.95</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.86</td>
+                                                                        <td>7.99</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.98</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.9</td>
+                                                                        <td>7.87</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.22</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>Alessandro Verri</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.95</td>
+                                                                        <td>8.04</td>
+                                                                        <td>7.92</td>
+                                                                        <td>8.07</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.91</td>
+                                                                        <td>7.96</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.13</td>
+                                                                        <td>7.93</td>
+                                                                        <td>8.06</td>
+                                                                        <td>7.87</td>
+                                                                        <td>7.99</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.84</td>
+                                                                        <td>7.88</td>
+                                                                        <td>7.95</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.09</td>
+                                                                        <td>7.91</td>
+                                                                        <td>7.9</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.41</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>Ginevra Castelli</td>
+                                                                        <td>7.92</td>
+                                                                        <td>8.05</td>
+                                                                        <td>7.9</td>
+                                                                        <td>8.13</td>
+                                                                        <td>7.96</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.07</td>
+                                                                        <td>7.93</td>
+                                                                        <td>7.99</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.89</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.04</td>
+                                                                        <td>7.95</td>
+                                                                        <td>8.08</td>
+                                                                        <td>7.87</td>
+                                                                        <td>8.1</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.98</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.9</td>
+                                                                        <td>8.03</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.95</td>
+                                                                        <td>7.89</td>
+                                                                        <td>7.99</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.42</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>Davide Longhi</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.88</td>
+                                                                        <td>7.95</td>
+                                                                        <td>8.04</td>
+                                                                        <td>8.12</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.9</td>
+                                                                        <td>8.07</td>
+                                                                        <td>8.05</td>
+                                                                        <td>7.96</td>
+                                                                        <td>7.93</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.08</td>
+                                                                        <td>7.99</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.91</td>
+                                                                        <td>8.1</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.85</td>
+                                                                        <td>8.06</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.94</td>
+                                                                        <td>7.97</td>
+                                                                        <td>8.02</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.83</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>Sofia Martelli</td>
+                                                                        <td>7.87</td>
+                                                                        <td>8.05</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.92</td>
+                                                                        <td>7.99</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.08</td>
+                                                                        <td>7.95</td>
+                                                                        <td>8.03</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.85</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.91</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.98</td>
+                                                                        <td>8.06</td>
+                                                                        <td>7.9</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.12</td>
+                                                                        <td>7.93</td>
+                                                                        <td>7.96</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.94</td>
+                                                                        <td>7.97</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.70</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>Martino Corsi</td>
+                                                                        <td>7.9</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.96</td>
+                                                                        <td>7.99</td>
+                                                                        <td>7.87</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.03</td>
+                                                                        <td>8.07</td>
+                                                                        <td>7.85</td>
+                                                                        <td>8.06</td>
+                                                                        <td>8.1</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.92</td>
+                                                                        <td>7.99</td>
+                                                                        <td>8.13</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.05</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.91</td>
+                                                                        <td>8.08</td>
+                                                                        <td>7.88</td>
+                                                                        <td>7.94</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.95</td>
+                                                                        <td>7.97</td>
+                                                                        <td>7.93</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.49</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                    
+                                                                    <tr>
+                                                                        <td>Beatrice Magni</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.98</td>
+                                                                        <td>7.85</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.93</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.07</td>
+                                                                        <td>8.12</td>
+                                                                        <td>7.95</td>
+                                                                        <td>7.9</td>
+                                                                        <td>8.03</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>8.1</td>
+                                                                        <td>7.86</td>
+                                                                        <td>8.05</td>
+                                                                        <td>7.97</td>
+                                                                        <td>8.09</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.94</td>
+                                                                        <td>7.89</td>
+                                                                        <td>8.02</td>
+                                                                        <td>7.95</td>
+                                                                        <td>0</td>
+                                                                        <td>0</td>
+                                                                        <td>7.9</td>
+                                                                        <td>8.06</td>
+                                                                        <td>7.91</td>
+                                                                        <td>0</td>
+                                                                        <td style="font-weight:bold;">167.53</td>
+                                                                        <td>giugno</td>
+                                                                        <td>2025</td>
+                                                                    </tr>
+                                                                      
+                                                                      
+                                                                </tbody>
+                                                            </table>
+                                                        
+                                                        </div>
+                                                    </div>
+                                                    <!--/ Responsive Table -->
+                                                    <br>
+                                                    <br>
+                                            
+                                                    <p style="font-size: 0.8rem; font-style: italic;">
+                                                        Tutti i dati e nomi mostrati nella DEMO sono puramente a scopo illustrativo e non sono reali.
+                                                    </p>
+                                                      
+
+
+                                    </div> <!-- /card-body -->
+                                </div> <!-- /card -->
+                            </div> <!-- /col -->
+                        </div>
+                    </div>
+                    <!-- / Content -->
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div
+                            class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                            <div class="mb-2 mb-md-0">
+                                ©
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                , Designed with ❤️ by
+                                <a class="footer-link fw-bolder" href="https://www.app-eleven.it" target="_blank">
+                                    AppEleven
+                                </a>
+                            </div>
+                            <div>
+                                <a class="footer-link me-4" href="https://themeselection.com/license/" target="_blank">
+                                    License
+                                </a>
+                                <a class="footer-link me-4" href="{{ url_for('home') }}#contact" target="_blank">
+                                    Support
+                                </a>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
+                    <div class="content-backdrop fade">
+                    </div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle">
+        </div>
+    </div>
+    <!-- / Layout wrapper -->
+    <div class="buy-now">
+        <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="_blank">
+            Assistenza
+        </a>
+    </div>
+    <!-- Core JS -->
+    <!-- build:js /vendor/js/core.js -->
+    <script src="/static/vendor/libs/jquery/jquery.js"></script>
+    <script src="/static/vendor/libs/popper/popper.js"></script>
+    <script src="/static/vendor/js/bootstrap.js"></script>
+    <script src="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/static/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="/static/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="/static/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="/static/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categorieOrarie = [
+                "00", "01", "02", "03", "04", "05", "06", "07",
+                "08", "09", "10", "11", "12", "13", "14", "15",
+                "16", "17", "18", "19", "20", "21", "22", "23"
+            ];
+
+            const datiIngressi = [
+                0, 0, 0, 0, 0, 0, 2, 5,
+                12, 18, 22, 20, 15, 10, 8, 6,
+                9, 14, 16, 11, 4, 2, 1, 0
+            ];
+
+            console.log("Categorie:", categorieOrarie);
+            console.log("Ingressi:", datiIngressi);
+
+            const totalRevenueChartEl = document.querySelector('#totalRevenueChart');
+
+            if (totalRevenueChartEl) {
+                const totalRevenueChartOptions = {
+                    series: [{
+                        name: 'Ingressi',
+                        data: datiIngressi
+                    }],
+                    chart: {
+                        height: 300,
+                        stacked: true,
+                        type: 'bar',
+                        toolbar: { show: false }
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: false,
+                            columnWidth: '33%',
+                            borderRadius: 12,
+                            startingShape: 'rounded',
+                            endingShape: 'rounded'
+                        }
+                    },
+                    colors: ['#696CFF'],
+                    dataLabels: { enabled: false },
+                    legend: {
+                        show: true,
+                        horizontalAlign: 'left',
+                        position: 'top',
+                        markers: { height: 8, width: 8, radius: 12, offsetX: -3 },
+                        labels: { colors: '#888' },
+                        itemMargin: { horizontal: 10 }
+                    },
+                    grid: {
+                        borderColor: '#e0e0e0',
+                        padding: { top: 0, bottom: -8, left: 20, right: 20 }
+                    },
+                    xaxis: {
+                        categories: categorieOrarie,
+                        labels: {
+                            style: { fontSize: '13px', colors: '#888' }
+                        },
+                        axisTicks: { show: false },
+                        axisBorder: { show: false }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: { fontSize: '13px', colors: '#888' }
+                        }
+                    },
+                    states: {
+                        hover: { filter: { type: 'none' } },
+                        active: { filter: { type: 'none' } }
+                    }
+                };
+
+                const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
+                totalRevenueChart.render();
+            }
+        });
+    </script>
+
+
+    <!-- Capienza Database -->
+    <!-- Capienza Database Demo -->
+    <script>
+        const growthChartOptions = {
+            series: [30],  // Capienza demo al 30%
+            labels: ['Capienza'],
+            chart: {
+                height: 240,
+                type: 'radialBar'
+            },
+            plotOptions: {
+                radialBar: {
+                    size: 150,
+                    offsetY: 10,
+                    startAngle: -150,
+                    endAngle: 150,
+                    hollow: {
+                        size: '55%'
+                    },
+                    track: {
+                        background: '#f3f3f3',
+                        strokeWidth: '100%'
+                    },
+                    dataLabels: {
+                        name: {
+                            offsetY: 15,
+                            color: '#333',
+                            fontSize: '15px',
+                            fontWeight: '600',
+                            fontFamily: 'Public Sans'
+                        },
+                        value: {
+                            offsetY: -25,
+                            color: '#333',
+                            fontSize: '22px',
+                            fontWeight: '500',
+                            fontFamily: 'Public Sans',
+                            formatter: function (val) {
+                                return val + '%';
+                            }
+                        }
+                    }
+                }
+            },
+            colors: ['#7367F0'],
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#7367F0'],
+                    inverseColors: true,
+                    opacityFrom: 1,
+                    opacityTo: 0.6,
+                    stops: [30, 70, 100]
+                }
+            },
+            stroke: {
+                dashArray: 5
+            },
+            grid: {
+                padding: {
+                    top: -35,
+                    bottom: -10
+                }
+            },
+            states: {
+                hover: { filter: { type: 'none' } },
+                active: { filter: { type: 'none' } }
+            }
+        };
+
+        const growthChart = new ApexCharts(document.querySelector("#growthChart"), growthChartOptions);
+        growthChart.render();
+    </script>
+
+
+    <!-- GPS Locations Demo -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const chartOrderStatistics = document.querySelector('#orderStatisticsChart');
+
+            const orderChartConfig = {
+                chart: {
+                    height: 165,
+                    width: 130,
+                    type: 'donut'
+                },
+                labels: ["Roma", "Milano", "Torino"],
+                series: [45, 35, 20],
+                colors: ['#FF4C4C', '#4C8EFF', '#FFD644'],
+                stroke: {
+                    width: 0.3,
+                    colors: ['#000000', '#000000', '#000000']
+                },
+                dataLabels: {
+                    enabled: false,
+                    formatter: function (val) {
+                        return parseInt(val) + '%';
+                    }
+                },
+                legend: { show: false },
+                grid: {
+                    padding: {
+                        top: 0,
+                        bottom: 0,
+                        right: 15
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '75%',
+                            labels: {
+                                show: true,
+                                value: {
+                                    fontSize: '1.5rem',
+                                    fontFamily: 'Public Sans',
+                                    color: '#333',
+                                    offsetY: -15,
+                                    formatter: function (val) {
+                                        return parseInt(val) + '%';
+                                    }
+                                },
+                                name: {
+                                    offsetY: 20,
+                                    fontFamily: 'Public Sans'
+                                },
+                                total: {
+                                    show: true,
+                                    fontSize: '0.8125rem',
+                                    color: '#333',
+                                    label: 'Totale',
+                                    formatter: function (w) {
+                                        const total = w.globals.series.reduce((a, b) => a + b, 0);
+                                        return total + '';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            if (chartOrderStatistics !== null) {
+                const statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
+                statisticsChart.render();
+            }
+        });
+    </script>
+
+
+
+</body>
+
+</html>

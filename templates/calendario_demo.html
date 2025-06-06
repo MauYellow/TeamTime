@@ -145,11 +145,10 @@
                                     </ul>
                               </li>
                               <li class="menu-item">
-                                    <a class="menu-link" href="#"
-                                          onclick="alert('Report Excel per il commercialista! Non disponibile in versione demo'); return false;">
+                                    <a class="menu-link" href="{{ url_for('report_demo') }}">
                                           <i class="menu-icon tf-icons bx bx-file"></i>
-                                          <div data-i18n="Support">Report</div>
-                                    </a>                   </li>
+                                          <div data-i18n="Support">Report</div>        
+                                    </a> </li>
                               <li class="menu-header small text-uppercase">
                                     <span class="menu-header-text">
                                           Profilo
@@ -167,22 +166,37 @@
                         </ul>
                   </aside>
                   <!-- / Menu -->
-
+                   
                   <!-- Main content -->
                   <div class="layout-page">
                         <div class="content-wrapper">
                               <div class="container-xxl flex-grow-1 container-p-y">
+                  
+                                    <!-- NUOVA SEZIONE: DEMO REPORT EXCEL -->
+                                    <div class="col-md-6 col-lg-4 col-xl-12 order-0 mb-4">
+                                          <div class="card h-100">
+                                                <h5 class="card-header">DEMO Calendario Online</h5>
+                                                <div class="card-body">
+                                                      <p>Il calendario online ti permette di visionare realtime tutte le entrate e le uscite dei tuoi dipendenti nel dettaglio con una vista chiara giornaliera e mensile.</p>
+                                                      <br>
+                                                      <p>Il calendario si aggiorna automaticamente ad ogni scan di entrata e di uscita.</p>
+                                                </div>
+                                          </div>
+                                    </div>
+                  
+                                    <!-- IFRAME AIRTABLE -->
                                     <div class="iframe-container">
-                                          <iframe
-                                                src="https://airtable.com/embed/appOwBv51ihqoT7Cx/shrhRwK1Gl15ilefp?viewControls=on"
+                                          <iframe src="https://airtable.com/embed/appOwBv51ihqoT7Cx/shrhRwK1Gl15ilefp?viewControls=on"
                                                 allowfullscreen></iframe>
                                     </div>
+                  
                               </div>
                         </div>
                   </div>
+                      
                   <!-- /Main content -->
                   <div class="buy-now">
-                        <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="blank">
+                        <a class="btn btn-danger btn-buy-now" href="{{ url_for('home') }}#contact" target="_blank">
                               Assistenza
                         </a>            </div>
             </div>
