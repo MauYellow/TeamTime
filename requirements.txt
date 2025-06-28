@@ -28,6 +28,7 @@ python-dotenv==1.1.0
 pytz==2025.2
 reportlab==4.4.1
 requests==2.32.3
+schedule==1.2.2
 six==1.17.0
 stripe==12.1.0
 typing-inspection==0.4.0
