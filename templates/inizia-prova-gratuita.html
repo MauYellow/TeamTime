@@ -174,56 +174,49 @@
                     <button type="button" class="btn-close position-absolute" style="top: 16px; right: 16px;" aria-label="Close" onclick="closePopup()"></button>
     
                     <div class="modal-body">
-                    <form id="step1" class="d-flex">
-                        <!-- BOX BIANCO A SINISTRA -->
-                        <div id="boxStep1" class="p-4 p-md-5"
-                            style="background-color: rgba(255,255,255,0.9); width: 50%; border-radius: 5px;">
-                            <h3 class="fw-bold mb-3">Mai più tempo perso.</h3>
-                            <p class="mb-4 text-secondary">Supervisiona, gestisci e monitora gli orari dei tuoi
-                                dipendenti in modo
-                                intelligente.</p>
-
-                            <ul class="list-unstyled text-dark">
-                                <li class="mb-2">✅ Monitoraggio entrate/uscite in tempo reale</li>
-                                <li class="mb-2">✅ Report Excel dettagliati per il commercialista</li>
-                                <li class="mb-2">✅ Gestionale interattivo e intuitivo</li>
-                                <li class="mb-4">✅ Vista Calendarizzata per una gestione smart</li>
-                            </ul>
-
-                            <div class="d-flex flex-column align-items-center gap-2 mb-3">
-                                <a href="/dashboard_demo" class="btn btn-outline-danger px-4 py-2 fw-semibold w-auto"
-                                    style="min-width: 220px; border-radius: 5px;" target="_blank">
-                                    Esplora DEMO
-                                </a>
-
-                                <button type="button" class="btn btn-danger px-4 py-2 fw-semibold w-auto"
-                                    style="min-width: 220px; border-radius: 5px;" onclick="vaiStep2()">
-                                    Prova Gratis 30 giorni
-                                </button>
-
+                        <form id="step1" class="row gx-0">
+                            <!-- BOX BIANCO -->
+                            <div id="boxStep1" class="col-12 col-md-6 p-4 p-md-5"
+                                style="background-color: rgba(255,255,255,0.9); border-radius: 5px;">
+                                <h3 class="fw-bold mb-3">Mai più tempo perso.</h3>
+                                <p class="mb-4 text-secondary">Supervisiona, gestisci e monitora gli orari dei tuoi dipendenti in modo
+                                    intelligente.</p>
+                        
+                                <ul class="list-unstyled text-dark">
+                                    <li class="mb-2">✅ Monitoraggio entrate/uscite in tempo reale</li>
+                                    <li class="mb-2">✅ Report Excel dettagliati per il commercialista</li>
+                                    <li class="mb-2">✅ Gestionale interattivo e intuitivo</li>
+                                    <li class="mb-4">✅ Vista Calendarizzata per una gestione smart</li>
+                                </ul>
+                        
+                                <div class="d-flex flex-column align-items-center gap-2 mb-3">
+                                    <a href="/dashboard_demo" class="btn btn-outline-danger px-4 py-2 fw-semibold w-100 w-md-auto"
+                                        style="min-width: 220px; border-radius: 5px;" target="_blank">
+                                        Esplora DEMO
+                                    </a>
+                        
+                                    <button type="button" class="btn btn-danger px-4 py-2 fw-semibold w-100 w-md-auto"
+                                        style="min-width: 220px; border-radius: 5px;" onclick="vaiStep2()">
+                                        Prova Gratis 30 giorni
+                                    </button>
+                                </div>
+                        
+                                <p class="small text-muted text-center mb-0" style="font-size: 0.65rem;">
+                                    Annulla in qualsiasi momento, ti invieremo un promemoria prima della scadenza del periodo di prova.
+                                </p>
                             </div>
-
-
-                            <p class="small text-muted text-center mb-0" style="font-size: 0.65rem;" title="Testo di prova">Annulla in
-                                qualsiasi momento, ti invieremo un promemoria prima della scadenza
-                                del periodo di prova.</p>
-                        </div>
-
-
-
-                        <!-- COLONNA VUOTA A DESTRA PER EQUILIBRARE -->
-                        <div style="width: 50%;">
-
-                        </div>
-                    </form>
+                        
+                            <!-- COLONNA VUOTA SOLO SU DESKTOP -->
+                            <div class="d-none d-md-block col-md-6"></div>
+                        </form>
+                          
 
                     <!-- Step 2 -->
                     <form id="step2" style="display:none;">
-                        <div class="p-4 p-md-5"
-                            style="background-color: rgba(255,255,255,0.9); width: 100%; height: 100%; border-radius: 5px;">
-
-                            <!-- Step Indicator (pieno) -->
-                            <div class="d-flex align-items-center justify-content-start gap-4 mb-4">
+                        <div class="p-4 p-md-5 bg-white bg-opacity-90 rounded">
+                    
+                            <!-- Step Indicator -->
+                            <div class="d-flex align-items-center justify-content-start gap-4 mb-4 flex-wrap">
                                 <div class="step active">
                                     <div class="circle">1</div>
                                     <div class="label"><strong>Informazioni</strong></div>
@@ -239,95 +232,73 @@
                                     <div class="label">Fine</div>
                                 </div>
                             </div>
-
-                            <!-- Contenuto a 50% -->
-                            <div class="d-flex">
-                                <!-- Colonna SINISTRA -->
-                                <div style="width: 50%;">
+                    
+                            <div class="row">
+                                <!-- COLONNA SINISTRA -->
+                                <div class="col-12 col-md-6">
                                     <label class="form-label mb-3">Seleziona il numero dei dipendenti:</label>
-
-
-                                    <select class="form-select mb-4" style="border-radius: 5px;" id="numeroDipendenti">
+                                    <select class="form-select mb-4 rounded" id="numeroDipendenti">
                                         <option value="5">da 1 a 5 Dipendenti</option>
                                         <option value="11">da 6 a 11 dipendenti</option>
                                         <option value="99999">Più di 12 dipendenti</option>
-
                                     </select>
-
-                                    <!-- Campo Email -->
+                    
                                     <div class="mb-3">
                                         <label for="email" class="form-label">La tua migliore mail</label>
-
-                                        <input type="email" id="email" class="form-control" style="border-radius: 5px;"
-                                            placeholder="esempio@azienda.it" required>
-                                        <div class="fst-italic" style="font-size: 0.8rem;">Riceverai qui il tuo QR Code
-                                        </div>
+                                        <input type="email" id="email" class="form-control rounded" placeholder="esempio@azienda.it"
+                                            required>
+                                        <div class="fst-italic small">Riceverai qui il tuo QR Code</div>
                                     </div>
-
-                                    <!-- Campo Telefono -->
+                    
                                     <div class="mb-4">
                                         <label for="telefono" class="form-label">Telefono</label>
-
-                                        <input type="tel" id="telefono" class="form-control" style="border-radius: 5px;"
-                                            placeholder="+39 333 1234567" required>
-                                        <div class="fst-italic" style="font-size: 0.8rem;">Non lo utilizzeremo mai a
-                                            scopo promozionale</div>
+                                        <input type="tel" id="telefono" class="form-control rounded" placeholder="+39 333 1234567" required>
+                                        <div class="fst-italic small">Non lo utilizzeremo mai a scopo promozionale</div>
                                     </div>
-
+                    
                                     <div class="d-grid">
-                                        <button type="button" class="btn btn-danger" style="border-radius: 5;"
-                                            onclick="vaiStep3()">Attiva Prova Gratuita</button>
+                                        <button type="button" class="btn btn-danger rounded" onclick="vaiStep3()">Attiva Prova
+                                            Gratuita</button>
                                     </div>
                                 </div>
-
-
-
-                                <!-- Colonna DESTRA -->
-                                <div style="width: 50%;" class="ps-4">
-                                    <!-- Card 1 -->
+                    
+                                <!-- COLONNA DESTRA -->
+                                <div class="col-12 col-md-6 ps-md-4 pt-4 pt-md-0">
+                                    <!-- Card GPS -->
                                     <div class="mb-4">
                                         <div class="d-flex align-items-start gap-2 mb-2">
-                                            <img src="https://img.icons8.com/office/40/worldwide-location--v1.png"
-                                                class="mb-2" alt="icona" style="width: 25px; height: 25px;">
+                                            <img src="https://img.icons8.com/office/40/worldwide-location--v1.png" alt="icona"
+                                                style="width: 25px; height: 25px;">
                                             <div class="fw-bold" style="font-size: 1.3rem;">Localizzazione GPS</div>
                                         </div>
-
-                                        <p class="mb-0">Attiva la rilevazione della posizione al dispositivo quando si
-                                            effettua lo scan di entrata o di uscita</p>
-
+                                        <p class="mb-0">Attiva la rilevazione della posizione al dispositivo quando si effettua lo scan di
+                                            entrata o di uscita</p>
                                         <div class="form-check mt-2">
                                             <input class="form-check-input" type="checkbox" id="GPSCheckbox">
                                             <label class="form-check-label" for="GPSCheckbox">Attiva GPS</label>
                                         </div>
-
-
                                         <hr class="my-3" style="border-top: 1px solid #ccc;">
-
-                                        <!-- Card 2 -->
-                                        <div>
-                                            <div class="d-flex align-items-start gap-2 mb-2">
-                                                <img src="https://img.icons8.com/ultraviolet/40/change-user-male.png"
-                                                    alt="icona" style="width: 25px; height: 25px;">
-                                                <div class="fw-bold" style="font-size: 1.3rem;">Interscambio</div>
-                                            </div>
-
-                                            <p class="mb-0">Permette ai dipendenti di scannerizzare più QR Code. Utile
-                                                per situazioni simili a cantieri dislocati in diverse
-                                                posizioni</p>
-                                            <div class="form-check mt-2">
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="interscambioCheckbox">
-                                                <label class="form-check-label" for="interscambioCheckbox">Attiva
-                                                    Interscambio</label>
-                                            </div>
-
-
+                                    </div>
+                    
+                                    <!-- Card Interscambio -->
+                                    <div>
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <img src="https://img.icons8.com/ultraviolet/40/change-user-male.png" alt="icona"
+                                                style="width: 25px; height: 25px;">
+                                            <div class="fw-bold" style="font-size: 1.3rem;">Interscambio</div>
+                                        </div>
+                                        <p class="mb-0">Permette ai dipendenti di scannerizzare più QR Code. Utile per situazioni simili a
+                                            cantieri dislocati in diverse posizioni</p>
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" id="interscambioCheckbox">
+                                            <label class="form-check-label" for="interscambioCheckbox">Attiva Interscambio</label>
                                         </div>
                                     </div>
                                 </div>
-                            </div> <!-- CHIUSURA CORRETTA DELLA D-FLEX -->
-                        </div> <!-- CHIUSURA CORRETTA DEL P-4 P-MD-5 -->
+                            </div>
+                        </div>
                     </form>
+                      
 
                     <!-- Step 3 -->
                     <div id="step3" style="display: none;">
