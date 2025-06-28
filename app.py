@@ -27,12 +27,13 @@ app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY") #, "una-chiave-molto-segreta-e-lunga")  # <-- Cambia qui
 
 stripe.api_key = STRIPE_SECRET_KEY
-STRIPE_PRICE_ID = STRIPE_PRICE_ID #"price_1RN9mhEF8NjwgIEO4ZGym71S" #reale > "price_1RN9QQEF8NjwgIEOh6LgsLD4"**
+STRIPE_PRICE_ID = STRIPE_PRICE_ID
 STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET #'whsec_b7142045be6eda2db162e890c9acd6ac2d348dfd24f4401b9d334eb8a672e781' #di prova nel locale, scade dopo 90 giorni**
-
+STRIPE_WEBHOOK_SECRET_KOYEB = os.getenv("STRIPE_WEBHOOK_SECRET_KOYEB")
 AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 api = Api(AIRTABLE_TOKEN)
+
 
 # Configura Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -112,7 +113,7 @@ def stripe_webhook():
 
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET
+            payload, sig_header, STRIPE_WEBHOOK_SECRET_KOYEB #** forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET?
         )
     except stripe.error.SignatureVerificationError as e:
         return jsonify({"error": str(e)}), 400
@@ -175,7 +176,7 @@ def stripe_webhook():
         print(f"🔁 Altra modifica all’abbonamento per: {customer_id}")
 
     # ❌ Pagamento fallito
-    elif event['type'] == 'invoice.payment_failed':
+    elif event['type'] == 'invoice.payment_failed': #** qui bisogna svilupparlo
         invoice = event['data']['object']
         customer_id = invoice['customer']
         print(f"❌ invoice.payment_failed → Pagamento fallito per {customer_id}")
