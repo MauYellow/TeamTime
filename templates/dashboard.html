@@ -3,7 +3,7 @@
       data-theme="theme-default" dir="ltr" lang="en">
 
 <head>
-  <meta charset="utf-8" />
+      <meta charset="utf-8" />
       <meta content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
             name="viewport" />
       <title>
@@ -39,1181 +39,1285 @@
       <script src="/static/js/config.js"></script>
 </head>
 
- <body>
-  <!-- Layout wrapper -->
-  <div class="layout-wrapper layout-content-navbar">
-   <div class="layout-container">
-    <!-- Menu -->
-    <aside class="layout-menu menu-vertical menu bg-menu-theme" id="layout-menu">
-      <div class="app-brand demo">
-            <a class="app-brand-link" href="/">
-                  <span class="app-brand-logo demo">
-                        <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}" alt="TeamTime Logo"
-                              height="32">
-                  </span>
-                  <span class="app-brand-text demo menu-text fw-bolder ms-2">
-                        TeamTime
-                  </span>
-            </a>
-            <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" href="javascript:void(0);">
-                  <i class="bx bx-chevron-left bx-sm align-middle"></i>
-            </a>
-      </div>
-          
-     <div class="menu-inner-shadow">
-     </div>
-     <ul class="menu-inner py-1">
-      <!-- Dashboard -->
-      <li class="menu-item active">
-       <a class="menu-link" href="{{ url_for('dashboard') }}">
-        <i class="menu-icon tf-icons bx bx-home-circle">
-        </i>
-        <div data-i18n="Analytics">
-         Dashboard
-        </div>
-       </a>
-      </li>
-      <li class="menu-header small text-uppercase">
-       <span class="menu-header-text">
-        Dipendenti
-       </span>
-      </li>
-      <li class="menu-item">
-            <a class="menu-link" href="{{ url_for('calendario') }}">
-            <i class="menu-icon tf-icons bx bx-calendar"></i>
-        <div data-i18n="Authentications">
-         Calendario
-        </div>
-       </a>
-      </li>
-      <li class="menu-item">
-            <a class="menu-link" href="{{ url_for('staff') }}">
-                  <i class="menu-icon tf-icons bx bx-group"></i>
-                  <div data-i18n="Support">
-                        Staff
-                  </div>
-            </a>
-      </li>
-      <li class="menu-item">
-            <a class="menu-link" href="{{ url_for('dipendenti_al_lavoro') }}">
-                  <i class="menu-icon tf-icons bx bx-edit"></i>
-                  <div data-i18n="Support">
-                        Correggi Orari
-                        <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
-                  </div>
-            </a>
-      </li>
-          
+<style>
+      .step-indicator {
+            width: 12px;
+            height: 12px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.3s;
+      }
+
+      .step-indicator.active {
+            background-color: #dc3545;
+            /* rosso Bootstrap */
+      }
+</style>
 
 
-      <!-- Documenti -->
-      <li class="menu-header small text-uppercase">
-       <span class="menu-header-text">
-        Documenti
-       </span>
-      </li>
-      <li class="menu-item">
-            <a class="menu-link menu-toggle" href="javascript:void(0);">
-                  <i class="menu-icon tf-icons bx bx-euro">
-                  </i>
-                  <div data-i18n="Account Settings">
-                        Piani
-                  </div>
-            </a>
-            <ul class="menu-sub">
-                  <li class="menu-item">
-                        <a class="menu-link" href="piani" target="_blank">
-                              <div data-i18n="Account">
-                                    Piano Start
-                              </div>
-                        </a>
-                  </li>
-                  <li class="menu-item">
-                        <a class="menu-link" href="piani" target="_blank">
-                              <div data-i18n="Notifications">
-                                    Piano Teams
-                              </div>
-                        </a>
-                  </li>
-                  <li class="menu-item">
-                        <a class="menu-link" href="piani" target="_blank">
-                              <div data-i18n="Connections">
-                                    Piano Business
-                              </div>
-                        </a>
-                  </li>
-            </ul></li>
-      <li class="menu-item">
-       <a class="menu-link" href="/report">
-        <i class="menu-icon tf-icons bx bx-file">
-        </i>
-        <div data-i18n="Support">
-         Report
-        </div>
-       </a>
-      </li>
-      <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">
-                  Profilo
-            </span></li>
-      <li class="menu-item">
-       <a class="menu-link" href="{{ url_for('logout') }}">
-            <i class="menu-icon tf-icons bx bx-log-out"></i>
-        </i>
-        <div data-i18n="Documentation">
-         Log Out
-        </div>
-       </a>
-      </li>
-     </ul>
-    </aside>
-    <!-- / Menu -->
-    <!-- Layout container -->
-    <div class="layout-page">
-     <!-- Navbar -->
-     <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-      <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-       <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-        <i class="bx bx-menu bx-sm">
-        </i>
-       </a>
-      </div>
-      <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+<body>
+      <!-- Layout wrapper -->
+      <div class="layout-wrapper layout-content-navbar">
+            <div class="layout-container">
+                  <!-- Menu -->
+                  <aside class="layout-menu menu-vertical menu bg-menu-theme" id="layout-menu">
+                        <div class="app-brand demo">
+                              <a class="app-brand-link" href="/">
+                                    <span class="app-brand-logo demo">
+                                          <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}"
+                                                alt="TeamTime Logo" height="32">
+                                    </span>
+                                    <span class="app-brand-text demo menu-text fw-bolder ms-2">
+                                          TeamTime
+                                    </span>
+                              </a>
+                              <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
+                                    href="javascript:void(0);">
+                                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                              </a>
+                        </div>
 
-       <ul class="navbar-nav flex-row align-items-center ms-auto">
-        <!-- Place this tag where you want the button to render. -->
-      <a href="https://beacons.ai/teamtime" target="_blank" class="btn btn-outline-primary">
-            <i class="bx bx-download me-1"></i> Scarica App Mobile
-      </a>
-                 
-      <!-- User -->
-      <li class="nav-item navbar-dropdown dropdown-user dropdown">
-            <a class="nav-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown" href="javascript:void(0);">
-                  <div class="avatar avatar-online">
-                        <img alt="" class="w-px-40 h-auto rounded-circle" src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
-                  </div>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                        <a class="dropdown-item" href="#">
-                              <div class="d-flex">
-                                    <div class="flex-shrink-0 me-3">
-                                          <div class="avatar avatar-online">
-                                                <img alt="" class="w-px-40 h-auto rounded-circle"
-                                                      src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
+                        <div class="menu-inner-shadow">
+                        </div>
+                        <ul class="menu-inner py-1">
+                              <!-- Dashboard -->
+                              <li class="menu-item active">
+                                    <a class="menu-link" href="{{ url_for('dashboard') }}">
+                                          <i class="menu-icon tf-icons bx bx-home-circle">
+                                          </i>
+                                          <div data-i18n="Analytics">
+                                                Dashboard
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-header small text-uppercase">
+                                    <span class="menu-header-text">
+                                          Dipendenti
+                                    </span>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="{{ url_for('calendario') }}">
+                                          <i class="menu-icon tf-icons bx bx-calendar"></i>
+                                          <div data-i18n="Authentications">
+                                                Calendario
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="{{ url_for('staff') }}">
+                                          <i class="menu-icon tf-icons bx bx-group"></i>
+                                          <div data-i18n="Support">
+                                                Staff
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="{{ url_for('dipendenti_al_lavoro') }}">
+                                          <i class="menu-icon tf-icons bx bx-edit"></i>
+                                          <div data-i18n="Support">
+                                                Correggi Orari
+                                                <span class="badge bg-warning text-dark ms-2"
+                                                      style="font-size: 0.6rem;">Beta</span>
+                                          </div>
+                                    </a>
+                              </li>
+
+
+
+                              <!-- Documenti -->
+                              <li class="menu-header small text-uppercase">
+                                    <span class="menu-header-text">
+                                          Documenti
+                                    </span>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link menu-toggle" href="javascript:void(0);">
+                                          <i class="menu-icon tf-icons bx bx-euro">
+                                          </i>
+                                          <div data-i18n="Account Settings">
+                                                Piani
+                                          </div>
+                                    </a>
+                                    <ul class="menu-sub">
+                                          <li class="menu-item">
+                                                <a class="menu-link" href="piani" target="_blank">
+                                                      <div data-i18n="Account">
+                                                            Piano Start
+                                                      </div>
+                                                </a>
+                                          </li>
+                                          <li class="menu-item">
+                                                <a class="menu-link" href="piani" target="_blank">
+                                                      <div data-i18n="Notifications">
+                                                            Piano Teams
+                                                      </div>
+                                                </a>
+                                          </li>
+                                          <li class="menu-item">
+                                                <a class="menu-link" href="piani" target="_blank">
+                                                      <div data-i18n="Connections">
+                                                            Piano Business
+                                                      </div>
+                                                </a>
+                                          </li>
+                                    </ul>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="/report">
+                                          <i class="menu-icon tf-icons bx bx-file">
+                                          </i>
+                                          <div data-i18n="Support">
+                                                Report
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-header small text-uppercase">
+                                    <span class="menu-header-text">
+                                          Profilo
+                                    </span>
+                              </li>
+                              <li class="menu-item">
+                                    {% if data['Link Annullamento'] %}
+                                    <a class="menu-link" href="{{ data['Link Annullamento'] }}" target="_blank">
+                                          <i class="menu-icon tf-icons bx bx-repeat"></i>
+                                          <div data-i18n="Subscription">Gestisci Abbonamento</div>
+                                    </a>
+                                    {% else %}
+                                    <a class="menu-link" href="#" onclick="mostraPopupAbbonamento()">
+                                          <i class="menu-icon tf-icons bx bx-repeat"></i>
+                                          <div data-i18n="Subscription">Gestisci Abbonamento</div>
+                                    </a>
+                                    {% endif %}                           
+                              </li>
+                                  
+                              <li class="menu-item">
+                                    <a class="menu-link" href="{{ url_for('logout') }}">
+                                          <i class="menu-icon tf-icons bx bx-log-out"></i>
+                                          </i>
+                                          <div data-i18n="Documentation">
+                                                Log Out
+                                          </div>
+                                    </a>
+                              </li>
+                        </ul>
+                  </aside>
+                  <!-- / Menu -->
+                  <!-- Layout container -->
+                  <div class="layout-page">
+                        <!-- Navbar -->
+                        <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                              id="layout-navbar">
+                              <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                                          <i class="bx bx-menu bx-sm"></i>
+                                    </a>
+                              </div>
+                        
+                              <div class="navbar-nav-right d-flex align-items-center justify-content-between w-100" id="navbar-collapse">
+                        
+                                    <!-- 🔶 Messaggio AVVISO -->
+                                    <div class="alert alert-warning d-flex align-items-center mb-0" role="alert" style="font-size: 0.85rem;">
+                                          <i class="bx bx-mobile-alt me-2"></i>
+                                          <div>
+                                                Per registrare nuove entrate è necessaria l'app mobile!
+                                                <a href="#" class="fw-bold text-dark text-decoration-underline"
+                                                      onclick="document.getElementById('welcomeModal').style.display = 'block'; showStep(1); return false;">
+                                                      Vedi il breve tutorial
+                                                </a>
                                           </div>
                                     </div>
-                                    <div class="flex-grow-1">
-                                          <span class="fw-semibold d-block">
-                                                {{ data.Nome }}
-                                          </span>
-                                          <small class="text-muted">
-                                                Admin
-                                          </small>
-                                    </div>
+                        
+                                    <!-- 🔹 Pulsanti e avatar -->
+                                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+                                          <a href="https://beacons.ai/teamtime" target="_blank" class="btn btn-outline-primary me-2">
+                                                <i class="bx bx-download me-1"></i> Scarica App Mobile
+                                          </a>
+                        
+                                          <!-- User -->
+                                          <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                                                <a class="nav-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown"
+                                                      href="javascript:void(0);">
+                                                      <div class="avatar avatar-online">
+                                                            <img alt="" class="w-px-40 h-auto rounded-circle"
+                                                                  src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
+                                                      </div>
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                      <li>
+                                                            <a class="dropdown-item" href="#">
+                                                                  <div class="d-flex">
+                                                                        <div class="flex-shrink-0 me-3">
+                                                                              <div class="avatar avatar-online">
+                                                                                    <img alt="" class="w-px-40 h-auto rounded-circle"
+                                                                                          src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="flex-grow-1">
+                                                                              <span class="fw-semibold d-block">{{ data.Nome }}</span>
+                                                                              <small class="text-muted">Admin</small>
+                                                                        </div>
+                                                                  </div>
+                                                            </a>
+                                                      </li>
+                                                      <li>
+                                                            <div class="dropdown-divider"></div>
+                                                      </li>
+                                                      <li>
+                                                            <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                                                  <i class="bx bx-power-off me-2"></i>
+                                                                  <span class="align-middle">Log Out</span>
+                                                            </a>
+                                                      </li>
+                                                </ul>
+                                          </li>
+                                    </ul>
                               </div>
-                        </a>
-                  </li>
-                  <li>
-                        <div class="dropdown-divider"></div>
-                  </li>
-                  <li>
-                        <a class="dropdown-item" href="{{ url_for('logout') }}">
-                              <i class="bx bx-power-off me-2"></i>
-                              <span class="align-middle">Log Out</span>
-                        </a>
-                  </li>
-            </ul>
-      </li>
-      <!--/ User -->
+                        </nav>
+                            
+                        <!-- / Navbar -->
+                        <!-- Content wrapper -->
+                        <div class="content-wrapper">
+                              <!-- Content -->
+                              <div class="container-xxl flex-grow-1 container-p-y">
+                                    <div class="row">
+                                          <div class="col-lg-8 mb-4 order-0">
+                                                <div class="card">
+                                                      <div class="d-flex align-items-end row">
+                                                            <div class="col-sm-7">
+                                                                  <div class="card-body">
+                                                                        <h5 class="card-title text-primary">
+                                                                              Benvenuto/a {{ data.Nome }}! 🎉
+                                                                        </h5>
+                                                                        <p class="mb-4">
+                                                                              Al momento ci sono
+                                                                              <span class="fw-bold">
+                                                                                    {{ counter_al_lavoro }}
+                                                                              </span>
+                                                                              dipendenti a lavoro
+                                                                        </p>
+                                                                        <a href="{{ url_for('static', filename='qr_codes/' + data['Locale'] + '.pdf') }}" download class="btn btn-outline-danger">
+                                                                              Scarica QR Code
+                                                                        </a>
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-sm-5 text-center text-sm-left">
+                                                                  <div class="card-body pb-0 px-0 px-md-4">
+                                                                        <img alt="View Badge User"
+                                                                              data-app-dark-img="illustrations/man-with-laptop-dark.png"
+                                                                              data-app-light-img="illustrations/man-with-laptop-light.png"
+                                                                              height="140"
+                                                                              src="/static/img/illustrations/man-with-laptop-light.png" />
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <div class="col-lg-4 col-md-4 order-1">
+                                                <div class="row">
+                                                      <div class="col-lg-12 col-md-12 col-6 mb-4">
+                                                            <div class="card h-100">
+                                                                  <div class="card-body">
+                                                                        <div
+                                                                              class="card-title d-flex align-items-start justify-content-between">
+                                                                              <div class="avatar flex-shrink-0">
+                                                                                    <img src="/static/img/icons/unicons/chart-success.png"
+                                                                                          alt="chart success"
+                                                                                          class="rounded" />
+                                                                              </div>
+                                                                        </div>
 
-     </nav>
-     <!-- / Navbar -->
-     <!-- Content wrapper -->
-     <div class="content-wrapper">
-      <!-- Content -->
-      <div class="container-xxl flex-grow-1 container-p-y">
-       <div class="row">
-        <div class="col-lg-8 mb-4 order-0">
-         <div class="card">
-          <div class="d-flex align-items-end row">
-           <div class="col-sm-7">
-            <div class="card-body">
-             <h5 class="card-title text-primary">
-              Benvenuto/a {{ data.Nome }}! 🎉
-             </h5>
-             <p class="mb-4">
-              Al momento ci sono
-              <span class="fw-bold">
-                  {{ counter_al_lavoro }}
-              </span>
-              dipendenti a lavoro
-             </p>
-             <a class="btn btn-sm btn-outline-primary" href="https://apps.apple.com/us/app/teamtime-registro-presenze/id6443974498" target="_blank">
-              Lascia Recensione su Apple
-             </a>
-            <a class="btn btn-sm btn-outline-primary" href="https://play.google.com/store/apps/details?id=com.gmail.mauriziopolverini89.teamtime" target="_blank">
-                  Lascia Recensione su Android</a>
-            </div>
-           </div>
-           <div class="col-sm-5 text-center text-sm-left">
-            <div class="card-body pb-0 px-0 px-md-4">
-             <img alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png" height="140" src="/static/img/illustrations/man-with-laptop-light.png"/>
-            </div>
-           </div>
-          </div>
-         </div>
-        </div>
-        <div class="col-lg-4 col-md-4 order-1">
-         <div class="row">
-            <div class="col-lg-12 col-md-12 col-6 mb-4">
-                  <div class="card h-100">
-                        <div class="card-body">
-                              <div class="card-title d-flex align-items-start justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                          <img src="/static/img/icons/unicons/chart-success.png" alt="chart success"
-                                                class="rounded" />
-                                    </div>
-                              </div>
-            
-                              <span class="fw-semibold d-block mb-1">Stato del Servizio</span>
-                              <span class="badge bg-success">Attivo</span>
-            
-                              <small class="text-success fw-semibold d-block mt-2">
-                                    <i class="bx bx-up-arrow-alt"></i>
-                                    {{ len_mese_records }} Ingressi Questo Mese
-                              </small>
-                        </div>
-                  </div>
-            </div>
-                
-                
-         </div>
-        </div>
-        <!-- Total Revenue -->
-        <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
-         <div class="card">
-          <div class="row row-bordered g-0">
-           <div class="col-md-8">
-            <h5 class="card-header m-0 me-2 pb-3">
-             Totale Ingressi Di Oggi
-            </h5>
-            <div class="px-2" id="totalRevenueChart">
-            </div>
-           </div>
-           <div class="col-md-4">
-            <div class="card-body">
-             <div class="text-center">
-                  Capienza Database
-             </div>
-            </div>
-            <div id="growthChart">
-            </div>
-            <div class="text-center fw-semibold pt-3 mb-2">
-                  Numero Entrate: {{ len_records }}
-                  </div>
-            <div class="text-center fw-semibold pt-3 mb-2">
-             Capienza Massima: {{ data['Max Rows'] }}
-            </div>
-            <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
-             <div class="d-flex">
-              <div class="me-2">
-               <span class="badge bg-label-primary p-2">
-                  <i class='bx bx-user'></i>
-               </span>
-              </div>
-              <div class="d-flex flex-column">
-               <small>
-                Entrate Oggi
-               </small>
-               <h6 class="mb-0">
-                {{ len_oggi_records }}
-               </h6>
-              </div>
-             </div>
-             <div class="d-flex">
-              <div class="me-2">
-               <span class="badge bg-label-info p-2">
-                <i class="bx bx-door-open">
-                </i>
-               </span>
-              </div>
-              <div class="d-flex flex-column">
-               <small>
-                A Lavoro
-               </small>
-               <h6 class="mb-0">
-                {{ counter_al_lavoro }}
-               </h6>
-              </div>
-             </div>
-            </div>
-           </div>
-          </div>
-         </div>
-        </div>
-        <!--/ Total Revenue -->
-        <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
-         <div class="row">
-          <div class="col-6 mb-4">
-           <div class="card">
-            <div class="card-body">
-             <div class="card-title d-flex align-items-start justify-content-between">
-              <div class="avatar flex-shrink-0">
-            <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/today.png" />
+                                                                        <span class="fw-semibold d-block mb-1">Stato del
+                                                                              Servizio</span>
+                                                                        <span class="badge bg-success">Attivo</span>
 
-              </div>
-             </div>
-             <span class="d-block mb-1">
-              Oggi
-             </span>
-             <h3 class="card-title text-nowrap mb-2">
-              {{ counter_ore_lavorate_oggi | round(2) }}
-             </h3>
-             <small class="d-block mb-1">
-              Ore Lavorate
-             </small>
-            </div>
-           </div>
-          </div>
-          <div class="col-6 mb-4">
-           <div class="card">
-            <div class="card-body">
-             <div class="card-title d-flex align-items-start justify-content-between">
-              <div class="avatar flex-shrink-0">
-               <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/month.png"/>
-              </div>
-             </div>
-            <span class="d-block mb-1">
-                  Questo Mese
-            </span>
-             <h3 class="card-title mb-2">
-              {{ counter_ore_lavorate_mese }}
-             </h3>
-             <small class="d-block mb-1">
-              Ore Lavorate
-             </small>
-            </div>
-           </div>
-          </div>
-          <!-- </div>
+                                                                        <small
+                                                                              class="text-success fw-semibold d-block mt-2">
+                                                                              <i class="bx bx-up-arrow-alt"></i>
+                                                                              {{ len_mese_records }} Ingressi Questo
+                                                                              Mese
+                                                                        </small>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+
+
+                                                </div>
+                                          </div>
+                                          <!-- Total Revenue -->
+                                          <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
+                                                <div class="card">
+                                                      <div class="row row-bordered g-0">
+                                                            <div class="col-md-8">
+                                                                  <h5 class="card-header m-0 me-2 pb-3">
+                                                                        Totale Ingressi Di Oggi
+                                                                  </h5>
+                                                                  <div class="px-2" id="totalRevenueChart">
+                                                                  </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                  <div class="card-body">
+                                                                        <div class="text-center">
+                                                                              Capienza Database
+                                                                        </div>
+                                                                  </div>
+                                                                  <div id="growthChart">
+                                                                  </div>
+                                                                  <div class="text-center fw-semibold pt-3 mb-2">
+                                                                        Numero Entrate: {{ len_records }}
+                                                                  </div>
+                                                                  <div class="text-center fw-semibold pt-3 mb-2">
+                                                                        Capienza Massima: {{ data['Max Rows'] }}
+                                                                  </div>
+                                                                  <div
+                                                                        class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
+                                                                        <div class="d-flex">
+                                                                              <div class="me-2">
+                                                                                    <span
+                                                                                          class="badge bg-label-primary p-2">
+                                                                                          <i class='bx bx-user'></i>
+                                                                                    </span>
+                                                                              </div>
+                                                                              <div class="d-flex flex-column">
+                                                                                    <small>
+                                                                                          Entrate Oggi
+                                                                                    </small>
+                                                                                    <h6 class="mb-0">
+                                                                                          {{ len_oggi_records }}
+                                                                                    </h6>
+                                                                              </div>
+                                                                        </div>
+                                                                        <div class="d-flex">
+                                                                              <div class="me-2">
+                                                                                    <span
+                                                                                          class="badge bg-label-info p-2">
+                                                                                          <i class="bx bx-door-open">
+                                                                                          </i>
+                                                                                    </span>
+                                                                              </div>
+                                                                              <div class="d-flex flex-column">
+                                                                                    <small>
+                                                                                          A Lavoro
+                                                                                    </small>
+                                                                                    <h6 class="mb-0">
+                                                                                          {{ counter_al_lavoro }}
+                                                                                    </h6>
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <!--/ Total Revenue -->
+                                          <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
+                                                <div class="row">
+                                                      <div class="col-6 mb-4">
+                                                            <div class="card">
+                                                                  <div class="card-body">
+                                                                        <div
+                                                                              class="card-title d-flex align-items-start justify-content-between">
+                                                                              <div class="avatar flex-shrink-0">
+                                                                                    <img alt="Credit Card"
+                                                                                          class="rounded"
+                                                                                          src="/static/img/icons/unicons/today.png" />
+
+                                                                              </div>
+                                                                        </div>
+                                                                        <span class="d-block mb-1">
+                                                                              Oggi
+                                                                        </span>
+                                                                        <h3 class="card-title text-nowrap mb-2">
+                                                                              {{ counter_ore_lavorate_oggi | round(2) }}
+                                                                        </h3>
+                                                                        <small class="d-block mb-1">
+                                                                              Ore Lavorate
+                                                                        </small>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="col-6 mb-4">
+                                                            <div class="card">
+                                                                  <div class="card-body">
+                                                                        <div
+                                                                              class="card-title d-flex align-items-start justify-content-between">
+                                                                              <div class="avatar flex-shrink-0">
+                                                                                    <img alt="Credit Card"
+                                                                                          class="rounded"
+                                                                                          src="/static/img/icons/unicons/month.png" />
+                                                                              </div>
+                                                                        </div>
+                                                                        <span class="d-block mb-1">
+                                                                              Questo Mese
+                                                                        </span>
+                                                                        <h3 class="card-title mb-2">
+                                                                              {{ counter_ore_lavorate_mese }}
+                                                                        </h3>
+                                                                        <small class="d-block mb-1">
+                                                                              Ore Lavorate
+                                                                        </small>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <!-- </div>
     <div class="row"> -->
-      <div class="col-6 mb-4">
-            <div class="card">
-             <div class="card-body">
-              <div class="card-title d-flex align-items-start justify-content-between">
-               <div class="avatar flex-shrink-0">
-                <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/today.png"/>
-               </div>
-              </div>
-             <span class="d-block mb-1">
-              Media di Oggi
-             </span>
-              <h3 class="card-title mb-2">
-                  {{ "%.2f"|format((counter_ore_lavorate_oggi / len_oggi_records)
-                  if counter_ore_lavorate_oggi and len_oggi_records and len_oggi_records != 0     else 0) }}
-              </h3>
-              <small class="d-block mb-1">
-               Ore Lavorate
-              </small>
-             </div>
+                                                      <div class="col-6 mb-4">
+                                                            <div class="card">
+                                                                  <div class="card-body">
+                                                                        <div
+                                                                              class="card-title d-flex align-items-start justify-content-between">
+                                                                              <div class="avatar flex-shrink-0">
+                                                                                    <img alt="Credit Card"
+                                                                                          class="rounded"
+                                                                                          src="/static/img/icons/unicons/today.png" />
+                                                                              </div>
+                                                                        </div>
+                                                                        <span class="d-block mb-1">
+                                                                              Media di Oggi
+                                                                        </span>
+                                                                        <h3 class="card-title mb-2">
+                                                                              {{
+                                                                              "%.2f"|format((counter_ore_lavorate_oggi /
+                                                                              len_oggi_records)
+                                                                              if counter_ore_lavorate_oggi and
+                                                                              len_oggi_records and len_oggi_records != 0
+                                                                              else 0) }}
+                                                                        </h3>
+                                                                        <small class="d-block mb-1">
+                                                                              Ore Lavorate
+                                                                        </small>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                      <div class="col-6 mb-4">
+                                                            <div class="card">
+                                                                  <div class="card-body">
+                                                                        <div
+                                                                              class="card-title d-flex align-items-start justify-content-between">
+                                                                              <div class="avatar flex-shrink-0">
+                                                                                    <img alt="Credit Card"
+                                                                                          class="rounded"
+                                                                                          src="/static/img/icons/unicons/month.png" />
+                                                                              </div>
+                                                                        </div>
+                                                                        <span class="d-block mb-1">
+                                                                              Media Mensile
+                                                                        </span>
+                                                                        <h3 class="card-title mb-2">
+                                                                              {{ media_ore_mese }}
+                                                                        </h3>
+                                                                        <small class="d-block mb-1">
+                                                                              Ore Lavorate
+                                                                        </small>
+                                                                  </div>
+                                                            </div>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                                    <div class="row">
+                                          <!-- Order Statistics -->
+                                          <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
+                                                <div class="card h-100">
+                                                      <div
+                                                            class="card-header d-flex align-items-center justify-content-between pb-0">
+                                                            <div class="card-title mb-0">
+                                                                  <h5 class="m-0 me-2">
+                                                                        Registrazioni GPS Mensile
+                                                                  </h5>
+                                                                  <small class="text-muted">
+                                                                        In ottemperanza delle norme di privacy vigenti
+                                                                  </small>
+                                                            </div>
+                                                      </div>
+                                                      <div class="card-body">
+                                                            <div
+                                                                  class="d-flex justify-content-between align-items-center mb-3">
+                                                                  <div
+                                                                        class="d-flex flex-column align-items-center gap-1">
+                                                                        <h2 class="mb-2">
+                                                                              {{ len_mese_records }}
+                                                                        </h2>
+                                                                        <span>
+                                                                              Totale Registrazioni
+                                                                        </span>
+                                                                  </div>
+                                                                  <div id="orderStatisticsChart">
+                                                                  </div>
+                                                            </div>
+                                                            <ul class="p-0 m-0">
+                                                                  <li class="d-flex mb-4 pb-1">
+                                                                        <div class="avatar flex-shrink-0 me-3">
+                                                                              <span
+                                                                                    class="avatar-initial rounded bg-label-danger">
+                                                                                    <i class="bx bx-mobile-alt">
+                                                                                    </i>
+                                                                              </span>
+                                                                        </div>
+                                                                        <div
+                                                                              class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                                              <div class="me-2">
+                                                                                    <h6 class="mb-0">
+                                                                                          {{ GPS_labels.0 }}
+                                                                                    </h6>
+                                                                                    <small class="text-muted">
+                                                                                          {{ GPS_labels.0 }}
+                                                                                    </small>
+                                                                              </div>
+                                                                              <div class="user-progress">
+                                                                                    <small class="fw-semibold">
+                                                                                          {{ GPS_series.0 }}
+                                                                                    </small>
+                                                                              </div>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li class="d-flex mb-4 pb-1">
+                                                                        <div class="avatar flex-shrink-0 me-3">
+                                                                              <span
+                                                                                    class="avatar-initial rounded bg-label-primary">
+                                                                                    <i class="bx bx-mobile-alt">
+                                                                                    </i>
+                                                                              </span>
+                                                                        </div>
+                                                                        <div
+                                                                              class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                                              <div class="me-2">
+                                                                                    <h6 class="mb-0">
+                                                                                          {{ GPS_labels[1] if
+                                                                                          GPS_labels|length > 1 else
+                                                                                          "N/A" }}
+                                                                                    </h6>
+                                                                                    <small class="text-muted">
+                                                                                          {{ GPS_labels.1 }}
+                                                                                    </small>
+                                                                              </div>
+                                                                              <div class="user-progress">
+                                                                                    <small class="fw-semibold">
+                                                                                          {{ GPS_series.1 }}
+                                                                                    </small>
+                                                                              </div>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li class="d-flex mb-4 pb-1">
+                                                                        <div class="avatar flex-shrink-0 me-3">
+                                                                              <span
+                                                                                    class="avatar-initial rounded bg-label-warning">
+                                                                                    <i class="bx bx-mobile-alt">
+                                                                                    </i>
+                                                                              </span>
+                                                                        </div>
+                                                                        <div
+                                                                              class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                                              <div class="me-2">
+                                                                                    <h6 class="mb-0">
+                                                                                          {{ GPS_labels[2] if
+                                                                                          GPS_labels|length > 1 else
+                                                                                          "N/A" }}
+                                                                                    </h6>
+                                                                                    <small class="text-muted">
+                                                                                          {{ GPS_labels.2 }}
+                                                                                    </small>
+                                                                              </div>
+                                                                              <div class="user-progress">
+                                                                                    <small class="fw-semibold">
+                                                                                          {{ GPS_series.2 }}
+                                                                                    </small>
+                                                                              </div>
+                                                                        </div>
+                                                                  </li>
+                                                                  <li class="d-flex">
+                                                                        <div class="avatar flex-shrink-0 me-3">
+                                                                              <span
+                                                                                    class="avatar-initial rounded bg-label-secondary">
+                                                                                    <i class="bx bx-mobile-alt">
+                                                                                    </i>
+                                                                              </span>
+                                                                        </div>
+                                                                        <div
+                                                                              class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                                              <div class="me-2">
+                                                                                    <h6 class="mb-0">
+                                                                                          Altro
+                                                                                    </h6>
+                                                                                    <small class="text-muted">
+                                                                                          Altro
+                                                                                    </small>
+                                                                              </div>
+                                                                              <div class="user-progress">
+                                                                                    <small class="fw-semibold">
+                                                                                          -
+                                                                                    </small>
+                                                                              </div>
+                                                                        </div>
+                                                                  </li>
+                                                            </ul>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <!--/ Order Statistics -->
+                                          <!-- Impostazioni -->
+                                          <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
+                                                <div class="card h-100">
+                                                      <h5 class="card-header">Impostazioni</h5>
+                                                      <div class="card-body">
+                                                            <p>Le tue estensioni attive</p>
+
+                                                            <!-- QR Code -->
+                                                            <div class="d-flex mb-3">
+                                                                  <div class="flex-shrink-0">
+                                                                        <img src="https://img.icons8.com/fluency/48/qr-code.png"
+                                                                              alt="qr-code" class="me-3" height="30" />
+                                                                  </div>
+                                                                  <div class="flex-grow-1 row">
+                                                                        <div class="col-9">
+                                                                              <h6 class="mb-0">QR Code</h6>
+                                                                              <small class="text-muted">Attivo e
+                                                                                    Personalizzato</small>
+                                                                        </div>
+                                                                        <div class="col-3 text-end">
+                                                                              <div class="form-check form-switch">
+                                                                                    <input class="form-check-input"
+                                                                                          type="checkbox" role="switch"
+                                                                                          disabled checked />
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+
+                                                            <!-- Conteggio Orario -->
+                                                            <div class="d-flex mb-3">
+                                                                  <div class="flex-shrink-0">
+                                                                        <img src="https://img.icons8.com/ultraviolet/40/abacus.png"
+                                                                              alt="conteggio" class="me-3"
+                                                                              height="30" />
+                                                                  </div>
+                                                                  <div class="flex-grow-1 row">
+                                                                        <div class="col-9">
+                                                                              <h6 class="mb-0">Conteggio Orario</h6>
+                                                                              <small class="text-muted">In App</small>
+                                                                        </div>
+                                                                        <div class="col-3 text-end">
+                                                                              <div class="form-check form-switch">
+                                                                                    <input class="form-check-input"
+                                                                                          type="checkbox" role="switch"
+                                                                                          disabled checked />
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+
+                                                            <!-- Report Excel -->
+                                                            <div class="d-flex mb-3">
+                                                                  <div class="flex-shrink-0">
+                                                                        <img src="https://img.icons8.com/ultraviolet/40/ms-excel.png"
+                                                                              alt="excel" class="me-3" height="30" />
+                                                                  </div>
+                                                                  <div class="flex-grow-1 row">
+                                                                        <div class="col-9">
+                                                                              <h6 class="mb-0">Report Excel</h6>
+                                                                              <small class="text-muted">In App e sul
+                                                                                    Web</small>
+                                                                        </div>
+                                                                        <div class="col-3 text-end">
+                                                                              <div class="form-check form-switch">
+                                                                                    <input class="form-check-input"
+                                                                                          type="checkbox" role="switch"
+                                                                                          disabled {% if data['Mail
+                                                                                          Report Premium']=='yes'
+                                                                                          %}checked{% endif %} />
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+
+                                                            <!-- GPS -->
+                                                            <div class="d-flex mb-3">
+                                                                  <div class="flex-shrink-0">
+                                                                        <img src="https://img.icons8.com/office/40/worldwide-location--v1.png"
+                                                                              alt="gps" class="me-3" height="30" />
+                                                                  </div>
+                                                                  <div class="flex-grow-1 row">
+                                                                        <div class="col-9">
+                                                                              <h6 class="mb-0">GPS</h6>
+                                                                              <small class="text-muted">Localizza dove
+                                                                                    sono effettuati gli scan</small>
+                                                                        </div>
+                                                                        <div class="col-3 text-end">
+                                                                              <div class="form-check form-switch">
+                                                                                    <input class="form-check-input"
+                                                                                          type="checkbox" role="switch"
+                                                                                          disabled {% if
+                                                                                          data['GPS']=='yes' %}checked{%
+                                                                                          endif %} />
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+
+                                                            <!-- Intercambio -->
+                                                            <div class="d-flex">
+                                                                  <div class="flex-shrink-0">
+                                                                        <img src="https://img.icons8.com/ultraviolet/40/change-user-male.png"
+                                                                              alt="intercambio" class="me-3"
+                                                                              height="30" />
+                                                                  </div>
+                                                                  <div class="flex-grow-1 row">
+                                                                        <div class="col-9">
+                                                                              <h6 class="mb-0">Intercambio</h6>
+                                                                              <small class="text-muted">Permette ai
+                                                                                    dipendenti di scannerizzare più QR
+                                                                                    Code</small>
+                                                                        </div>
+                                                                        <div class="col-3 text-end">
+                                                                              <div class="form-check form-switch">
+                                                                                    <input class="form-check-input"
+                                                                                          type="checkbox" role="switch"
+                                                                                          disabled {% if
+                                                                                          data['Intercambio']=='yes'
+                                                                                          %}checked{% endif %} />
+
+                                                                              </div>
+                                                                        </div>
+                                                                  </div>
+                                                            </div>
+
+                                                      </div> <!-- /card-body -->
+                                                </div> <!-- /card -->
+                                          </div> <!-- /col -->
+
+                                          <!--/ Expense Overview -->
+                                          <!-- Transactions -->
+                                          <div class="col-md-6 col-lg-4 order-2 mb-4">
+                                                <div class="card h-100">
+                                                      <div
+                                                            class="card-header d-flex align-items-center justify-content-between">
+                                                            <h5 class="card-title m-0 me-2">
+                                                                  Ultime Attività
+                                                            </h5>
+                                                      </div>
+                                                      <div class="card-body">
+                                                            <ul class="p-0 m-0">
+                                                                  {% for i in range(6) %}
+                                                                  {% set record = ultimi6_records[i] if
+                                                                  ultimi6_records|length > i else None %}
+                                                                  <li class="d-flex mb-4 pb-1">
+                                                                        <div class="avatar flex-shrink-0 me-3">
+                                                                              <img alt="User" class="rounded"
+                                                                                    src="/static/img/icons/unicons/chart.png" />
+                                                                        </div>
+                                                                        <div
+                                                                              class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                                              <div class="me-2">
+                                                                                    <small
+                                                                                          class="text-muted d-block mb-1">
+                                                                                          {{ record.fields.Created if
+                                                                                          record else "-" }}
+                                                                                    </small>
+                                                                                    <h6 class="mb-0">
+                                                                                          {{ record.fields.Nome if
+                                                                                          record else "-" }}
+                                                                                    </h6>
+                                                                              </div>
+                                                                              <div
+                                                                                    class="user-progress d-flex align-items-center gap-1">
+                                                                                    <h6 class="mb-0">
+                                                                                          {{ record.fields.Entrata if
+                                                                                          record else "-" }}
+                                                                                    </h6>
+                                                                                    <span class="text-muted">
+                                                                                          {{ record.fields.Uscita if
+                                                                                          record else "-" }}
+                                                                                    </span>
+                                                                              </div>
+                                                                        </div>
+                                                                  </li>
+                                                                  {% endfor %}
+
+
+                                                            </ul>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          <!--/ Transactions -->
+                                    </div>
+                              </div>
+                              <!-- / Content -->
+                              <!-- Footer -->
+                              <footer class="content-footer footer bg-footer-theme">
+                                    <div
+                                          class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                                          <div class="mb-2 mb-md-0">
+                                                ©
+                                                <script>
+                                                      document.write(new Date().getFullYear());
+                                                </script>
+                                                , Designed with ❤️ by
+                                                <a class="footer-link fw-bolder" href="https://www.app-eleven.it"
+                                                      target="_blank">
+                                                      AppEleven
+                                                </a>
+                                          </div>
+                                          <div>
+                                                <a class="footer-link me-4" href="https://themeselection.com/license/"
+                                                      target="_blank">
+                                                      License
+                                                </a>
+                                                <a class="footer-link me-4" href="{{ url_for('home') }}#contact"
+                                                      target="_blank">
+                                                      Support
+                                                </a>
+                                          </div>
+                                    </div>
+                              </footer>
+                              <!-- / Footer -->
+                              <div class="content-backdrop fade">
+                              </div>
+                        </div>
+                        <!-- Content wrapper -->
+                  </div>
+                  <!-- / Layout page -->
             </div>
-           </div>
-      <div class="col-6 mb-4">
-            <div class="card">
-                  <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                              <div class="avatar flex-shrink-0">
-                                    <img alt="Credit Card" class="rounded" src="/static/img/icons/unicons/month.png" />
-                              </div>
-                        </div>
-                        <span class="d-block mb-1">
-                              Media Mensile
-                        </span>
-                        <h3 class="card-title mb-2">
-                              {{ media_ore_mese }}
-                        </h3>
-                        <small class="d-block mb-1">
-                              Ore Lavorate
-                        </small>
-                  </div>
+            <!-- Overlay -->
+            <div class="layout-overlay layout-menu-toggle">
             </div>
       </div>
-         </div>
-        </div>
-       </div>
-       <div class="row">
-        <!-- Order Statistics -->
-        <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
-         <div class="card h-100">
-          <div class="card-header d-flex align-items-center justify-content-between pb-0">
-           <div class="card-title mb-0">
-            <h5 class="m-0 me-2">
-             Registrazioni GPS Mensile
-            </h5>
-            <small class="text-muted">
-             In ottemperanza delle norme di privacy vigenti
-            </small>
-           </div>
-          </div>
-          <div class="card-body">
-           <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="d-flex flex-column align-items-center gap-1">
-             <h2 class="mb-2">
-              {{ len_mese_records }}
-             </h2>
-             <span>
-              Totale Registrazioni
-             </span>
+      <!-- / Layout wrapper -->
+
+      <!-- Pulsante Assistenza -->
+      <div class="buy-now" id="assistenza-button">
+            <button class="btn btn-danger btn-buy-now" onclick="apriChat()">
+                  Assistenza
+            </button>
+      </div>
+
+      <!-- Chat Assistenza -->
+      <div id="chat-assistenza" class="card p-3 mb-4 position-fixed end-0 bottom-0 m-4 shadow"
+            style="width: 350px; max-width: 90vw; display: none; z-index: 9999;">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                  <h6 class="mb-0">🤖 Assistenza TeamTime</h6>
+                  <button class="btn-close" aria-label="Close" onclick="toggleChat()"></button>
             </div>
-            <div id="orderStatisticsChart">
+
+            <div id="chat-box" class="border rounded bg-light p-3 mb-3"
+                  style="min-height: 150px; max-height: 200px; overflow-y: auto;">
+                  <p><i>Benvenuto! Seleziona una domanda per ricevere assistenza.</i></p>
             </div>
-           </div>
-           <ul class="p-0 m-0">
-            <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <span class="avatar-initial rounded bg-label-danger">
-               <i class="bx bx-mobile-alt">
-               </i>
-              </span>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <h6 class="mb-0">
-                {{ GPS_labels.0 }}
-               </h6>
-               <small class="text-muted">
-                  {{ GPS_labels.0 }}
-               </small>
-              </div>
-              <div class="user-progress">
-               <small class="fw-semibold">
-                  {{ GPS_series.0 }}
-               </small>
-              </div>
-             </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <span class="avatar-initial rounded bg-label-primary">
-               <i class="bx bx-mobile-alt">
-               </i>
-              </span>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <h6 class="mb-0">
-                  {{ GPS_labels[1] if GPS_labels|length > 1 else "N/A" }}
-               </h6>
-               <small class="text-muted">
-                  {{ GPS_labels.1 }}
-               </small>
-              </div>
-              <div class="user-progress">
-               <small class="fw-semibold">
-                  {{ GPS_series.1 }}
-               </small>
-              </div>
-             </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <span class="avatar-initial rounded bg-label-warning">
-               <i class="bx bx-mobile-alt">
-               </i>
-              </span>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <h6 class="mb-0">
-                  {{ GPS_labels[2] if GPS_labels|length > 1 else "N/A" }}
-               </h6>
-               <small class="text-muted">
-                  {{ GPS_labels.2 }}
-               </small>
-              </div>
-              <div class="user-progress">
-               <small class="fw-semibold">
-                  {{ GPS_series.2 }}
-               </small>
-              </div>
-             </div>
-            </li>
-            <li class="d-flex">
-             <div class="avatar flex-shrink-0 me-3">
-              <span class="avatar-initial rounded bg-label-secondary">
-               <i class="bx bx-mobile-alt">
-               </i>
-              </span>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <h6 class="mb-0">
-                Altro
-               </h6>
-               <small class="text-muted">
-                Altro
-               </small>
-              </div>
-              <div class="user-progress">
-               <small class="fw-semibold">
-                -
-               </small>
-              </div>
-             </div>
-            </li>
-           </ul>
-          </div>
-         </div>
-        </div>
-        <!--/ Order Statistics -->
-        <!-- Impostazioni -->
-      <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
-            <div class="card h-100">
-                  <h5 class="card-header">Impostazioni</h5>
-                  <div class="card-body">
-                        <p>Le tue estensioni attive</p>
-      
-                        <!-- QR Code -->
-                        <div class="d-flex mb-3">
-                              <div class="flex-shrink-0">
-                                    <img src="https://img.icons8.com/fluency/48/qr-code.png" alt="qr-code" class="me-3"
-                                          height="30" />
-                              </div>
-                              <div class="flex-grow-1 row">
-                                    <div class="col-9">
-                                          <h6 class="mb-0">QR Code</h6>
-                                          <small class="text-muted">Attivo e Personalizzato</small>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                          <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" disabled checked />
-                                          </div>
-                                    </div>
-                              </div>
-                        </div>
-      
-                        <!-- Conteggio Orario -->
-                        <div class="d-flex mb-3">
-                              <div class="flex-shrink-0">
-                                    <img src="https://img.icons8.com/ultraviolet/40/abacus.png" alt="conteggio" class="me-3"
-                                          height="30" />
-                              </div>
-                              <div class="flex-grow-1 row">
-                                    <div class="col-9">
-                                          <h6 class="mb-0">Conteggio Orario</h6>
-                                          <small class="text-muted">In App</small>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                          <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" disabled checked />
-                                          </div>
-                                    </div>
-                              </div>
-                        </div>
-      
-                        <!-- Report Excel -->
-                        <div class="d-flex mb-3">
-                              <div class="flex-shrink-0">
-                                    <img src="https://img.icons8.com/ultraviolet/40/ms-excel.png" alt="excel" class="me-3"
-                                          height="30" />
-                              </div>
-                              <div class="flex-grow-1 row">
-                                    <div class="col-9">
-                                          <h6 class="mb-0">Report Excel</h6>
-                                          <small class="text-muted">In App e sul Web</small>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                          <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" disabled {% if data['Mail Report Premium']=='yes' %}checked{% endif %} />
-                                          </div>
-                                    </div>
-                              </div>
-                        </div>
-      
-                        <!-- GPS -->
-                        <div class="d-flex mb-3">
-                              <div class="flex-shrink-0">
-                                    <img src="https://img.icons8.com/office/40/worldwide-location--v1.png" alt="gps"
-                                          class="me-3" height="30" />
-                              </div>
-                              <div class="flex-grow-1 row">
-                                    <div class="col-9">
-                                          <h6 class="mb-0">GPS</h6>
-                                          <small class="text-muted">Localizza dove sono effettuati gli scan</small>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                          <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" disabled {% if data['GPS']=='yes' %}checked{% endif %} />
-                                          </div>
-                                    </div>
-                              </div>
-                        </div>
-      
-                        <!-- Intercambio -->
-                        <div class="d-flex">
-                              <div class="flex-shrink-0">
-                                    <img src="https://img.icons8.com/ultraviolet/40/change-user-male.png" alt="intercambio"
-                                          class="me-3" height="30" />
-                              </div>
-                              <div class="flex-grow-1 row">
-                                    <div class="col-9">
-                                          <h6 class="mb-0">Intercambio</h6>
-                                          <small class="text-muted">Permette ai dipendenti di scannerizzare più QR
-                                                Code</small>
-                                    </div>
-                                    <div class="col-3 text-end">
-                                          <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" role="switch" disabled {% if data['Intercambio']=='yes' %}checked{% endif %} />
 
-                                          </div>
-                                    </div>
-                              </div>
-                        </div>
-      
-                  </div> <!-- /card-body -->
-            </div> <!-- /card -->
-      </div> <!-- /col -->
-          
-        <!--/ Expense Overview -->
-        <!-- Transactions -->
-        <div class="col-md-6 col-lg-4 order-2 mb-4">
-         <div class="card h-100">
-          <div class="card-header d-flex align-items-center justify-content-between">
-           <h5 class="card-title m-0 me-2">
-            Ultime Attività
-           </h5>
-          </div>
-          <div class="card-body">
-           <ul class="p-0 m-0">
-            <li class="d-flex mb-4 pb-1">
-             <div class="avatar flex-shrink-0 me-3">
-              <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png"/>
-             </div>
-             <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-               <small class="text-muted d-block mb-1">
-                {{ ultimi6_records.0.fields.Created | default("-") }}
-               </small>
-               <h6 class="mb-0">
-                  {{ ultimi6_records.0.fields.Nome | default("-") }}
-               </h6>
-              </div>
-              <div class="user-progress d-flex align-items-center gap-1">
-               <h6 class="mb-0">
-                  {{ ultimi6_records.0.fields.Entrata | default("-") }}
-               </h6>
-               <span class="text-muted">
-                  {{ ultimi6_records.0.fields.Uscita | default("-") }}
-               </span>
-              </div>
-             </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-                  <div class="avatar flex-shrink-0 me-3">
-                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
-                  </div>
-                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                        <div class="me-2">
-                              <small class="text-muted d-block mb-1">
-                                    {{ ultimi6_records.1.fields.Created | default("-") }}
-                              </small>
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.1.fields.Nome | default("-") }}
-                              </h6>
-                        </div>
-                        <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.1.fields.Entrata | default("-") }}
-                              </h6>
-                              <span class="text-muted">
-                                    {{ ultimi6_records.1.fields.Uscita | default("-") }}
-                              </span>
-                        </div>
-                  </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-                  <div class="avatar flex-shrink-0 me-3">
-                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
-                  </div>
-                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                        <div class="me-2">
-                              <small class="text-muted d-block mb-1">
-                                    {{ ultimi6_records.2.fields.Created | default("-") }}
-                              </small>
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.2.fields.Nome | default("-") }}
-                              </h6>
-                        </div>
-                        <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.2.fields.Entrata | default("-") }}
-                              </h6>
-                              <span class="text-muted">
-                                    {{ ultimi6_records.2.fields.Uscita | default("-") }}
-                              </span>
-                        </div>
-                  </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-                  <div class="avatar flex-shrink-0 me-3">
-                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
-                  </div>
-                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                        <div class="me-2">
-                              <small class="text-muted d-block mb-1">
-                                    {{ ultimi6_records.3.fields.Created | default("-") }}
-                              </small>
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.3.fields.Nome | default("-") }}
-                              </h6>
-                        </div>
-                        <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.3.fields.Entrata | default("-") }}
-                              </h6>
-                              <span class="text-muted">
-                                    {{ ultimi6_records.3.fields.Uscita | default("-") }}
-                              </span>
-                        </div>
-                  </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-                  <div class="avatar flex-shrink-0 me-3">
-                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
-                  </div>
-                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                        <div class="me-2">
-                              <small class="text-muted d-block mb-1">
-                                    {{ ultimi6_records.4.fields.Created | default("-") }}
-                              </small>
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.4.fields.Nome | default("-") }}
-                              </h6>
-                        </div>
-                        <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.4.fields.Entrata | default("-") }}
-                              </h6>
-                              <span class="text-muted">
-                                    {{ ultimi6_records.4.fields.Uscita | default("-") }}
-                              </span>
-                        </div>
-                  </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-                  <div class="avatar flex-shrink-0 me-3">
-                        <img alt="User" class="rounded" src="/static/img/icons/unicons/chart.png" />
-                  </div>
-                  <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                        <div class="me-2">
-                              <small class="text-muted d-block mb-1">
-                                    {{ ultimi6_records.5.fields.Created | default("-") }}
-                              </small>
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.5.fields.Nome | default("-") }}
-                              </h6>
-                        </div>
-                        <div class="user-progress d-flex align-items-center gap-1">
-                              <h6 class="mb-0">
-                                    {{ ultimi6_records.5.fields.Entrata | default("-") }}
-                              </h6>
-                              <span class="text-muted">
-                                    {{ ultimi6_records.5.fields.Uscita | default("-") }}
-                              </span>
-                        </div>
-                  </div>
-            </li>
-           </ul>
-          </div>
-         </div>
-        </div>
-        <!--/ Transactions -->
-       </div>
-      </div>
-      <!-- / Content -->
-      <!-- Footer -->
-      <footer class="content-footer footer bg-footer-theme">
-       <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-        <div class="mb-2 mb-md-0">
-         ©
-         <script>
-          document.write(new Date().getFullYear());
-         </script>
-         , Designed with ❤️ by
-         <a class="footer-link fw-bolder" href="https://www.app-eleven.it" target="_blank">
-          AppEleven
-         </a>
-        </div>
-        <div>
-         <a class="footer-link me-4" href="https://themeselection.com/license/" target="_blank">
-          License
-         </a>
-         <a class="footer-link me-4" href="{{ url_for('home') }}#contact" target="_blank">
-          Support
-         </a>
-        </div>
-       </div>
-      </footer>
-      <!-- / Footer -->
-      <div class="content-backdrop fade">
-      </div>
-     </div>
-     <!-- Content wrapper -->
-    </div>
-    <!-- / Layout page -->
-   </div>
-   <!-- Overlay -->
-   <div class="layout-overlay layout-menu-toggle">
-   </div>
-  </div>
-  <!-- / Layout wrapper -->
-
-  -- Pulsante Assistenza -->
-<div class="buy-now" id="assistenza-button">
-      <button class="btn btn-danger btn-buy-now" onclick="apriChat()">
-            Assistenza
-      </button>
-</div>
-
-<!-- Chat Assistenza -->
-<div id="chat-assistenza" class="card p-3 mb-4 position-fixed end-0 bottom-0 m-4 shadow"
-      style="width: 350px; max-width: 90vw; display: none; z-index: 9999;">
-      <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="mb-0">🤖 Assistenza TeamTime</h6>
-            <button class="btn-close" aria-label="Close" onclick="toggleChat()"></button>
+            <div class="d-grid gap-2">
+                  <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('primoscan')"> 🚪 Come registrare un'entrata?</button>
+                  <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('correggi')">👤 Un dipendente si è
+                        dimenticato di timbrare l'uscita</button>
+                  <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('report')">📊 Come scarico il
+                        report
+                        mensile?</button>
+                  <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('alLavoro')">📌 Cosa significa “al
+                        lavoro”?</button>
+                  <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('Assistenza')">Contatta il servizio
+                        clienti</button>
+            </div>
       </div>
 
-      <div id="chat-box" class="border rounded bg-light p-3 mb-3"
-            style="min-height: 150px; max-height: 200px; overflow-y: auto;">
-            <p><i>Benvenuto! Seleziona una domanda per ricevere assistenza.</i></p>
-      </div>
-
-      <div class="d-grid gap-2">
-            <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('correggi')">👤 Un dipendente si è dimenticato di timbrare l'uscita</button>
-            <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('report')">📊 Come scarico il report
-                  mensile?</button>
-            <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('alLavoro')">📌 Cosa significa “al
-                  lavoro”?</button>
-            <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('Assistenza')">Contatta il servizio
-                  clienti</button>
-      </div>
-</div>
-
-<!-- Script -->
-<script>
-      function apriChat() {
-            document.getElementById("chat-assistenza").style.display = "block";
-            document.getElementById("assistenza-button").style.display = "none";
-      }
-
-      function toggleChat() {
-            const chat = document.getElementById("chat-assistenza");
-            if (chat.style.display === "none") {
-                  chat.style.display = "block";
+      <!-- Script -->
+      <script>
+            function apriChat() {
+                  document.getElementById("chat-assistenza").style.display = "block";
                   document.getElementById("assistenza-button").style.display = "none";
-            } else {
-                  chat.style.display = "none";
-                  document.getElementById("assistenza-button").style.display = "block";
-            }
-      }
-
-      function showAnswer(type) {
-            const chatBox = document.getElementById("chat-box");
-            let answer = "";
-
-            if (type === 'correggi') {
-                  answer = "Nessun problema! Vai su <strong>Correggi Orari</strong> (nel menu a sinistra) > Cerca il dipendente > Clicca '<strong>Correggi</strong>' > Immetti l'orario di uscita > clicca '<strong>Salva</strong>'";
-            } else if (type === 'report') {
-                  answer = "Puoi scaricare il report mensile accedendo alla sezione 'Report' e selezionando il mese desiderato.";
-            } else if (type === 'alLavoro') {
-                  answer = "Quando un dipendente risulta 'Al lavoro', significa che non ha ancora registrato l'orario di uscita.";
-            } else if (type === 'Assistenza') {
-                  answer = `Per ricevere ulteriore supporto, <a href="/#contact" class="text-primary" target="_blank">clicca qui</a>.`;
             }
 
-            const domanda = document.querySelector(`button[onclick*="${type}"]`).innerText;
-            chatBox.innerHTML += `<p><b> Tu :</b> ${domanda}</p>`;
-            chatBox.innerHTML += `<p><b>TeamTimeBot:</b> ${answer}</p>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-      }
-</script>
-    
-    
-          
-<!-- Core JS -->
-<!-- build:js /vendor/js/core.js -->
-<script src="/static/vendor/libs/jquery/jquery.js"></script>
-<script src="/static/vendor/libs/popper/popper.js"></script>
-<script src="/static/vendor/js/bootstrap.js"></script>
-<script src="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-<script src="/static/vendor/js/menu.js"></script>
-<!-- endbuild -->
+            function toggleChat() {
+                  const chat = document.getElementById("chat-assistenza");
+                  if (chat.style.display === "none") {
+                        chat.style.display = "block";
+                        document.getElementById("assistenza-button").style.display = "none";
+                  } else {
+                        chat.style.display = "none";
+                        document.getElementById("assistenza-button").style.display = "block";
+                  }
+            }
 
-<!-- Vendors JS -->
-<script src="/static/vendor/libs/apex-charts/apexcharts.js"></script>
+            function showAnswer(type) {
+                  const chatBox = document.getElementById("chat-box");
+                  let answer = "";
 
-<!-- Main JS -->
-<script src="/static/js/main.js"></script>
+                  if (type === 'correggi') {
+                        answer = "Nessun problema! Vai su <strong>Correggi Orari</strong> (nel menu a sinistra) > Cerca il dipendente > Clicca '<strong>Correggi</strong>' > Immetti l'orario di uscita > clicca '<strong>Salva</strong>'";
+                  } else if (type === 'report') {
+                        answer = "Puoi scaricare il report mensile accedendo alla sezione 'Report' e selezionando il mese desiderato.";
+                  } else if (type === 'alLavoro') {
+                        answer = "Quando un dipendente risulta 'Al lavoro', significa che non ha ancora registrato l'orario di uscita.";
+                  } else if (type === 'Assistenza') {
+                        answer = `Per ricevere ulteriore supporto, <a href="/#contact" class="text-primary" target="_blank">clicca qui</a>.`;
+                  } else if (type === 'primoscan') {
+                        answer = `Scarica l'app mobile > Registrati come dipendente e legati al QR Code > Scannerizza il QR Code
+    <br><a href="#" onclick="document.getElementById('welcomeModal').style.display = 'block'; showStep(1); return false;" style="text-decoration: underline; font-size: 0.85rem; color: #007bff;">📘 Inizia Tutorial</a>`;
+                  }
 
-<!-- Page JS -->
-<script src="/static/js/dashboards-analytics.js"></script>
+                  const domanda = document.querySelector(`button[onclick*="${type}"]`).innerText;
+                  chatBox.innerHTML += `<p><b> Tu :</b> ${domanda}</p>`;
+                  chatBox.innerHTML += `<p><b>TeamTimeBot:</b> ${answer}</p>`;
+                  chatBox.scrollTop = chatBox.scrollHeight;
+            }
+      </script>
 
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
 
-<script>
-      document.addEventListener("DOMContentLoaded", function () {
-            const categorieOrarie = {{ grafico_etichette_ore | tojson
-      }};
-      const datiIngressi = {{ grafico_valori | tojson }};
+      <!-- Core JS -->
+      <!-- build:js /vendor/js/core.js -->
+      <script src="/static/vendor/libs/jquery/jquery.js"></script>
+      <script src="/static/vendor/libs/popper/popper.js"></script>
+      <script src="/static/vendor/js/bootstrap.js"></script>
+      <script src="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+      <script src="/static/vendor/js/menu.js"></script>
+      <!-- endbuild -->
 
-      console.log("Categorie:", categorieOrarie);
-      console.log("Ingressi:", datiIngressi);
+      <!-- Vendors JS -->
+      <script src="/static/vendor/libs/apex-charts/apexcharts.js"></script>
 
-      const totalRevenueChartEl = document.querySelector('#totalRevenueChart');
+      <!-- Main JS -->
+      <script src="/static/js/main.js"></script>
 
-      if (totalRevenueChartEl) {
-            const totalRevenueChartOptions = {
-                  series: [{
-                        name: 'Ingressi',
-                        data: datiIngressi
-                  }],
+      <!-- Page JS -->
+      <script src="/static/js/dashboards-analytics.js"></script>
+
+      <!-- Place this tag in your head or just before your close body tag. -->
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+
+      <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                  const primoAccesso = "{{ data['Primo Accesso'] | lower }}";
+                  if (primoAccesso === "yes") {
+                        document.getElementById("welcomeModal").style.display = "block";
+                  }
+
+                  const categorieOrarie = {{ grafico_etichette_ore | tojson
+            }};
+            const datiIngressi = {{ grafico_valori | tojson }};
+
+            console.log("Categorie:", categorieOrarie);
+            console.log("Ingressi:", datiIngressi);
+
+            const totalRevenueChartEl = document.querySelector('#totalRevenueChart');
+
+            if (totalRevenueChartEl) {
+                  const totalRevenueChartOptions = {
+                        series: [{
+                              name: 'Ingressi',
+                              data: datiIngressi
+                        }],
+                        chart: {
+                              height: 300,
+                              stacked: true,
+                              type: 'bar',
+                              toolbar: { show: false }
+                        },
+                        plotOptions: {
+                              bar: {
+                                    horizontal: false,
+                                    columnWidth: '33%',
+                                    borderRadius: 12,
+                                    startingShape: 'rounded',
+                                    endingShape: 'rounded'
+                              }
+                        },
+                        colors: ['#696CFF'],  // oppure usa config.colors.primary se lo hai definito
+                        dataLabels: {
+                              enabled: false
+                        },
+                        legend: {
+                              show: true,
+                              horizontalAlign: 'left',
+                              position: 'top',
+                              markers: {
+                                    height: 8,
+                                    width: 8,
+                                    radius: 12,
+                                    offsetX: -3
+                              },
+                              labels: {
+                                    colors: '#888'
+                              },
+                              itemMargin: {
+                                    horizontal: 10
+                              }
+                        },
+                        grid: {
+                              borderColor: '#e0e0e0',
+                              padding: {
+                                    top: 0,
+                                    bottom: -8,
+                                    left: 20,
+                                    right: 20
+                              }
+                        },
+                        xaxis: {
+                              categories: categorieOrarie,
+                              labels: {
+                                    style: {
+                                          fontSize: '13px',
+                                          colors: '#888'
+                                    }
+                              },
+                              axisTicks: {
+                                    show: false
+                              },
+                              axisBorder: {
+                                    show: false
+                              }
+                        },
+                        yaxis: {
+                              labels: {
+                                    style: {
+                                          fontSize: '13px',
+                                          colors: '#888'
+                                    }
+                              }
+                        },
+                        states: {
+                              hover: {
+                                    filter: { type: 'none' }
+                              },
+                              active: {
+                                    filter: { type: 'none' }
+                              }
+                        }
+                  };
+
+                  const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
+                  totalRevenueChart.render();
+            }
+      });
+      </script>
+
+      <!-- Capienza Database -->
+      <script>
+            const growthChartOptions = {
+                  series: [{{ percentage }} ],
+                  labels: ['Capienza'],
                   chart: {
-                        height: 300,
-                        stacked: true,
-                        type: 'bar',
-                        toolbar: { show: false }
+                        height: 240,
+                        type: 'radialBar'
                   },
                   plotOptions: {
-                        bar: {
-                              horizontal: false,
-                              columnWidth: '33%',
-                              borderRadius: 12,
-                              startingShape: 'rounded',
-                              endingShape: 'rounded'
-                        }
-                  },
-                  colors: ['#696CFF'],  // oppure usa config.colors.primary se lo hai definito
-                  dataLabels: {
-                        enabled: false
-                  },
-                  legend: {
-                        show: true,
-                        horizontalAlign: 'left',
-                        position: 'top',
-                        markers: {
-                              height: 8,
-                              width: 8,
-                              radius: 12,
-                              offsetX: -3
-                        },
-                        labels: {
-                              colors: '#888'
-                        },
-                        itemMargin: {
-                              horizontal: 10
-                        }
-                  },
-                  grid: {
-                        borderColor: '#e0e0e0',
-                        padding: {
-                              top: 0,
-                              bottom: -8,
-                              left: 20,
-                              right: 20
-                        }
-                  },
-                  xaxis: {
-                        categories: categorieOrarie,
-                        labels: {
-                              style: {
-                                    fontSize: '13px',
-                                    colors: '#888'
-                              }
-                        },
-                        axisTicks: {
-                              show: false
-                        },
-                        axisBorder: {
-                              show: false
-                        }
-                  },
-                  yaxis: {
-                        labels: {
-                              style: {
-                                    fontSize: '13px',
-                                    colors: '#888'
-                              }
-                        }
-                  },
-                  states: {
-                        hover: {
-                              filter: { type: 'none' }
-                        },
-                        active: {
-                              filter: { type: 'none' }
-                        }
-                  }
-            };
-
-            const totalRevenueChart = new ApexCharts(totalRevenueChartEl, totalRevenueChartOptions);
-            totalRevenueChart.render();
-      }
-      });
-</script>
-
-<!-- Capienza Database -->
-<script>
-      const growthChartOptions = {
-            series: [ {{ percentage }} ],
-            labels: ['Capienza'],
-            chart: {
-                  height: 240,
-                  type: 'radialBar'
-            },
-            plotOptions: {
-                  radialBar: {
-                        size: 150,
-                        offsetY: 10,
-                        startAngle: -150,
-                        endAngle: 150,
-                        hollow: {
-                              size: '55%'
-                        },
-                        track: {
-                              background: '#f3f3f3',
-                              strokeWidth: '100%'
-                        },
-                        dataLabels: {
-                              name: {
-                                    offsetY: 15,
-                                    color: '#333',
-                                    fontSize: '15px',
-                                    fontWeight: '600',
-                                    fontFamily: 'Public Sans'
+                        radialBar: {
+                              size: 150,
+                              offsetY: 10,
+                              startAngle: -150,
+                              endAngle: 150,
+                              hollow: {
+                                    size: '55%'
                               },
-                              value: {
-                                    offsetY: -25,
-                                    color: '#333',
-                                    fontSize: '22px',
-                                    fontWeight: '500',
-                                    fontFamily: 'Public Sans',
-                                    formatter: function (val) {
-                                          return val + '%';
+                              track: {
+                                    background: '#f3f3f3',
+                                    strokeWidth: '100%'
+                              },
+                              dataLabels: {
+                                    name: {
+                                          offsetY: 15,
+                                          color: '#333',
+                                          fontSize: '15px',
+                                          fontWeight: '600',
+                                          fontFamily: 'Public Sans'
+                                    },
+                                    value: {
+                                          offsetY: -25,
+                                          color: '#333',
+                                          fontSize: '22px',
+                                          fontWeight: '500',
+                                          fontFamily: 'Public Sans',
+                                          formatter: function (val) {
+                                                return val + '%';
                 }
               }
             }
           }
         },
-      colors: ['#7367F0'],  // esempio colore
-            fill: {
-            type: 'gradient',
-                  gradient: {
-                  shade: 'dark',
-                        shadeIntensity: 0.5,
-                              gradientToColors: ['#7367F0'],
-                                    inverseColors: true,
-                                          opacityFrom: 1,
-                                                opacityTo: 0.6,
-                                                      stops: [30, 70, 100]
+            colors: ['#7367F0'],  // esempio colore
+                  fill: {
+                  type: 'gradient',
+                        gradient: {
+                        shade: 'dark',
+                              shadeIntensity: 0.5,
+                                    gradientToColors: ['#7367F0'],
+                                          inverseColors: true,
+                                                opacityFrom: 1,
+                                                      opacityTo: 0.6,
+                                                            stops: [30, 70, 100]
+                  }
+            },
+            stroke: {
+                  dashArray: 5
+            },
+            grid: {
+                  padding: {
+                        top: -35,
+                              bottom: -10
+                  }
+            },
+            states: {
+                  hover: { filter: { type: 'none' } },
+                  active: { filter: { type: 'none' } }
             }
-      },
-      stroke: {
-            dashArray: 5
-      },
-      grid: {
-            padding: {
-                  top: -35,
-                        bottom: -10
-            }
-      },
-      states: {
-            hover: { filter: { type: 'none' } },
-            active: { filter: { type: 'none' } }
-      }
       };
 
-      const growthChart = new ApexCharts(document.querySelector("#growthChart"), growthChartOptions);
-      growthChart.render();
-</script>
+            const growthChart = new ApexCharts(document.querySelector("#growthChart"), growthChartOptions);
+            growthChart.render();
+      </script>
 
-<!-- GPS Locations -->
-<script>
-      document.addEventListener("DOMContentLoaded", function () {
-      const chartOrderStatistics = document.querySelector('#orderStatisticsChart');
+      <!-- GPS Locations -->
+      <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                  const chartOrderStatistics = document.querySelector('#orderStatisticsChart');
 
-      const orderChartConfig = {
-            chart: {
-                  height: 165,
-                  width: 130,
-                  type: 'donut'
-            },
-            labels: {{ GPS_labels | tojson }},
-      series: {{ GPS_series | tojson }},
-      colors: ['#FF4C4C', '#4C8EFF', '#FFD644', '#28C76F'],
-            stroke: {
-            width: 0.3,
+                  const orderChartConfig = {
+                        chart: {
+                              height: 165,
+                              width: 130,
+                              type: 'donut'
+                        },
+                        labels: {{ GPS_labels | tojson
+            }},
+                  series: {{ GPS_series | tojson }},
+                  colors: ['#FF4C4C', '#4C8EFF', '#FFD644', '#28C76F'],
+                  stroke: {
+                  width: 0.3,
                   colors: ['#000000', '#000000', '#000000', '#000000']
-      },
-      dataLabels: {
-            enabled: false,
+            },
+                  dataLabels: {
+                  enabled: false,
                   formatter: function (val) {
                         return parseInt(val) + '%';
                   }
-      },
-      legend: { show: false },
-      grid: {
-            padding: {
-                  top: 0,
+            },
+                  legend: { show: false },
+                  grid: {
+                  padding: {
+                        top: 0,
                         bottom: 0,
-                              right: 15
-            }
-      },
-      plotOptions: {
-            pie: {
-                  donut: {
-                        size: '75%',
+                        right: 15
+                  }
+            },
+                  plotOptions: {
+                  pie: {
+                        donut: {
+                              size: '75%',
                               labels: {
-                              show: true,
-                                    value: {
-                                    fontSize: '1.5rem',
-                                          fontFamily: 'Public Sans',
-                                                color: '#333',
-                                                      offsetY: -15,
-                                                            formatter: function (val) {
-                                                                  return parseInt(val) + '%';
-                                                            }
-                              },
-                              name: {
-                                    offsetY: 20,
-                                          fontFamily: 'Public Sans'
-                              },
-                              total: {
                                     show: true,
+                                    value: {
+                                          fontSize: '1.5rem',
+                                          fontFamily: 'Public Sans',
+                                          color: '#333',
+                                          offsetY: -15,
+                                          formatter: function (val) {
+                                                return parseInt(val) + '%';
+                                          }
+                                    },
+                                    name: {
+                                          offsetY: 20,
+                                          fontFamily: 'Public Sans'
+                                    },
+                                    total: {
+                                          show: true,
                                           fontSize: '0.8125rem',
-                                                color: '#333',
-                                                      label: 'Totale',
-                                                            formatter: function (w) {
-                                                                  const total = w.globals.series.reduce((a, b) => a + b, 0);
-                                                                  return total + '';
-                                                            }
+                                          color: '#333',
+                                          label: 'Totale',
+                                          formatter: function (w) {
+                                                const total = w.globals.series.reduce((a, b) => a + b, 0);
+                                                return total + '';
+                                          }
+                                    }
                               }
                         }
                   }
             }
-      }
       };
 
-      if (chartOrderStatistics !== null) {
-            const statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
-            statisticsChart.render();
-      }
+            if (chartOrderStatistics !== null) {
+                  const statisticsChart = new ApexCharts(chartOrderStatistics, orderChartConfig);
+                  statisticsChart.render();
+            }
 });
-</script>
-    
+      </script>
+
+
+      <div id="welcomeModal" class="modal" tabindex="-1"
+     style="display:none; background-color: rgba(0,0,0,0.5); position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999;">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 400px; margin: auto;">
+    <div class="modal-content p-4 text-center">
+
+      <!-- Contenitore comune con altezza fissa -->
+      <div style="min-height: 360px; display: flex; flex-direction: column; justify-content: center;">
+        <!-- Step 1 -->
+        <div id="step1">
+          <h4 class="modal-title mb-3">✅ Azienda Registrata Correttamente!</h4>
+          <h5><p><strong>Passo 1</strong>:<br> Scarica l'app TeamTime per registrarti come dipendente!</p></h5>
+          <img src="/static/qr_codes/teamtimedownloadQRcode.jpg" alt="QR Code App"
+               style="width: 120px;" class="my-2"><br>
+          <p>Inquadra questo QR Code con il tuo telefono</p>
+          <button class="btn btn-danger mt-3" onclick="showStep(2)">Ho fatto!</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step2" style="display:none;">
+          <h5 class="modal-title mb-3">👤 <strong>Passo 2</strong>: Registra un dipendente</h5>
+          <p>Apri l’app TeamTime, leggi il breve tutorial ed infine clicca su <strong>“Continua come Dipendente”</strong>.<br>
+            Inserisci all'interno dell'app i tuoi dati e seleziona l'azienda per iniziare.</p><br>
+          <p>✅ Ricorda, la tua azienda è già registrata!</p>
+          <button class="btn btn-danger mt-3" onclick="showStep(3)">Avanti</button>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step3" style="display:none;">
+          <h5 class="modal-title mb-3">📲 <strong>Passo 3</strong>: Primo Scan</h5>
+          <p>Usa il QR code ricevuto via email per fare il tuo primo <strong>“Scan Entrata”</strong> dall’app!</p><br>
+          <p>Eccone una copia:</p>
+          <img src="{{ data.QRCode }}"><br>
+          <p>Nome QR Code: <strong>{{ data.Locale }}</strong></p>
+          <button class="btn btn-success mt-3" onclick="closeWelcome()">Inizia!</button>
+        </div>
+      </div>
+
+      <!-- Indicatori -->
+      <div class="d-flex justify-content-center mt-4 gap-2">
+        <span class="step-indicator" id="dot1"></span>
+        <span class="step-indicator" id="dot2"></span>
+        <span class="step-indicator" id="dot3"></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+      <script>
+            function showStep(n) {
+                  // Mostra solo lo step richiesto
+                  for (let i = 1; i <= 3; i++) {
+                        document.getElementById('step' + i).style.display = (i === n) ? 'block' : 'none';
+                        document.getElementById('dot' + i).classList.toggle('active', i === n);
+                  }
+            }
+
+            function closeWelcome() {
+                  document.getElementById('welcomeModal').style.display = 'none';
+            }
+
+            window.onload = () => {
+                  document.getElementById('welcomeModal').style.display = 'block';
+                  showStep(1);
+            };
+      </script>
+
+      <script>
+            function mostraPopupAbbonamento() {
+                  alert("Per informazioni sul tuo abbonamento contatta il commerciale di riferimento.");
+            }
+      </script>
+          
+
+      
 
 
 </body>

@@ -87,18 +87,18 @@
               </div>
               <!-- /Logo -->
               <h4 class="mb-2">Benvenuto su TeamTime! 👋</h4>
-              <p class="mb-4">Accedi con i tuoi dati per continuare o esplora la <a href="{{ url_for('dashboard_demo') }}">DEMO
+              <p class="mb-4">Accedi con i tuoi dati per continuare o esplora la <a href="{{ url_for('dashboard_demo') }}" target="_blank">DEMO
                   gratuita</a>.</p>
 
               <form id="formAuthentication" class="mb-3" action="/login" method="POST">
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
+                  <label for="email" class="form-label">Email o Nome QR Code</label>
                   <input
                     type="text"
                     class="form-control"
                     id="email"
                     name="email-username"
-                    placeholder="La tua mail"
+                    placeholder="es: mail@mail.it o teamtime001"
                     autofocus
                   />
                 </div>

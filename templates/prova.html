@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html class="light-style layout-menu-fixed" data-assets-path="/static/" data-template="vertical-menu-template-free"
+    data-theme="theme-default" dir="ltr" lang="en">
+
+<style>
+    /* Sfondo immagine con opacità */
+    .modal-content {
+        min-height: 400px;
+        height: 660px;
+        /* forza l'altezza fissa */
+        position: relative;
+        overflow: hidden;
+        background-color: rgba(255, 255, 255, 0.95);
+    }
+
+
+    .modal-content::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("/static/img/img/img.jpg");
+        background-size: cover;
+        background-position: center;
+        z-index: 1;
+    }
+
+    /* Tutto il contenuto sopra l'immagine */
+    .modal-body,
+    .modal-header,
+    .modal-footer {
+        position: relative;
+        z-index: 2;
+    }
+
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #999;
+        font-size: 0.85rem;
+    }
+
+    .step .circle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 1px solid red;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .step.active .circle {
+        background-color: red;
+        color: white;
+        border: none;
+    }
+
+    .step.current .circle {
+        color: red;
+        background-color: white;
+        border: 1px solid red;
+    }
+
+    .step .label {
+        white-space: nowrap;
+    }
+
+    .divider {
+        height: 1px;
+        flex: 1;
+        background-color: #ddd;
+        margin-top: 12px;
+    }
+</style>
+
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        name="viewport" />
+    <title>
+        Dashboard - Analytics | TeamTime
+    </title>
+    <meta content="" name="description" />
+    <!-- Favicon -->
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/static/img/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/static/img/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Icons. Uncomment required icon fonts -->
+    <link href="/static/vendor/fonts/boxicons.css" rel="stylesheet" />
+    <!-- Core CSS -->
+    <link class="template-customizer-core-css" href="/static/vendor/css/core.css" rel="stylesheet" />
+    <link class="template-customizer-theme-css" href="/static/vendor/css/theme-default.css" rel="stylesheet" />
+    <link href="/static/css/demo.css" rel="stylesheet" />
+    <!-- Vendors CSS -->
+    <link href="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="/static/vendor/libs/apex-charts/apex-charts.css" rel="stylesheet" />
+    <!-- Page CSS -->
+    <!-- Helpers -->
+    <script src="/static/vendor/js/helpers.js"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config: Mandatory theme config file containing global vars & default theme options -->
+    <script src="/static/js/config.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+
+<body>
+    <!-- Bottone -->
+    <div class="text-center mt-5">
+        <button id="openPopup" class="btn btn-danger btn-lg rounded-pill px-4">
+            Prova Gratis 15 giorni
+        </button>
+    </div>
+
+    <!-- Popup -->
+    <div id="popup" class="modal fade show" tabindex="-1" style="display:none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content shadow rounded-4">
+                <div class="modal-body">
+                    <!-- Step 1 -->
+                    <form id="step1" class="d-flex">
+                        <!-- BOX BIANCO A SINISTRA -->
+                        <div id="boxStep1" class="p-4 p-md-5"
+                            style="background-color: rgba(255,255,255,0.9); width: 50%; border-radius: 5px;">
+                            <h3 class="fw-bold mb-3">Mai più tempo perso.</h3>
+                            <p class="mb-4 text-secondary">Supervisiona, gestisci e monitora gli orari dei tuoi
+                                dipendenti in modo
+                                intelligente.</p>
+
+                            <ul class="list-unstyled text-dark">
+                                <li class="mb-2">✅ Monitoraggio entrate/uscite in tempo reale</li>
+                                <li class="mb-2">✅ Report Excel dettagliati per il commercialista</li>
+                                <li class="mb-2">✅ Gestionale interattivo e intuitivo</li>
+                                <li class="mb-4">✅ Vista Calendarizzata per una gestione smart</li>
+                            </ul>
+
+                            <div class="d-flex flex-column align-items-center gap-2 mb-3">
+                                <a href="/dashboard_demo" class="btn btn-outline-danger px-4 py-2 fw-semibold w-auto"
+                                    style="min-width: 220px; border-radius: 5px;" target="_blank">
+                                    Esplora DEMO
+                                </a>
+
+                                <button type="button" class="btn btn-danger px-4 py-2 fw-semibold w-auto"
+                                    style="min-width: 220px; border-radius: 5px;" onclick="vaiStep2()">
+                                    Prova Gratis 15 giorni
+                                </button>
+
+                            </div>
+
+
+                            <p class="small text-muted text-center mb-0" style="font-size: 0.65rem;">Annulla in
+                                qualsiasi momento, ti invieremo un promemoria prima della scadenza
+                                del periodo di prova.</p>
+                        </div>
+
+
+
+                        <!-- COLONNA VUOTA A DESTRA PER EQUILIBRARE -->
+                        <div style="width: 50%;">
+
+                        </div>
+                    </form>
+
+
+
+                    <!-- Step 2 -->
+                    <form id="step2" style="display:none;">
+                        <div class="p-4 p-md-5"
+                            style="background-color: rgba(255,255,255,0.9); width: 100%; height: 100%; border-radius: 5px;">
+
+                            <!-- Step Indicator (pieno) -->
+                            <div class="d-flex align-items-center justify-content-start gap-4 mb-4">
+                                <div class="step active">
+                                    <div class="circle">1</div>
+                                    <div class="label"><strong>Informazioni</strong></div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="step current">
+                                    <div class="circle">2</div>
+                                    <div class="label">Revisione</div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="step">
+                                    <div class="circle">3</div>
+                                    <div class="label">Fine</div>
+                                </div>
+                            </div>
+
+                            <!-- Contenuto a 50% -->
+                            <div class="d-flex">
+                                <!-- Colonna SINISTRA -->
+                                <div style="width: 50%;">
+                                    <label class="form-label mb-3">Seleziona il numero dei dipendenti:</label>
+
+
+                                    <select class="form-select mb-4" style="border-radius: 5px;">
+                                        <option value="ristorante">2 Dipendenti</option>
+                                        <option value="hotel">da 3 a 5 dipendenti</option>
+                                        <option value="negozio">da 6 a 12 dipendenti</option>
+                                        <option value="altro">Più di 13</option>
+                                    </select>
+
+                                    <!-- Campo Email -->
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">La tua migliore mail</label>
+
+                                        <input type="email" id="email" class="form-control" style="border-radius: 5px;"
+                                            placeholder="esempio@azienda.it" required>
+                                        <div class="fst-italic" style="font-size: 0.8rem;">Riceverai qui il tuo QR Code
+                                        </div>
+                                    </div>
+
+                                    <!-- Campo Telefono -->
+                                    <div class="mb-4">
+                                        <label for="telefono" class="form-label">Telefono</label>
+
+                                        <input type="tel" id="telefono" class="form-control" style="border-radius: 5px;"
+                                            placeholder="+39 333 1234567" required>
+                                        <div class="fst-italic" style="font-size: 0.8rem;">Non lo utilizzeremo mai a
+                                            scopo promozionale</div>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-danger" style="border-radius: 5;"
+                                            onclick="vaiStep3()">Attiva Prova Gratuita</button>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Colonna DESTRA -->
+                                <div style="width: 50%;" class="ps-4">
+                                    <!-- Card 1 -->
+                                    <div class="mb-4">
+                                        <div class="d-flex align-items-start gap-2 mb-2">
+                                            <img src="https://img.icons8.com/office/40/worldwide-location--v1.png"
+                                                class="mb-2" alt="icona" style="width: 25px; height: 25px;">
+                                            <div class="fw-bold" style="font-size: 1.3rem;">Localizzazione GPS</div>
+                                        </div>
+
+                                        <p class="mb-0">Attiva la rilevazione della posizione al dispositivo quando si
+                                            effettua lo scan di entrata o di uscita</p>
+
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox" id="GPSCheckbox">
+                                            <label class="form-check-label" for="GPSCheckbox">Attiva GPS</label>
+                                        </div>
+
+
+                                        <hr class="my-3" style="border-top: 1px solid #ccc;">
+
+                                        <!-- Card 2 -->
+                                        <div>
+                                            <div class="d-flex align-items-start gap-2 mb-2">
+                                                <img src="https://img.icons8.com/ultraviolet/40/change-user-male.png"
+                                                    alt="icona" style="width: 25px; height: 25px;">
+                                                <div class="fw-bold" style="font-size: 1.3rem;">Interscambio</div>
+                                            </div>
+
+                                            <p class="mb-0">Permette ai dipendenti di scannerizzare più QR Code. Utile
+                                                per situazioni simili a cantieri dislocati in diverse
+                                                posizioni</p>
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="interscambioCheckbox">
+                                                <label class="form-check-label" for="interscambioCheckbox">Attiva
+                                                    Interscambio</label>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- CHIUSURA CORRETTA DELLA D-FLEX -->
+                        </div> <!-- CHIUSURA CORRETTA DEL P-4 P-MD-5 -->
+                    </form>
+
+                    <!-- Step 3 -->
+                    <div id="step3" style="display: none;">
+                        <div class="p-4 p-md-5">
+                            <!-- Step Indicator (in alto, centrato) -->
+                            <div class="d-flex align-items-center justify-content-center gap-4 mb-3">
+                                <div class="step">
+                                    <div class="circle">1</div>
+                                    <div class="label"><strong>Informazioni</strong></div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="step active">
+                                    <div class="circle">2</div>
+                                    <div class="label"><strong>Revisione</strong></div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="step current">
+                                    <div class="circle">3</div>
+                                    <div class="label"><strong>Fine</strong></div>
+                                </div>
+                            </div>
+                            <!-- Titolo centrato -->
+                            <div class="text-center mb-4">
+                                <h5 class="fw-bold mb-1" style="font-size: 1.0rem;">Prova TeamTime gratis per 15 giorni.
+                                </h5>
+                                <div style="font-size: 0.8rem;">Senza impegno. Potrai annullare l'abbonamento in
+                                    qualsiasi momento.</div>
+                            </div>
+                            <!-- Progress bar orizzontale subito sotto il titolo -->
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center justify-content-between" style="gap: 0.5rem;">
+                                    <div class="d-flex flex-column align-items-center" style="flex:1;">
+                                        <img src="https://img.icons8.com/?size=100&id=ObnBoaCt9lCV&format=png&color=000000"
+                                            alt="Step 1" style="width: 28px; height: 28px;">
+                                        <div class="fw-bold" style="font-size: 0.85rem;">Oggi</div>
+                                        <div style="font-size: 0.7rem; color: #444;">QR Code via mail</div>
+                                    </div>
+                                    <div
+                                        style="height: 4px; background: linear-gradient(to right, #ff1744 0%, #ff1744 0%, #ddd 20%, #ddd 100%); flex:2; border-radius: 2px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center" style="flex:1;">
+                                        <img src="https://img.icons8.com/?size=100&id=xLIkjgcmFOsC&format=png&color=000000"
+                                            alt="Step 2" style="width: 28px; height: 28px;">
+                                        <div class="d-flex flex-column align-items-center text-center">
+                                            <div class="fw-bold" style="font-size: 0.85rem;">Promemoria</div>
+                                            <div style="font-size: 0.7rem; color: #444;">Mail promemoria</div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="height: 4px; background: linear-gradient(to right, #ff1744 0%, #ff1744 0%,  #ddd 0%, #ddd 100%); flex:2; border-radius: 2px;">
+                                    </div>
+                                    <div class="d-flex flex-column align-items-center" style="flex:1;">
+                                        <img src="https://img.icons8.com/?size=100&id=lWWE908jTJ3m&format=png&color=000000"
+                                            alt="Step 3" style="width: 28px; height: 28px;">
+                                        <div class="fw-bold" style="font-size: 0.85rem;">Fine prova</div>
+                                        <div style="font-size: 0.7rem; color: #444;">Abbonamento</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Box riepilogo e pagamento affiancati -->
+                            <div class="d-flex justify-content-between align-items-start flex-row mb-4">
+                                <!-- Colonna sinistra: Box riepilogo -->
+                                <div style="width: 38%; min-width: 220px;">
+                                    <div class="border rounded p-4 mb-0"
+                                        style="background-color: rgba(255,255,255,0.9); width: 100%; height: 100%; border-radius: 5px;">
+                                        <h6 class="fw-bold mb-3" style="font-size: 1rem;">Riepilogo <span
+                                                class="badge bg-success" style="font-size: 0.5rem;">Nessun pagamento
+                                                ora</span></h6>
+                                        <div class="d-flex justify-content-between mb-2" style="font-size: 0.85rem;">
+                                            <span>Numero dipendenti</span><strong>da 5 a 12</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2" style="font-size: 0.85rem;">
+                                            <span>Rilevazione GPS</span><strong>Attivo</strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3" style="font-size: 0.85rem;">
+                                            <span>Intercambio</span><strong>Non Attivo</strong>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between mb-1"
+                                            style="font-size: 0.8rem; color: #999;">
+                                            <span>Totale</span><span>324,00€</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3" style="font-size: 0.95rem;">
+                                            <strong>Da pagare oggi</strong><strong style="color: green;">0,00 €</strong>
+                                        </div>
+                                        <div>
+
+                                        </div>
+                                        <div style="font-size: 0.7rem; color: #555;">
+                                            ✅ Annulla quando vuoi. Non pagherai niente fino al <strong>5
+                                                agosto</strong>.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Colonna destra: Box pagamento -->
+                                <div style="width: 60%; min-width: 260px;">
+                                    <div class="border rounded p-4 mb-0 d-flex flex-column align-items-center justify-content-center"
+                                        style="background-color: rgba(255,255,255,0.9); width: 100%; height: 100%; border-radius: 5px; max-width: 400px; margin: 0 auto; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04);">
+
+                                        <form style="width: 100%; max-width: 340px;">
+                                            <div class="mb-3 d-flex gap-2">
+                                                <div style="flex:1;">
+                                                    <input type="text" class="form-control" id="cardFirstName" placeholder="Nome"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;">
+                                                </div>
+                                                <div style="flex:1;">
+                                                    <input type="text" class="form-control" id="cardLastName" placeholder="Cognome"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 position-relative">
+                                                <label for="cardNumber" class="form-label"
+                                                    style="font-size: 0.85rem;">Numero carta</label>
+
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control pe-5" id="cardNumber"
+                                                        placeholder="1234 5678 9012 3456"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px; padding-right: 90px;">
+
+                                                    <!-- Icone Carte -->
+                                                    <div
+                                                        class="position-absolute end-0 top-50 translate-middle-y pe-3 d-flex gap-1">
+                                                        <img src="https://img.icons8.com/color/24/000000/visa.png"
+                                                            alt="Visa" style="height: 20px;">
+                                                        <img src="https://img.icons8.com/color/24/000000/mastercard-logo.png"
+                                                            alt="Mastercard" style="height: 20px;">
+                                                        <img src="https://img.icons8.com/color/24/000000/amex.png"
+                                                            alt="Amex" style="height: 20px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 d-flex gap-2">
+                                                <div style="flex:1;">
+                                                    <label for="cardExpiry" class="form-label"
+                                                        style="font-size: 0.85rem;">Scadenza</label>
+                                                    <input type="text" class="form-control" id="cardExpiry"
+                                                        placeholder="MM/AA"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;">
+                                                </div>
+                                                <div style="flex:1;">
+                                                    <label for="cardCVC" class="form-label"
+                                                        style="font-size: 0.85rem;">CVC</label>
+                                                    <input type="text" class="form-control" id="cardCVC"
+                                                        placeholder="CVC"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;">
+                                                </div>
+                                            </div>
+                                           
+                                        </form>
+                                        <!-- Bottone e Stripe info centrali sotto i box -->
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div
+                                class="text-center mt-3 d-flex flex-column align-items-center justify-content-center w-100">
+                                <button class="btn btn-danger px-5 py-2 fw-semibold"
+                                    style="font-size: 0.95rem; border-radius: 5px; min-width: 220px;">Attiva
+                                    Prova Gratuita</button>
+                                <div style="font-size: 0.7rem; color: #555; margin-top: 0.5rem;">
+                                    <strong>Pagamento sicuro con Stripe</strong>
+                                    <img
+                                        src="https://img.icons8.com/?size=100&id=Rvbp0egoNvc2&format=png&color=000000" style="width: 30px; height: 30px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const popup = document.getElementById('popup');
+        document.getElementById('openPopup').onclick = () => popup.style.display = 'block';
+
+        function closePopup() {
+            popup.style.display = 'none';
+        }
+
+        function vaiStep2() {
+            document.getElementById('boxStep1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+        }
+
+        function vaiStep3() {
+            document.getElementById('step2').style.display = 'none';
+            var s3 = document.getElementById('step3');
+            s3.style.display = 'block';
+            s3.style.position = 'relative';
+            s3.style.zIndex = 10;
+            s3.style.background = 'rgba(255,255,255,0.99)';
+            s3.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Debug: log computed style
+            console.log('step3 display:', window.getComputedStyle(s3).display);
+        }
+
+
+    </script>
+
+
+
+
+</body>
+
+
+
+<!-- Core JS -->
+<!-- build:js /vendor/js/core.js -->
+<script src="/static/vendor/libs/jquery/jquery.js"></script>
+<script src="/static/vendor/libs/popper/popper.js"></script>
+<script src="/static/vendor/js/bootstrap.js"></script>
+<script src="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="/static/vendor/js/menu.js"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script src="/static/vendor/libs/apex-charts/apexcharts.js"></script>
+
+<!-- Main JS -->
+<script src="/static/js/main.js"></script>
+
+<!-- Page JS -->
+<script src="/static/js/dashboards-analytics.js"></script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+</html>

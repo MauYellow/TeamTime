@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 instance/
 *.db
+app_backup.py
+dashboard_demo_backuptogliereStrupe.html

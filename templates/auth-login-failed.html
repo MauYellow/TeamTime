@@ -87,17 +87,17 @@
               </div>
               <!-- /Logo -->
               <h4 class="mb-2">Benvenuto su TeamTime! 👋</h4>
-              <p class="mb-4">Accedi con i tuoi dati per continuare o esplora la <a href="{{ url_for('dashboard_demo') }}">DEMO gratuita</a>.</p>
+              <p class="mb-4">Accedi con i tuoi dati per continuare o esplora la <a href="{{ url_for('dashboard_demo') }}" target="_blank">DEMO gratuita</a>.</p>
 
               <form id="formAuthentication" class="mb-3" action="/login" method="POST">
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
+                  <label for="email" class="form-label">Email o Nome QR Code</label>
                   <input
                     type="text"
                     class="form-control"
                     id="email"
                     name="email-username"
-                    placeholder="La tua mail"
+                    placeholder="es: mail@mail.it o teamtime001"
                     autofocus
                   />
                 </div>
@@ -126,7 +126,7 @@
                     <label class="form-check-label" for="remember-me"> Ricordami </label>
                   </div>
                 </div>
-                <div class="text-center"><p class="mb-4 text-danger fw-bold">Username e password non corretti</p></div>
+                <div class="text-center"><p class="mb-4 text-danger fw-bold">{{ motivo }}</p></div>
                 <div class="mb-3">
                   <button class="btn btn-primary d-grid w-100" type="submit">Accedi</button>
                 </div>

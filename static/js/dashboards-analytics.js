@@ -6,6 +6,7 @@
 
   // Profit Report Line Chart
   // --------------------------------------------------------------------
+(function () {
   const profileReportChartEl = document.querySelector('#profileReportChart'),
     profileReportChartConfig = {
       chart: {
