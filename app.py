@@ -129,13 +129,13 @@ def stripe_webhook():
         #** Azioni: crea record Airtable, invia email, ecc.
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
-    elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail!
+    elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento
        invoice = event['data']['object']
        customer_id = invoice['customer']
        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
        print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}")
 
-    elif event['type'] == 'invoice.payment_succeeded': #** bisogna sviluppare! questo si crea quando si crea l'abbonamento? Sono due eventi legati alla creazione
+    elif event['type'] == 'invoice.payment_succeeded': #** Questo evento si verifica molto dopo il customer subscription created o updated, però si verifica
         invoice = event['data']['object']
         customer_id = invoice['customer']
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
@@ -143,10 +143,10 @@ def stripe_webhook():
         if amount == 0:
           print(f"💰 Prova Gratuita Attivata da {customer_id}: {amount}€")
         else:
-          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€") #**qquesto non si verifica perché il pagamento viene tramite subscriptio updated (da verificare)
+          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€")
           try: 
             table.update(record["id"], {"Pagato": 'Si'})
-            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}") #** questo non succede, non è l'evento giusto. Si paga quando finisce la prova, quindi con evento customer subscription updated da status trialing (previous_attributes) a status active
+            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}") 
           except Exception as e:
             print(f"Errore durante l'aggiornamento dello stato 'Pagato in Airtable per {customer_id}: {e}")
 
@@ -157,7 +157,7 @@ def stripe_webhook():
       previous_attributes = event['data'].get('previous_attributes', {})
     
     # Caso: Disdetta pianificata
-      if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'):
+      if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): #** Inviare una mail
         print(f"❌ Abbonamento disdetto per: {customer_id}")
         try: 
           table.update(record["id"], {"Status": 'Disattivato'})
@@ -168,16 +168,17 @@ def stripe_webhook():
 
     # Caso: Riattivazione (cancel_at_period_end = False)
       if previous_attributes.get("cancel_at_period_end") == True and subscription.get("cancel_at_period_end") == False:
-        print(f"✅ Abbonamento riattivato o ancora attivo per: {customer_id}")
+        print(f"✅ Abbonamento riattivato per: {customer_id}")
         try: 
           table.update(record["id"], {"Status": 'Attivo'})
           print(f"✅ Abbonamento aggiornato su Airtable per: {customer_id}")
         except Exception as e:
           print(f"Errore durante rinnovo manuale abbonamento in Airtable {e}")
 
-    # Caso: Finita la prova, pagamento riuscito e abbonamento attivato
+    # Caso: Finita la prova e abbonamento attivato
       if previous_attributes.get("status") == "trialing" and subscription['status'] == 'active':
-        print(f"✅ Attivazione Abbonamento dopo periodo di prova per {customer_id}") #bisogna aggiungere su Airtable lo stato "Pagato" e confermare lo stato "Attivo"**
+        print(f"✅ Attivazione Abbonamento dopo periodo di prova per {customer_id}")
+        table.update(record["id"], {"Status": 'Attivo'})
 
 
       else:
