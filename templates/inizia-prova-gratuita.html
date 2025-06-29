@@ -150,6 +150,36 @@
     <!--? Config: Mandatory theme config file containing global vars & default theme options -->
     <script src="/static/js/config.js"></script>
     <script src="https://js.stripe.com/v3/"></script>
+
+    <style>
+        @media (max-width: 768px) {
+          body {
+            overflow-x: hidden;
+          }
+      
+          #step1 {
+            flex-direction: column !important;
+            padding: 1rem;
+          }
+      
+          #step1 > div {
+            width: 100% !important;
+            margin-bottom: 1rem;
+          }
+
+          #step2 {
+            flex-direction: column !important;
+            padding: 1rem;
+          }
+      
+          #step2 > div {
+            width: 100% !important;
+            margin-bottom: 1rem;
+          }
+        }
+      </style>
+
+
 </head>
 
 <body>
@@ -174,7 +204,7 @@
                     <button type="button" class="btn-close position-absolute" style="top: 16px; right: 16px;" aria-label="Close" onclick="closePopup()"></button>
     
                     <div class="modal-body">
-                        <form id="step1" class="row gx-0 form-scroll-mobile">
+                        <form id="step1" class="row gx-0">
                             <!-- BOX BIANCO -->
                             <div id="boxStep1" class="col-12 col-md-6 p-4 p-md-5"
                                 style="background-color: rgba(255,255,255,0.9); border-radius: 5px;">

@@ -101,23 +101,6 @@ h1, .h1 {
   font-size: calc(1.3625rem + 1.35vw);
 }
 
-@media (max-width: 768px) {
-  .form-scroll-mobile {
-    display: flex;
-    flex-direction: column !important;
-    overflow-y: auto;
-    max-height: 100vh;
-    padding: 1rem;
-  }
-
-  .form-scroll-mobile>div {
-    width: 100% !important;
-  }
-
-  body {
-    overflow: hidden;
-  }
-}
 
 @media (min-width: 1200px) {
   h1, .h1 {
