@@ -148,10 +148,6 @@ def stripe_webhook():
       subscription = event['data']['object']
       customer_id = subscription['customer']
       previous_attributes = event['data'].get('previous_attributes', {})
-
-      #
-      print(previous_attributes.get("status"))
-      print(subscription['status'])
     
     # Caso: Disdetta pianificata
       if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'):
@@ -166,7 +162,8 @@ def stripe_webhook():
 
 
     # Caso: Riattivazione (cancel_at_period_end = False)
-      if not subscription.get('cancel_at_period_end') and not subscription.get('canceled_at'): #**questonon dovrebbe essere così, deve essere che previous_attributes deattivato e poi attivato
+      #if not subscription.get('cancel_at_period_end') and not subscription.get('canceled_at'): #**questonon dovrebbe essere così, deve essere che previous_attributes deattivato e poi attivato
+      if previous_attributes.get("cancel_at_period_end") == True and subscription.get("cancel_at_period_end") == False:
         print(f"✅ Abbonamento riattivato o ancora attivo per: {customer_id}")
         table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
