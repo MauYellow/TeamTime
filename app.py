@@ -166,7 +166,7 @@ def stripe_webhook():
 
 
     # Caso: Riattivazione (cancel_at_period_end = False)
-      elif not subscription.get('cancel_at_period_end') and not subscription.get('canceled_at'): #questonon dovrebbe essere così, deve essere che previous_attributes deattivato e poi attivato
+      if not subscription.get('cancel_at_period_end') and not subscription.get('canceled_at'): #**questonon dovrebbe essere così, deve essere che previous_attributes deattivato e poi attivato
         print(f"✅ Abbonamento riattivato o ancora attivo per: {customer_id}")
         table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
@@ -177,7 +177,7 @@ def stripe_webhook():
           print(f"Errore durante rinnovo manuale abbonamento in Airtable {e}")
 
     # Caso: Finita la prova, pagamento riuscito e abbonamento attivato
-      elif previous_attributes.get("status") == "trialing" and subscription['status'] == 'active':
+      if previous_attributes.get("status") == "trialing" and subscription['status'] == 'active':
 
          print(f"✅ Abbonamento attivato dopo periodo di prova per {customer_id}") #bisogna aggiungere su Airtable lo stato "Pagato" e confermare lo stato "Attivo"**
 
