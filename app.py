@@ -518,18 +518,21 @@ def create_subscription():
             payment_method=payment_method_id,
             invoice_settings={'default_payment_method': payment_method_id},
         )
-        print(f"Customer Stripe {customer}")
+        #print(f"Customer Stripe {customer}")
 
         # Crea la sottoscrizione
-        print("Cerco Subscription")
-        print(f"Price ID selezionato: {price_id}")
-        print(f"Items: {items}")
+        #print("Cerco Subscription")
+        #print(f"Price ID selezionato: {price_id}")
+        #print(f"Items: {items}")
+        trial_end_timestamp = int(time.time()) + 60  # Ora + 60 secondi . ** Questo va cancellato poi in produzione
+
         try:
             subscription = stripe.Subscription.create(
             customer=customer.id,
             items=items,
             expand=['latest_invoice.payment_intent'],
-            trial_period_days=1 #** qui vanno messi i periodi di prova con trial_period = 30,
+            trial_end=trial_end_timestamp, #** da cancellare in produzione
+            #trial_period_days=1 #** qui vanno messi i periodi di prova con trial_period = 30,
         )
             print("Tutto ok")
         except Exception as e:
