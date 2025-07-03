@@ -391,6 +391,7 @@ def report():
 
     #records = table.all()
     records = table.all(sort=["-Created"])
+    
     # Estrai tutti i mesi unici
     mesi_disponibili = sorted(set(r['fields'].get("Mese Nome", "").lower() for r in records if "Mese Nome" in r['fields']))
 
@@ -401,6 +402,7 @@ def report():
 
         # Filtra i record per il mese selezionato
         filtered = [r for r in records if r['fields'].get('Mese Nome', '').lower() == mese_selezionato.lower()]
+        print(filtered)
 
         forza_generazione = request.form.get("forza_generazione") == "1"
         check_dipendenti_lavoro = any(r['fields'].get("Uscita", "").strip().lower() == "al lavoro" for r in filtered)
@@ -413,7 +415,7 @@ def report():
         for r in filtered:
             f = r['fields']
             nome = f.get("Nome", "Sconosciuto")
-            giorno = str(f.get("Giorni"))
+            giorno = f"{int(f.get('Giorni')):02d}" #** qui funziona solo con teamtime022 no giorno = str(f.get("Giorni"))
             ore = f.get("Ore Lavorate", 0)
             if isinstance(ore, dict):  # Gestione di {'specialValue': 'NaN'}
                 ore = 0
@@ -426,7 +428,7 @@ def report():
 
 
         # Crea intestazione colonne: 1...31 + mese + anno
-        giorni_colonne = [str(i) for i in range(1, 32)]
+        giorni_colonne = [f"{i:02d}" for i in range(1, 32)] #funziona sempre solo con  teamtime022 no, giorni_colonne = [str(i) for i in range(1, 32)]
         header = giorni_colonne + ['Totale', 'Mese', 'Anno']
 
         # Costruzione righe
