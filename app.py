@@ -487,7 +487,7 @@ def report_demo():
 
 @app.route('/inizia-prova') # **
 def inizia_prova():
-    return render_template('/inizia-prova-gratuita.html')
+    return render_template('/inizia-prova-gratuita.html')#/prova_popup.html')#/inizia-prova-gratuita.html')**
 
 
 @app.route('/create-subscription', methods=['POST'])

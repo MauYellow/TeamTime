@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Prova Modal</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ✅ MODAL -->
+    <div class="modal fade" id="popup" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="step1" class="modal-body" novalidate>
+                    <h5 class="modal-title mb-3" id="popupLabel">Prova Gratis</h5>
+
+                    <!-- STEP 1 -->
+                    <div id="boxStep1">
+                        <p class="mb-3">Benvenuto! Clicca per iniziare la prova gratuita.</p>
+                        <button id="btnProva30" type="button" class="btn btn-danger w-100">Prova Gratis 30
+                            giorni</button>
+                    </div>
+
+                    <!-- STEP 2 (inizialmente nascosto) -->
+                    <div id="step2" style="display: none;">
+                        <p>Questo è il secondo step della prova gratuita.</p>
+                        <button type="button" class="btn btn-success" onclick="vaiStep3()">Avanti</button>
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div id="step3" style="display: none;">
+                        <p>Step finale! 🎉</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Bootstrap JS Bundle (con Popper incluso) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // ✅ Apertura Modal al caricamento
+        document.addEventListener("DOMContentLoaded", function () {
+            const popupEl = document.getElementById("popup");
+            const popupModal = bootstrap.Modal.getOrCreateInstance(popupEl);
+            popupModal.show();
+
+            // ✅ Prevenzione chiusura su click sfondo
+            popupEl.addEventListener("hide.bs.modal", function (e) {
+                e.preventDefault();
+                console.warn("⛔️ Modal vuole chiudersi → BLOCCATO");
+            });
+
+            // ✅ Prevenzione submit accidentale
+            document.getElementById("step1").addEventListener("submit", function (e) {
+                e.preventDefault();
+                console.log("⛔️ Submit del form intercettato");
+            });
+
+            // ✅ Bottone "Prova Gratis"
+            document.getElementById("btnProva30").addEventListener("click", function (e) {
+                console.log("🧪 CLICK su btnProva30 → vaiStep2()");
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                vaiStep2();
+            });
+        });
+
+        // ✅ Logica degli step
+        function vaiStep2() {
+            console.log("✅ FUNZIONE vaiStep2 CHIAMATA");
+            document.getElementById('boxStep1').style.display = 'none';
+            document.getElementById('step2').style.display = 'block';
+            document.getElementById('step3').style.display = 'none';
+        }
+
+        function vaiStep3() {
+            console.log("✅ FUNZIONE vaiStep3 CHIAMATA");
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'block';
+        }
+    </script>
+
+</body>
+
+</html>
