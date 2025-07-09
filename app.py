@@ -19,6 +19,7 @@ import requests
 import random, string
 import schedule
 import threading
+
 load_dotenv()
 
 # locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8') #Non supportato da Koyeb
@@ -64,6 +65,10 @@ def piani():
 @app.route('/messaggio_inviato')
 def messaggio_inviato():
     return render_template('messaggio_inviato.html')
+
+@app.route('/prova') #**
+def provaa():
+    return render_template('inizia-prova-gratuita-TEST.html')
 
 @app.route('/contact', methods=['POST'])
 def contact():
