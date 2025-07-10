@@ -15,33 +15,34 @@
     <div id="popup" class="modal fade show" tabindex="-1" style="display:none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow rounded-4">
-                <button type="button" class="btn-close position-absolute" style="top: 16px; right: 16px;" aria-label="Close"
-                    onclick="closePopup()"></button>
+                <button type="button" class="btn-close position-absolute" style="top: 16px; right: 16px;"
+                    aria-label="Close" onclick="closePopup()"></button>
                 <form id="step1" class="modal-body" novalidate>
                     <h5 class="modal-title mb-3" id="popupLabel">Prova Gratis</h5>
 
                     <!-- STEP 1 -->
-                    <div id="boxStep1" class="p-4 p-md-5 w-100" style="background-color: rgba(255,255,255,0.93); border-radius: 10px; max-width: 430px; width: 100%; box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07); margin: 0 auto;">
-                                <h3 class="fw-bold mb-3">Mai più tempo perso.</h3>
-                                <p class="mb-4 text-secondary">Supervisiona, gestisci e monitora gli orari dei tuoi
-                                    dipendenti in modo intelligente.</p>
-                                <ul class="list-unstyled text-dark">
-                                    <li class="mb-2">✅ Monitoraggio entrate/uscite in tempo reale</li>
-                                    <li class="mb-2">✅ Report Excel dettagliati per il commercialista</li>
-                                    <li class="mb-2">✅ Gestionale interattivo e intuitivo</li>
-                                    <li class="mb-4">✅ Vista Calendarizzata per una gestione smart</li>
-                                </ul>
-                                <div class="d-flex flex-column align-items-center gap-2 mb-3">
-                                    <a href="/dashboard_demo"
-                                        class="btn btn-outline-danger px-4 py-2 fw-semibold w-100 w-md-auto"
-                                        style="min-width: 220px; border-radius: 5px;" target="_blank">Esplora DEMO</a>
-                                    <button id="btnProva30" type="button"
-                                        class="btn btn-danger px-4 py-2 fw-semibold w-100 w-md-auto"
-                                        style="min-width: 220px; border-radius: 5px;">Prova Gratis 30 giorni</button>
-                                </div>
-                                <p class="small text-muted text-center mb-0" style="font-size: 0.65rem;">Annulla in
-                                    qualsiasi momento, ti invieremo un promemoria prima della scadenza del periodo di
-                                    prova.</p>
+                    <div id="boxStep1" class="p-4 p-md-5 w-100"
+                        style="background-color: rgba(255,255,255,0.93); border-radius: 10px; max-width: 430px; width: 100%; box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07); margin: 0 auto;">
+                        <h3 class="fw-bold mb-3">Mai più tempo perso.</h3>
+                        <p class="mb-4 text-secondary">Supervisiona, gestisci e monitora gli orari dei tuoi
+                            dipendenti in modo intelligente.</p>
+                        <ul class="list-unstyled text-dark">
+                            <li class="mb-2">✅ Monitoraggio entrate/uscite in tempo reale</li>
+                            <li class="mb-2">✅ Report Excel dettagliati per il commercialista</li>
+                            <li class="mb-2">✅ Gestionale interattivo e intuitivo</li>
+                            <li class="mb-4">✅ Vista Calendarizzata per una gestione smart</li>
+                        </ul>
+                        <div class="d-flex flex-column align-items-center gap-2 mb-3">
+                            <a href="/dashboard_demo"
+                                class="btn btn-outline-danger px-4 py-2 fw-semibold w-100 w-md-auto"
+                                style="min-width: 220px; border-radius: 5px;" target="_blank">Esplora DEMO</a>
+                            <button id="btnProva30" type="button"
+                                class="btn btn-danger px-4 py-2 fw-semibold w-100 w-md-auto"
+                                style="min-width: 220px; border-radius: 5px;">Prova Gratis 30 giorni</button>
+                        </div>
+                        <p class="small text-muted text-center mb-0" style="font-size: 0.65rem;">Annulla in
+                            qualsiasi momento, ti invieremo un promemoria prima della scadenza del periodo di
+                            prova.</p>
                     </div>
 
                     <!-- STEP 2 (inizialmente nascosto) -->
@@ -73,33 +74,36 @@
                                     <option value="11">da 6 a 11 dipendenti</option>
                                     <option value="99999">Più di 12 dipendenti</option>
                                 </select>
-                        
+
                                 <div class="mb-3">
                                     <label for="email" class="form-label">La tua migliore mail</label>
-                                    <input type="email" id="email" class="form-control rounded" placeholder="esempio@azienda.it" required>
+                                    <input type="email" id="email" class="form-control rounded"
+                                        placeholder="esempio@azienda.it" required>
                                     <div class="fst-italic small">Riceverai qui il tuo QR Code</div>
                                 </div>
-                        
+
                                 <div class="mb-4">
                                     <label for="telefono" class="form-label">Telefono</label>
-                                    <input type="tel" id="telefono" class="form-control rounded" placeholder="+39 333 1234567" required>
+                                    <input type="tel" id="telefono" class="form-control rounded"
+                                        placeholder="+39 333 1234567" required>
                                     <div class="fst-italic small">Non lo utilizzeremo mai a scopo promozionale
                                     </div>
                                 </div>
-                        
+
                                 <div class="d-grid d-none d-md-block">
-                                    <button type="button" class="btn btn-danger rounded" onclick="vaiStep3()">Attiva Prova
+                                    <button type="button" class="btn btn-danger rounded" onclick="vaiStep3()">Attiva
+                                        Prova
                                         Gratuita</button>
                                 </div>
                             </div>
-                        
+
                             <!-- COLONNA DESTRA -->
                             <div class="col-12 col-md-6 ps-md-4 pt-4 pt-md-0">
                                 <!-- Card GPS -->
                                 <div class="mb-4">
                                     <div class="d-flex align-items-start gap-2 mb-2">
-                                        <img src="https://img.icons8.com/office/40/worldwide-location--v1.png" alt="icona"
-                                            style="width: 25px; height: 25px;">
+                                        <img src="https://img.icons8.com/office/40/worldwide-location--v1.png"
+                                            alt="icona" style="width: 25px; height: 25px;">
                                         <div class="fw-bold" style="font-size: 1.3rem;">Localizzazione GPS</div>
                                     </div>
                                     <p class="mb-0">Attiva la rilevazione della posizione al dispositivo quando
@@ -111,12 +115,12 @@
                                     </div>
                                     <hr class="my-3" style="border-top: 1px solid #ccc;">
                                 </div>
-                        
+
                                 <!-- Card Interscambio -->
                                 <div>
                                     <div class="d-flex align-items-start gap-2 mb-2">
-                                        <img src="https://img.icons8.com/ultraviolet/40/change-user-male.png" alt="icona"
-                                            style="width: 25px; height: 25px;">
+                                        <img src="https://img.icons8.com/ultraviolet/40/change-user-male.png"
+                                            alt="icona" style="width: 25px; height: 25px;">
                                         <div class="fw-bold" style="font-size: 1.3rem;">Interscambio</div>
                                     </div>
                                     <p class="mb-0">Permette ai dipendenti di scannerizzare più QR Code. Utile
@@ -130,7 +134,8 @@
                                 </div>
 
                                 <div class="d-grid d-block d-md-none mt-4">
-                                    <button type="button" class="btn btn-danger rounded" onclick="vaiStep3()">Attiva Prova
+                                    <button type="button" class="btn btn-danger rounded" onclick="vaiStep3()">Attiva
+                                        Prova
                                         Gratuita</button>
                                 </div>
 
@@ -163,19 +168,19 @@
                                 <h5 class="fw-bold mb-1" style="font-size: 1.0rem;">Prova TeamTime gratis per 30
                                     giorni.
                                 </h5>
-                        
+
                             </div>
-                            <!-- Progress bar orizzontale subito sotto il titolo -->
+                            <!-- LAPTOP Progress bar orizzontale subito sotto il titolo -->
                             <div class="mb-4">
-                                <div class="d-flex align-items-center justify-content-between" style="gap: 0.5rem;">
+                                <div class="d-none d-md-flex align-items-center justify-content-between" style="gap: 0.5rem;">
                                     <!-- Step 1 -->
                                     <div class="d-flex flex-column align-items-center" style="flex:1;">
-                                        <img src="https://img.icons8.com/?size=100&id=ObnBoaCt9lCV&format=png&color=000000" alt="Step 1"
-                                            style="width: 28px; height: 28px;">
+                                        <img src="https://img.icons8.com/?size=100&id=ObnBoaCt9lCV&format=png&color=000000"
+                                            alt="Step 1" style="width: 28px; height: 28px;">
                                         <div class="fw-bold" style="font-size: 0.85rem;">Ricevi Oggi</div>
                                         <div style="font-size: 0.7rem; color: #444;">QR Code via mail</div>
                                     </div>
-                        
+
                                     <!-- 🔴 Testo sopra barra -->
                                     <div class="text-center" style="flex:2;">
                                         <div style="font-size: 0.65rem; color: #666;">Dopo 23 giorni</div>
@@ -183,15 +188,15 @@
                                             style="height: 4px; background: linear-gradient(to right, #ff1744 0%, #ff1744 0%, #ddd 20%, #ddd 100%); border-radius: 2px;">
                                         </div>
                                     </div>
-                        
+
                                     <!-- Step 2 -->
                                     <div class="d-flex flex-column align-items-center" style="flex:1;">
-                                        <img src="https://img.icons8.com/?size=100&id=xLIkjgcmFOsC&format=png&color=000000" alt="Step 2"
-                                            style="width: 28px; height: 28px;">
+                                        <img src="https://img.icons8.com/?size=100&id=xLIkjgcmFOsC&format=png&color=000000"
+                                            alt="Step 2" style="width: 28px; height: 28px;">
                                         <div class="fw-bold" style="font-size: 0.85rem;">Promemoria</div>
                                         <div style="font-size: 0.7rem; color: #444;">Via mail</div>
                                     </div>
-                        
+
                                     <!-- 🔴 Testo sopra barra -->
                                     <div class="text-center" style="flex:2;">
                                         <div style="font-size: 0.65rem; color: #666;">Dopo altri 7 giorni</div>
@@ -199,28 +204,33 @@
                                             style="height: 4px; background: linear-gradient(to right, #ff1744 0%, #ff1744 0%,  #ddd 0%, #ddd 100%); border-radius: 2px;">
                                         </div>
                                     </div>
-                        
+
                                     <!-- Step 3 -->
                                     <div class="d-flex flex-column align-items-center" style="flex:1;">
-                                        <img src="https://img.icons8.com/?size=100&id=lWWE908jTJ3m&format=png&color=000000" alt="Step 3"
-                                            style="width: 28px; height: 28px;">
+                                        <img src="https://img.icons8.com/?size=100&id=lWWE908jTJ3m&format=png&color=000000"
+                                            alt="Step 3" style="width: 28px; height: 28px;">
                                         <div class="fw-bold" style="font-size: 0.85rem;">Abbonamento</div>
                                         <div style="font-size: 0.60rem; color: #444;">Pagamento Annuale</div>
                                     </div>
                                 </div>
                             </div>
-                        
-                            <!-- Box riepilogo e pagamento affiancati -->
-                            <div class="d-flex justify-content-between flex-row mb-4" style="align-items: stretch; gap: 2.5%;">
+
+                            <!-- MOBILE Progress bar-->
+                            <img src="{{ url_for('static', filename='img/img/mobile_payment_flow.png') }}" alt="App Registro Presenze" class="d-block d-md-none img-fluid mb-3" 
+                            style="max-width: 100%; height: auto;">
+
+                            <!-- LAPTOP Box riepilogo e pagamento affiancati -->
+                            <div class="d-none d-md-flex justify-content-between flex-row mb-4" style="align-items: stretch; gap: 2.5%;">
                                 <!-- Colonna sinistra: Box pagamento -->
                                 <div style="width: 60%; min-width: 260px; display: flex; flex-direction: column;">
                                     <div class="border rounded p-4 mb-0 d-flex flex-column align-items-center justify-content-center flex-fill"
                                         style="background-color: rgba(255,255,255,0.9); width: 100%; border-radius: 5px; max-width: 400px; margin: 0 auto; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04); flex: 1 1 0; min-height: 0; overflow: auto;">
-                        
+
                                         <!-- Contenitore Form Stripe -->
                                         <form id="payment-form" style="width: 100%; max-width: 340px;">
                                             <div class="d-flex align-items-center justify-content-between mb-1">
-                                                <label for="card-element" class="form-label mb-0" style="font-size: 0.75rem;">Intestatario
+                                                <label for="card-element" class="form-label mb-0"
+                                                    style="font-size: 0.75rem;">Intestatario
                                                     Carta</label>
                                                 <div class="stripe-secure-text d-flex align-items-center"
                                                     style="font-size: 0.7rem; color: #555; gap: 0.3rem;">
@@ -237,69 +247,83 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                        
-                        
+
+
                                             </div>
-                        
+
                                             <div class="mb-3 d-flex gap-2">
                                                 <div style="flex:1;">
-                                                    <input type="text" class="form-control" id="cardFirstName" placeholder="Nome"
-                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                    <input type="text" class="form-control" id="cardFirstName"
+                                                        placeholder="Nome"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;"
+                                                        required>
                                                 </div>
                                                 <div style="flex:1;">
-                                                    <input type="text" class="form-control" id="cardLastName" placeholder="Cognome"
-                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                    <input type="text" class="form-control" id="cardLastName"
+                                                        placeholder="Cognome"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;"
+                                                        required>
                                                 </div>
                                             </div>
-                        
+
                                             <div class="mb-3">
                                                 <div id="card-element"
                                                     style="border: 1px solid #ced4da; border-radius: 6px; padding: 10px 12px; height: 44px;">
                                                     <!-- Stripe inserirà qui il campo carta -->
                                                 </div>
                                             </div>
-                        
+
                                             <div class="form-check mb-3">
                                                 <input class="form-check-input" type="checkbox" id="isBusiness">
-                                                <label class="form-check-label" for="isBusiness" style="font-size: 0.75rem;">Stai acquistando
+                                                <label class="form-check-label" for="isBusiness"
+                                                    style="font-size: 0.75rem;">Stai acquistando
                                                     come
                                                     azienda?</label>
                                             </div>
-                        
+
                                             <div id="businessFields" style="display: none;">
                                                 <div class="mb-3 d-flex gap-2">
                                                     <div style="flex:1;">
-                                                        <input type="text" id="companyName" class="form-control" placeholder="Ragione Sociale"
-                                                            style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                        <input type="text" id="companyName" class="form-control"
+                                                            placeholder="Ragione Sociale"
+                                                            style="font-size: 0.95rem; height: 44px; border-radius: 6px;"
+                                                            required>
                                                     </div>
                                                     <div style="flex:1;">
-                                                        <input type="text" id="vatNumber" class="form-control" placeholder="Partita IVA"
-                                                            style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                        <input type="text" id="vatNumber" class="form-control"
+                                                            placeholder="Partita IVA"
+                                                            style="font-size: 0.95rem; height: 44px; border-radius: 6px;"
+                                                            required>
                                                     </div>
                                                 </div>
                                                 <div class="mb-3">
                                                     <input type="text" id="companyAddress" class="form-control"
                                                         placeholder="Indirizzo aziendale"
-                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;"
+                                                        required>
                                                 </div>
                                             </div>
-                        
-                                            <div id="card-errors" role="alert" class="text-danger mt-2" style="font-size: 0.6rem;"></div>
-                        
-                                            <div class="text-center mt-3 d-flex flex-column align-items-center justify-content-center w-100">
+
+                                            <div id="card-errors" role="alert" class="text-danger mt-2"
+                                                style="font-size: 0.6rem;"></div>
+
+                                            <div
+                                                class="text-center mt-3 d-flex flex-column align-items-center justify-content-center w-100">
                                                 <button id="attivaProvaBtn" class="btn btn-danger px-5 py-2 fw-semibold"
-                                                    style="font-size: 0.95rem; border-radius: 5px; min-width: 220px;" type="button">
+                                                    style="font-size: 0.95rem; border-radius: 5px; min-width: 220px;"
+                                                    type="button">
                                                     Attiva Prova Gratuita
                                                     <img src="https://img.icons8.com/?size=100&id=BliA0IHNvACv&format=png&color=000000"
-                                                        alt="Stripe Icon" style="width: 30px; height: 30px; margin-left: 6px;" />
+                                                        alt="Stripe Icon"
+                                                        style="width: 30px; height: 30px; margin-left: 6px;" />
                                                 </button>
-                        
-                                                <div id="spinnerSectionStep3" class="spinner-border text-danger" role="status"
-                                                    style="width: 1.5rem; height: 1.5rem; display: none;">
+
+                                                <div id="spinnerSectionStep3" class="spinner-border text-danger"
+                                                    role="status" style="width: 1.5rem; height: 1.5rem; display: none;">
                                                 </div>
                                             </div>
                                         </form>
-                        
+
                                         <script>
                                             const stripe = Stripe('pk_test_51HQrXLEF8NjwgIEOCRLexg5Kb1y7rleJlbG8fHJ7yQ8L26Wy5Ps9Jz3XFFhtcCGCcq2loYG4pUoTBjRGjM4acOGr00XREbmlA0'); // La tua public key**
                                             const elements = stripe.elements();
@@ -411,25 +435,26 @@
                                                 }
                                             };
                                         </script>
-                        
+
                                     </div>
                                 </div>
                                 <!-- Colonna destra: Box riepilogo -->
                                 <div style="width: 38%; min-width: 220px; display: flex; flex-direction: column;">
                                     <div class="border rounded p-4 mb-0 d-flex flex-column justify-content-between h-100 riepilogo-box-fix d-grid d-none d-md-block"
                                         style="background-color: rgba(255,255,255,0.9); width: 100%; border-radius: 5px; flex: 1 1 0; min-height: 100%; box-sizing: border-box; overflow: auto;">
-                        
+
                                         <!-- Titolo -->
-                        
+
                                         <span class="badge bg-success mb-3" style="font-size: 0.6rem;">Nessun
                                             pagamento oggi</span>
-                        
+
                                         <!-- Dipendenti -->
                                         <div class="mb-3" style="font-size: 0.85rem;">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div class="d-flex flex-column">
                                                     <strong>Dipendenti:</strong>
-                                                    <span id="riepilogoDipendenti" style="font-size: 0.75rem; color: #444;">Da 1 a 5</span>
+                                                    <span id="riepilogoDipendenti"
+                                                        style="font-size: 0.75rem; color: #444;">Da 1 a 5</span>
                                                 </div>
                                                 <div class="d-flex flex-column text-end">
                                                     <span id="prezzoDipendenti">99,00€</span>
@@ -437,13 +462,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                        
+
                                         <!-- GPS -->
                                         <div class="mb-3" style="font-size: 0.85rem;">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div class="d-flex flex-column">
                                                     <strong>Rilevazione GPS:</strong>
-                                                    <span id="riepilogoGPS" style="font-size: 0.75rem; color: #444;">Attivo</span>
+                                                    <span id="riepilogoGPS"
+                                                        style="font-size: 0.75rem; color: #444;">Attivo</span>
                                                 </div>
                                                 <div class="d-flex flex-column text-end">
                                                     <span id="prezzoGPS">0,00€</span>
@@ -451,13 +477,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                        
+
                                         <!-- Interscambio -->
                                         <div class="mb-3" style="font-size: 0.85rem;">
                                             <div class="d-flex justify-content-between align-items-start">
                                                 <div class="d-flex flex-column">
                                                     <strong>Interscambio:</strong>
-                                                    <span id="riepilogoInterscambio" style="font-size: 0.75rem; color: #444;">Non Attivo</span>
+                                                    <span id="riepilogoInterscambio"
+                                                        style="font-size: 0.75rem; color: #444;">Non Attivo</span>
                                                 </div>
                                                 <div class="d-flex flex-column text-end">
                                                     <span id="prezzoInterscambio">0,00€</span>
@@ -465,9 +492,100 @@
                                                 </div>
                                             </div>
                                         </div>
-                        
+
                                         <hr>
-                        
+
+                                        <!-- Da pagare -->
+                                        <div class="d-flex justify-content-between mb-3" style="font-size: 0.95rem;">
+                                            <strong>Da pagare oggi</strong><strong style="color: green;">0,00
+                                                €</strong>
+                                        </div>
+                                        <!-- Totale -->
+                                        <div class="d-flex justify-content-between mb-1"
+                                            style="font-size: 0.8rem; color: #999;">
+                                            <span>Totale</span><span id="totaleImporto">324,00€</span>
+                                        </div>
+
+
+                                        <!-- Info prova -->
+                                        <div style="font-size: 0.7rem; color: #555;">
+                                            ✅ Annulla quando vuoi. Non pagherai nulla fino al <strong
+                                                id="fineProvaData"></strong>, poi si
+                                            attiverà l'abbonamento con
+                                            cadenza annuale.
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="button"
+                                                class="btn btn-outline-danger px-3 py-1 fw-normal w-auto"
+                                                style="width: 100%; border-radius: 4px; font-size: 0.8rem; opacity: 0.6;"
+                                                onclick="vaiStep2()">
+                                                Modifica
+                                            </button>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MOBILE Box Riepilogo VERSIONE MOBILE (< md) -->
+                            <div class="d-block d-md-none mb-4" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                <!-- Colonna 1: Box pagamento (mobile) -->
+                                <div style="width: 100%; display: flex; flex-direction: column;">
+                                    <div class="border rounded p-4 mb-0 d-flex flex-column align-items-center justify-content-center flex-fill"
+                                        style="background-color: rgba(255,255,255,0.9); width: 100%; border-radius: 5px; margin: 0 auto; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.04); overflow: auto; width: 100%">
+                                        <!-- Contenitore Form Stripe -->
+                                        
+                                        <span class="badge bg-success mb-3" style="font-size: 0.6rem;">Nessun
+                                            pagamento oggi
+                                        </span>
+                                        
+                                       
+                                       <!-- Riepilogo sintetico ordinato in due colonne -->
+                                        <!-- Riepilogo sintetico ordinato a tutta larghezza -->
+                                        <div class="mb-3" style="font-size: 0.85rem;">
+                                            <!-- Dipendenti -->
+                                            <div class="d-flex mb-2 w-100">
+                                                <div class="text-start" style="flex: 1;">
+                                                    <strong>Dipendenti</strong><br>
+                                                    <span id="riepilogoDipendenti" style="font-size: 0.75rem; color: #444;">Da 1 a 5</span>
+                                                </div>
+                                                <div class="text-end" style="flex: 1;">
+                                                    <span id="prezzoDipendenti">99,00€</span><br>
+                                                    <span style="font-size: 0.75rem; color: #444;">annuali</span>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- GPS -->
+                                            <div class="d-flex mb-2 w-100">
+                                                <div class="text-start" style="flex: 1;">
+                                                    <strong>Rilevazione GPS</strong><br>
+                                                    <span id="riepilogoGPS" style="font-size: 0.75rem; color: #444;">Attivo</span>
+                                                </div>
+                                                <div class="text-end" style="flex: 1;">
+                                                    <span id="prezzoGPS">0,00€</span><br>
+                                                    <span style="font-size: 0.75rem; color: #444;">annuali</span>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Interscambio -->
+                                            <div class="d-flex w-100">
+                                                <div class="text-start" style="flex: 1;">
+                                                    <strong>Interscambio</strong><br>
+                                                    <span id="riepilogoInterscambio" style="font-size: 0.75rem; color: #444;">Non Attivo</span>
+                                                </div>
+                                                <div class="text-end" style="flex: 1;">
+                                                    <span id="prezzoInterscambio">0,00€</span><br>
+                                                    <span style="font-size: 0.75rem; color: #444;">annuali</span>
+                                                </div>
+                                            </div>
+                                        </div>
+  
+  
+                                        
+                                        <hr>
+                                        
                                         <!-- Da pagare -->
                                         <div class="d-flex justify-content-between mb-3" style="font-size: 0.95rem;">
                                             <strong>Da pagare oggi</strong><strong style="color: green;">0,00
@@ -477,8 +595,8 @@
                                         <div class="d-flex justify-content-between mb-1" style="font-size: 0.8rem; color: #999;">
                                             <span>Totale</span><span id="totaleImporto">324,00€</span>
                                         </div>
-                        
-                        
+                                        
+                                        
                                         <!-- Info prova -->
                                         <div style="font-size: 0.7rem; color: #555;">
                                             ✅ Annulla quando vuoi. Non pagherai nulla fino al <strong id="fineProvaData"></strong>, poi si
@@ -491,107 +609,96 @@
                                                 Modifica
                                             </button>
                                         </div>
-                        
-                        
-                        
+                                        
                                     </div>
-
-                                
-                                 
-                                </div>
-
-                                
-                        
-                        
-                            </div>
-
-                            <!-- Mobile: Colonna Destra -->
-                            
-                            <div style="width: 38%; min-width: 220px; display: flex; flex-direction: column;">
-                                <div class="border rounded p-4 mb-0 d-flex flex-column justify-content-between h-100 riepilogo-box-fix d-grid d-block d-md-none"
-                                    style="background-color: rgba(255,255,255,0.9); width: 100%; border-radius: 5px; flex: 1 1 0; min-height: 100%; box-sizing: border-box; overflow: auto;">
-                            
-                                    <!-- Titolo -->
-                            
-                                    <span class="badge bg-success mb-3" style="font-size: 0.6rem;">Nessun
-                                        pagamento oggi</span>
-                            
-                                    <!-- Dipendenti -->
-                                    <div class="mb-3" style="font-size: 0.85rem;">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div class="d-flex flex-column">
-                                                <strong>Dipendenti:</strong>
-                                                <span id="riepilogoDipendenti" style="font-size: 0.75rem; color: #444;">Da 1 a 5</span>
-                                            </div>
-                                            <div class="d-flex flex-column text-end">
-                                                <span id="prezzoDipendenti">99,00€</span>
-                                                <span style="font-size: 0.75rem; color: #444;">annuali</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <!-- GPS -->
-                                    <div class="mb-3" style="font-size: 0.85rem;">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div class="d-flex flex-column">
-                                                <strong>Rilevazione GPS:</strong>
-                                                <span id="riepilogoGPS" style="font-size: 0.75rem; color: #444;">Attivo</span>
-                                            </div>
-                                            <div class="d-flex flex-column text-end">
-                                                <span id="prezzoGPS">0,00€</span>
-                                                <span style="font-size: 0.75rem; color: #444;">annuali</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <!-- Interscambio -->
-                                    <div class="mb-3" style="font-size: 0.85rem;">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div class="d-flex flex-column">
-                                                <strong>Interscambio:</strong>
-                                                <span id="riepilogoInterscambio" style="font-size: 0.75rem; color: #444;">Non Attivo</span>
-                                            </div>
-                                            <div class="d-flex flex-column text-end">
-                                                <span id="prezzoInterscambio">0,00€</span>
-                                                <span style="font-size: 0.75rem; color: #444;">annuali</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                            
-                                    <hr>
-                            
-                                    <!-- Da pagare -->
-                                    <div class="d-flex justify-content-between mb-3" style="font-size: 0.95rem;">
-                                        <strong>Da pagare oggi</strong><strong style="color: green;">0,00
-                                            €</strong>
-                                    </div>
-                                    <!-- Totale -->
-                                    <div class="d-flex justify-content-between mb-1" style="font-size: 0.8rem; color: #999;">
-                                        <span>Totale</span><span id="totaleImporto">324,00€</span>
-                                    </div>
-                            
-                            
-                                    <!-- Info prova -->
-                                    <div style="font-size: 0.7rem; color: #555;">
-                                        ✅ Annulla quando vuoi. Non pagherai nulla fino al <strong id="fineProvaData"></strong>, poi si
-                                        attiverà l'abbonamento con
-                                        cadenza annuale.
-                                    </div>
-                                    <div class="d-grid">
-                                        <button type="button" class="btn btn-outline-danger px-3 py-1 fw-normal w-auto"
-                                            style="width: 100%; border-radius: 4px; font-size: 0.8rem; opacity: 0.6;" onclick="vaiStep2()">
-                                            Modifica
-                                        </button>
-                                    </div>
-                            
-                            
-                            
                                 </div>
                             
-                            
-                            
+                                <!-- Colonna 2: Box riepilogo (mobile) -->
+                                <div style="width: 100%; display: flex; flex-direction: column;">
+                                    <div class="border rounded p-4 mb-0 d-flex flex-column justify-content-between riepilogo-box-fix"
+                                        style="background-color: rgba(255,255,255,0.9); width: 100%; border-radius: 5px; box-sizing: border-box; overflow: auto;">
+                                        <!-- Puoi copiare qui tutto il contenuto del box riepilogo -->
+                                        <form id="payment-form" style="width: 100%; max-width: 340px;">
+                                            <div class="d-flex align-items-center justify-content-between mb-1">
+                                                <label for="card-element" class="form-label mb-0" style="font-size: 0.75rem;">Intestatario
+                                                    Carta</label>
+                                                
+                                        
+                                        
+                                            </div>
+                                        
+                                            <div class="mb-3 d-flex gap-2">
+                                                <div style="flex:1;">
+                                                    <input type="text" class="form-control" id="cardFirstName" placeholder="Nome"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                </div>
+                                                <div style="flex:1;">
+                                                    <input type="text" class="form-control" id="cardLastName" placeholder="Cognome"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="mb-3">
+                                                <div id="card-element" style="border: 1px solid #ced4da; border-radius: 6px; padding: 10px 12px; height: 44px;">
+                                                    <!-- Stripe inserirà qui il campo carta -->
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="isBusiness">
+                                                <label class="form-check-label" for="isBusiness" style="font-size: 0.75rem;">Stai acquistando
+                                                    come
+                                                    azienda?</label>
+                                            </div>
+                                        
+                                            <div id="businessFields" style="display: none;">
+                                                <div class="mb-3 d-flex gap-2">
+                                                    <div style="flex:1;">
+                                                        <input type="text" id="companyName" class="form-control" placeholder="Ragione Sociale"
+                                                            style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                    </div>
+                                                    <div style="flex:1;">
+                                                        <input type="text" id="vatNumber" class="form-control" placeholder="Partita IVA"
+                                                            style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <input type="text" id="companyAddress" class="form-control" placeholder="Indirizzo aziendale"
+                                                        style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
+                                                </div>
+                                            </div>
+                                        
+                                            <div id="card-errors" role="alert" class="text-danger mt-2" style="font-size: 0.6rem;"></div>
+                                        
+                                        </form>
+
+                                        <div class="text-center mt-3 d-flex flex-column align-items-center justify-content-center w-100">
+                                            <button id="attivaProvaBtn" class="btn btn-danger px-5 py-2 fw-semibold"
+                                                style="font-size: 0.95rem; border-radius: 5px; min-width: 220px;" type="button">
+                                                Attiva Gratis
+                                            </button>
+                                            <div class="stripe-secure-text d-flex align-items-center" style="font-size: 0.7rem; color: #555; gap: 0.3rem;">
+                                                <a href="https://support.stripe.com/questions/is-my-financial-account-information-safe?locale=it-IT"
+                                                    style="font-size: 0.65rem; color: #635BFF; text-decoration: underline; font-weight: 400; display: inline-flex; align-items: center; gap: 4px;"
+                                                    target="_blank">
+                                                    Pagamento sicuro con
+                                                </a>
+                                                <div style="background-color: #635BFF; padding: 0.2px 7px; border-radius: 8px; display: inline-block;">
+                                                    <span
+                                                        style="color: #fff; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -1px;">
+                                                        stripe
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        
+                                            <div id="spinnerSectionStep3" class="spinner-border text-danger" role="status"
+                                                style="width: 1.5rem; height: 1.5rem; display: none;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        
+
                         </div>
                     </div>
                 </form>
