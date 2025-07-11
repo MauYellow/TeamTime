@@ -120,12 +120,18 @@
         }
     
         .StripeElement {
-            font-size: 16px;
-            font-family: 'Public Sans', sans-serif;
-            color: #495057;
-            background-color: white;
-            padding: 10px 12px;
-        }
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 16px;
+  font-family: 'Public Sans', sans-serif;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: 44px;
+}
     
         .StripeElement--focus {
             border-color: #dc3545;
@@ -205,12 +211,13 @@
 <body>
 
     <!-- ✅ MODAL -->
-    <div id="popup" class="modal fade show" tabindex="-1" style="display:none;" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content shadow rounded-4">
-                <button type="button" class="btn-close position-absolute" style="top: 16px; right: 16px;"
-                    aria-label="Close" onclick="closePopup()"></button>
-                <form id="step1" class="modal-body" novalidate>
+    <div id="popup" class="modal fade show" tabindex="-1" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 900px; width: 90%;">
+        <div class="modal-content shadow rounded-4">
+            <button type="button" class="btn-close position-absolute" style="top: 16px; right: 16px;"
+                aria-label="Close" onclick="closePopup()"></button>
+            <form id="step1" class="modal-body" novalidate>
+
                     <h5 class="modal-title mb-3" id="popupLabel"></h5>
 
                     <!-- STEP 1 -->
@@ -327,9 +334,7 @@
                                 </div>
 
                                 <div class="d-grid d-block d-md-none mt-4">
-                                    <button type="button" class="btn btn-danger rounded" onclick="vaiStep3()">Attiva
-                                        Prova
-                                        Gratuita</button>
+                                    <button type="button" class="btn btn-danger rounded" onclick="vaiStep3()">Attiva Prova Gratuita</button>
                                 </div>
 
                             </div>
@@ -454,20 +459,18 @@
                                         </div>
                         
                                         <div class="mb-3">
-                                            <div id="card-element"
-                                                style="border: 1px solid #ced4da; border-radius: 6px; padding: 10px 12px; height: 44px;">
+                                            <div class="card-element" style="width: 100%; border: 1px solid #ced4da; border-radius: 6px;">
                                                 <!-- Stripe inserirà qui il campo carta -->
                                             </div>
                                         </div>
+                                          
                         
                                         <div class="form-check mb-3">
-                                            <input class="form-check-input" type="checkbox" id="isBusiness">
-                                            <label class="form-check-label" for="isBusiness" style="font-size: 0.75rem;">Stai acquistando
-                                                come
-                                                azienda?</label>
+                                            <input class="form-check-input isBusiness" type="checkbox">
+                                            <label class="form-check-label" style="font-size: 0.75rem;">Stai acquistando come azienda?</label>                                    
                                         </div>
                         
-                                        <div id="businessFields" style="display: none;">
+                                        <div class="businessFields" style="display: none;">
                                             <div class="mb-3 d-flex gap-2">
                                                 <div style="flex:1;">
                                                     <input type="text" id="companyName" class="form-control" placeholder="Ragione Sociale"
@@ -487,7 +490,7 @@
                                         <div id="card-errors" role="alert" class="text-danger mt-2" style="font-size: 0.6rem;"></div>
                         
                                         <div class="text-center mt-3 d-flex flex-column align-items-center justify-content-center w-100">
-                                            <button id="attivaProvaBtn" class="btn btn-danger px-5 py-2 fw-semibold"
+                                            <button class="attivaProvaBtn" class="btn btn-danger px-5 py-2 fw-semibold"
                                                 style="font-size: 0.95rem; border-radius: 5px; min-width: 220px;" type="button">
                                                 Attiva Prova Gratuita
                                                 <img src="https://img.icons8.com/?size=100&id=BliA0IHNvACv&format=png&color=000000"
@@ -500,117 +503,7 @@
                                         </div>
                                     </form>
                         
-                                    <script>
-                                        const stripe = Stripe('pk_test_51HQrXLEF8NjwgIEOCRLexg5Kb1y7rleJlbG8fHJ7yQ8L26Wy5Ps9Jz3XFFhtcCGCcq2loYG4pUoTBjRGjM4acOGr00XREbmlA0'); // La tua public key**
-                                        const elements = stripe.elements();
-                                        const card = elements.create('card', {
-                                            style: {
-                                                base: {
-                                                    fontSize: '16px',
-                                                    color: '#32325d',
-                                                    fontFamily: 'Arial, sans-serif',
-                                                    '::placeholder': { color: '#aab7c4' }
-                                                },
-                                                invalid: {
-                                                    color: '#fa755a',
-                                                    iconColor: '#fa755a'
-                                                }
-                                            }
-                                        });
-                                        card.mount('#card-element');
-
-                                        document.getElementById('attivaProvaBtn').onclick = async () => {
-                                            const btn = document.getElementById('attivaProvaBtn');
-                                            const spinner = document.getElementById('spinnerSectionStep3');
-                                            // Validazione campi Nome e Cognome
-                                            const firstName = document.getElementById('cardFirstName').value.trim();
-                                            const lastName = document.getElementById('cardLastName').value.trim();
-                                            if (!firstName || !lastName) {
-                                                document.getElementById('card-errors').textContent = 'Compila tutti i campi.';
-                                                spinner.style.display = 'none';
-                                                btn.disabled = false;
-                                                return;
-                                            }
-                                            // Validazione campi aziendali se selezionato
-                                            const isBusiness = document.getElementById('isBusiness').checked;
-                                            let companyName = '', vatNumber = '', companyAddress = '';
-                                            if (isBusiness) {
-                                                companyName = document.getElementById('companyName').value.trim();
-                                                vatNumber = document.getElementById('vatNumber').value.trim();
-                                                companyAddress = document.getElementById('companyAddress').value.trim();
-                                                if (!companyName || !vatNumber || !companyAddress) {
-                                                    document.getElementById('card-errors').textContent = 'Compila tutti i dati aziendali.';
-                                                    spinner.style.display = 'none';
-                                                    btn.disabled = false;
-                                                    return;
-                                                }
-                                            }
-                                            document.getElementById('card-errors').textContent = '';
-                                            btn.disabled = true;
-                                            spinner.style.display = 'inline-block';
-
-                                            const email = window.email_cliente || document.getElementById('email').value.trim();
-
-                                            // Crea metodo di pagamento
-                                            const { paymentMethod, error: setupError } = await stripe.createPaymentMethod({
-                                                type: 'card',
-                                                card: card,
-                                                billing_details: { email: email }
-                                            });
-
-                                            if (setupError) {
-                                                alert(setupError.message);
-                                                return;
-                                            }
-
-                                            // Determina il piano corretto al momento del pagamento
-                                            let piano = "START";
-                                            if (window.dipendenti_cliente === "11") {
-                                                piano = "TEAMS";
-                                            } else if (window.dipendenti_cliente === "99999") {
-                                                piano = "BUSINESS";
-                                            }
-                                            window.piano_cliente = piano;
-
-
-                                            // Invia al server per creare sottoscrizione
-                                            const res = await fetch('/create-subscription', {
-                                                method: 'POST',
-                                                headers: { 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({
-                                                    email: email,
-                                                    payment_method: paymentMethod.id,
-                                                    piano: window.piano_cliente,              // oppure "TEAMS" o "BUSINESS"
-                                                    gps: window.gps_cliente,     // "yes" o "no"
-                                                    interscambio: window.interscambio_cliente, // "yes" o "no"
-                                                    ragionesociale_cliente: companyName || undefined,
-                                                    partitaiva_cliente: vatNumber || undefined,
-                                                    indirizzo_cliente: companyAddress || undefined
-                                                })
-                                            });
-
-                                            const data = await res.json();
-                                            window.customer_id_stripe = data.customerId;
-
-                                            // Se è una prova gratuita, clientSecret sarà null
-                                            if (!data.clientSecret) {
-                                                // alert("Prova gratuita attivata con successo!");
-                                                vaiStep4();
-                                                // document.getElementById('step4').style.display = 'block';
-                                                return;
-                                            }
-
-                                            // Altrimenti conferma il pagamento
-                                            const result = await stripe.confirmCardPayment(data.clientSecret);
-
-                                            if (result.error) {
-                                                alert("Errore pagamento: " + result.error.message);
-                                            } else {
-                                                alert("Iscrizione attivata con successo!");
-                                                // puoi proseguire al prossimo step
-                                            }
-                                        };
-                                    </script>
+                                    
                         
                                 </div>
                             </div>
@@ -632,7 +525,7 @@
                                                 <span id="riepilogoDipendenti" style="font-size: 0.75rem; color: #444;">Da 1 a 5</span>
                                             </div>
                                             <div class="d-flex flex-column text-end">
-                                                <span id="prezzoDipendenti">99,00€</span>
+                                                <span class="prezzoDipendenti">99,00€</span>
                                                 <span style="font-size: 0.75rem; color: #444;">annuali</span>
                                             </div>
                                         </div>
@@ -643,10 +536,10 @@
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div class="d-flex flex-column">
                                                 <strong>Rilevazione GPS:</strong>
-                                                <span id="riepilogoGPS" style="font-size: 0.75rem; color: #444;">Attivo</span>
+                                                <span class="riepilogoGPS" style="font-size: 0.75rem; color: #444;">Attivo</span>
                                             </div>
                                             <div class="d-flex flex-column text-end">
-                                                <span id="prezzoGPS">0,00€</span>
+                                                <span class="prezzoGPS">0,00€</span>
                                                 <span style="font-size: 0.75rem; color: #444;">annuali</span>
                                             </div>
                                         </div>
@@ -657,10 +550,10 @@
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div class="d-flex flex-column">
                                                 <strong>Interscambio:</strong>
-                                                <span id="riepilogoInterscambio" style="font-size: 0.75rem; color: #444;">Non Attivo</span>
+                                                <span class="riepilogoInterscambio" style="font-size: 0.75rem; color: #444;">Non Attivo</span>
                                             </div>
                                             <div class="d-flex flex-column text-end">
-                                                <span id="prezzoInterscambio">0,00€</span>
+                                                <span class="prezzoInterscambio">0,00€</span>
                                                 <span style="font-size: 0.75rem; color: #444;">annuali</span>
                                             </div>
                                         </div>
@@ -675,13 +568,13 @@
                                     </div>
                                     <!-- Totale -->
                                     <div class="d-flex justify-content-between mb-1" style="font-size: 0.8rem; color: #999;">
-                                        <span>Totale</span><span id="totaleImporto">324,00€</span>
+                                        <span>Totale</span><span class="totaleImporto">324,00€</span>
                                     </div>
                         
                         
                                     <!-- Info prova -->
                                     <div style="font-size: 0.7rem; color: #555;">
-                                        ✅ Annulla quando vuoi. Non pagherai nulla fino al <strong id="fineProvaData"></strong>, poi si
+                                        ✅ Annulla quando vuoi. Non pagherai nulla fino al <strong class="fineProvaData"></strong>, poi si
                                         attiverà l'abbonamento con
                                         cadenza annuale.
                                     </div>
@@ -710,74 +603,78 @@
                                         pagamento oggi
                                     </span>
                         
-                        
-                                    <!-- Riepilogo sintetico ordinato a tutta larghezza -->
-                                    <div class="mb-3" style="font-size: 0.85rem;">
-                                        <!-- Dipendenti -->
-                                        <div class="d-flex mb-2 w-100">
-                                            <div class="text-start" style="flex: 1;">
-                                                <strong>Dipendenti</strong><br>
-                                                <span id="riepilogoDipendenti" style="font-size: 0.75rem; color: #444;">Da 1 a 5</span>
-                                            </div>
-                                            <div class="text-end" style="flex: 1;">
-                                                <span id="prezzoDipendenti">99,00€</span><br>
-                                                <span style="font-size: 0.75rem; color: #444;">annuali</span>
-                                            </div>
+
+                                    <!-- Dipendenti -->
+                                    <div class="d-flex mb-2 w-100">
+                                        <div class="text-start" style="flex: 1;">
+                                            <strong>Dipendenti</strong><br>
+                                            <span id="riepilogoDipendenti" style="font-size: 0.75rem; color: #444;">Da 1 a 5</span>
                                         </div>
-                        
-                                        <!-- GPS -->
-                                        <div class="d-flex mb-2 w-100">
-                                            <div class="text-start" style="flex: 1;">
-                                                <strong>Rilevazione GPS</strong><br>
-                                                <span id="riepilogoGPS" style="font-size: 0.75rem; color: #444;">Attivo</span>
-                                            </div>
-                                            <div class="text-end" style="flex: 1;">
-                                                <span id="prezzoGPS">0,00€</span><br>
-                                                <span style="font-size: 0.75rem; color: #444;">annuali</span>
-                                            </div>
-                                        </div>
-                        
-                                        <!-- Interscambio -->
-                                        <div class="d-flex w-100">
-                                            <div class="text-start" style="flex: 1;">
-                                                <strong>Interscambio</strong><br>
-                                                <span id="riepilogoInterscambio" style="font-size: 0.75rem; color: #444;">Non Attivo</span>
-                                            </div>
-                                            <div class="text-end" style="flex: 1;">
-                                                <span id="prezzoInterscambio">0,00€</span><br>
-                                                <span style="font-size: 0.75rem; color: #444;">annuali</span>
-                                            </div>
+                                        <div class="text-end" style="flex: 1;">
+                                            <span class="prezzoDipendenti">99,00€</span><br>
+                                            <span style="font-size: 0.75rem; color: #444;">annuali</span>
                                         </div>
                                     </div>
-                        
-                        
-                        
-                                    <hr>
-                        
-                                    <!-- Da pagare -->
-                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3 px-2"
-                                        style="font-size: 0.80rem; white-space: nowrap;">
-                                        <strong class="mb-0">Da pagare oggi:</strong>
-                                        <strong class="mb-0" style="color: green;">0,00 €</strong>
+
+                                    <!-- GPS -->
+                                    <div class="d-flex mb-2 w-100">
+                                        <div class="text-start" style="flex: 1;">
+                                            <strong>GPS</strong><br>
+                                            <span class="riepilogoGPS" style="font-size: 0.75rem; color: #444;">Attivo</span>
+                                        </div>
+                                        <div class="text-end" style="flex: 1;">
+                                            <span class="prezzoGPS">0,00€</span><br>
+                                            <span style="font-size: 0.75rem; color: #444;">annuali</span>
+                                        </div>
                                     </div>
                                     
+                                    <!-- Interscambio -->
+                                    <div class="d-flex w-100">
+                                        <div class="text-start" style="flex: 1;">
+                                            <strong>Interscambio</strong><br>
+                                            <span class="riepilogoInterscambio" style="font-size: 0.75rem; color: #444;">Non Attivo</span>
+                                        </div>
+                                        <div class="text-end" style="flex: 1;">
+                                            <span class="prezzoInterscambio">0,00€</span><br>
+                                            <span style="font-size: 0.75rem; color: #444;">annuali</span>
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="d-flex w-100">
+                                        <div class="text-start" style="white-space: nowrap;">
+                                            <strong>Da Pagare Oggi:</strong>
+                                        </div>
+                                        <div class="text-end" style="flex: 1; color: green;">
+                                            <strong>0,00€</strong>
+                                        </div>
+                                    </div>
+                                                    
                                     
                                     <!-- Totale -->
-                                    <div class="d-flex justify-content-between align-items-center w-100 mb-1 px-2" style="font-size: 0.8rem; color: #999;">
-                                        <span class="text-start" style="flex: 1;">Totale:</span>
-                                        <span id="totaleImporto" class="text-end" style="flex: 1;">324,00€</span>
+                                    <div class="d-flex w-100" style="font-size: 0.8rem; color: #999;">
+                                        <div class="text-start" style="white-space: nowrap;">
+                                            <span>Totale:</span>
+                                        </div>
+                                        <div class="text-end" style="flex: 1; white-space: nowrap;">
+                                            <span class="totaleImporto">324,00€</span>
+                                        </div>
                                     </div>
+                                    
+
+                                    <hr>
                                     
                         
                         
                                     <!-- Info prova -->
                                     <div style="font-size: 0.7rem; color: #555;">
-                                        ✅ Annulla quando vuoi. Non pagherai nulla fino al <strong id="fineProvaData"></strong>, poi si
+                                        ✅ Annulla quando vuoi. Non pagherai nulla fino al <strong class="fineProvaData"></strong>, poi si
                                         attiverà l'abbonamento con
                                         cadenza annuale.
                                     </div>
                                     <div class="d-grid">
-                                        <button type="button" class="btn btn-outline-danger px-3 py-1 fw-normal w-auto"
+                                           <button type="button" class="btn btn-outline-danger px-5 py-2 fw-semibold"
                                             style="width: 100%; border-radius: 4px; font-size: 0.8rem; opacity: 0.6;" onclick="vaiStep2()">
                                             Modifica
                                         </button>
@@ -812,20 +709,18 @@
                                         <div class="mb-3">
                                             <label for="card-element" class="form-label mb-0" style="font-size: 0.75rem;">Dati Carta
                                             </label>
-                                            <div id="card-element"
+                                            <div class="card-element"
                                                 style="border: 1px solid #ced4da; border-radius: 6px; padding: 10px 12px; height: 44px;">
                                                 <!-- Stripe inserirà qui il campo carta -->
                                             </div>
                                         </div>
                         
                                         <div class="form-check mb-3">
-                                            <input class="form-check-input" type="checkbox" id="isBusiness">
-                                            <label class="form-check-label" for="isBusiness" style="font-size: 0.75rem;">Stai acquistando
-                                                come
-                                                azienda?</label>
+                                            <input class="form-check-input isBusiness" type="checkbox">
+                                            <label class="form-check-label" style="font-size: 0.75rem;">Stai acquistando come azienda?</label>
                                         </div>
                         
-                                        <div id="businessFields" style="display: none;">
+                                        <div class="businessFields" style="display: none;">
                                             <div class="mb-3 d-flex gap-2">
                                                 <div style="flex:1;">
                                                     <input type="text" id="companyName" class="form-control" placeholder="Ragione Sociale"
@@ -841,13 +736,15 @@
                                                     style="font-size: 0.95rem; height: 44px; border-radius: 6px;" required>
                                             </div>
                                         </div>
-                        
+
                                         <div id="card-errors" role="alert" class="text-danger mt-2" style="font-size: 0.6rem;"></div>
                         
+                                                               
                                     </form>
-                        
+
+                                    
                                     <div class="text-center mt-3 d-flex flex-column align-items-center justify-content-center w-100">
-                                        <button id="attivaProvaBtn" class="btn btn-danger px-5 py-2 fw-semibold"
+                                        <button class="attivaProvaBtn" class="btn btn-danger px-5 py-2 fw-semibold"
                                             style="font-size: 0.95rem; border-radius: 5px; min-width: 220px;" type="button">
                                             Attiva Gratis
                                         </button>
@@ -922,11 +819,287 @@
         }
 
         function vaiStep3() {
-            console.log("✅ FUNZIONE vaiStep3 CHIAMATA");
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3').style.display = 'block';
-        }
+                // Validazione campi obbligatori
+                const email = document.getElementById('email').value.trim();
+                const telefono = document.getElementById('telefono').value.trim();
+                if (!email || !telefono) {
+                    alert('Compila tutti i campi.');
+                    return;
+                }
+
+                // Salva valori globali
+                window.email_cliente = email;
+                window.telefono_cliente = telefono;
+                window.gps_cliente = document.getElementById('GPSCheckbox').checked ? "yes" : "no";
+                window.interscambio_cliente = document.getElementById('interscambioCheckbox').checked ? "yes" : "no";
+                window.dipendenti_cliente = document.getElementById('numeroDipendenti').value;
+
+                // Determina piano
+                let piano = "START";
+                if (window.dipendenti_cliente === "11") {
+                    piano = "TEAMS";
+                } else if (window.dipendenti_cliente === "99999") {
+                    piano = "BUSINESS";
+                }
+                window.piano_cliente = piano;
+
+                // Mostra step 3
+                document.getElementById('step2').style.display = 'none';
+                const s3 = document.getElementById('step3');
+                s3.style.display = 'block';
+                s3.style.position = 'relative';
+                s3.style.zIndex = 10;
+                s3.style.background = 'rgba(255,255,255,0.9)';
+                s3.style.borderRadius = '5px';
+                s3.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Debug
+                console.log('step3 display:', window.getComputedStyle(s3).display);
+
+                // Aggiorna riepiloghi
+                aggiornaRiepilogoDipendenti();
+                aggiornaRiepilogoGPS();
+                aggiornaRiepilogoInterscambio();
+                aggiornaDataFineProva();
+            }
+
+            function aggiornaRiepilogoDipendenti() {
+                    var val = window.dipendenti_cliente;
+                    console.log("⚙️ aggiornaRiepilogoDipendenti →", val);
+                    var riepiloghi = document.querySelectorAll('.riepilogoDipendenti');
+                    var prezzi = document.querySelectorAll('.prezzoDipendenti');
+
+                    riepiloghi.forEach((riepilogo) => {
+                        if (val === "5") {
+                            riepilogo.textContent = "da 1 a 5";
+                        } else if (val === "11") {
+                            riepilogo.textContent = "da 6 a 12";
+                        } else if (val === "99999") {
+                            riepilogo.textContent = "Più di 12";
+                        } else {
+                            riepilogo.textContent = "-";
+                        }
+                    });
+
+                    prezzi.forEach((prezzo) => {
+                        if (val === "5") {
+                            prezzo.textContent = "144,00€";
+                        } else if (val === "11") {
+                            prezzo.textContent = "174,00€";
+                        } else if (val === "99999") {
+                            prezzo.textContent = "324,00€";
+                        } else {
+                            prezzo.textContent = "-";
+                        }
+                    });
+
+                    aggiornaTotale();
+                }
+
+
+                function aggiornaRiepilogoGPS() {
+                        const gpsChecked = window.gps_cliente === "yes";
+                        const riepiloghi = document.querySelectorAll('.riepilogoGPS');
+                        const prezzi = document.querySelectorAll('.prezzoGPS');
+
+                        riepiloghi.forEach((r) => {
+                            r.textContent = gpsChecked ? "Attivo" : "Non Attivo";
+                        });
+
+                        prezzi.forEach((p) => {
+                            p.textContent = gpsChecked ? "48,00€" : "0,00€";
+                        });
+
+                        aggiornaTotale();
+                    }
+
+            
+                function aggiornaRiepilogoInterscambio() {
+                            const interChecked = window.interscambio_cliente === "yes";
+                            const riepiloghi = document.querySelectorAll('.riepilogoInterscambio');
+                            const prezzi = document.querySelectorAll('.prezzoInterscambio');
+
+                            riepiloghi.forEach((r) => {
+                                r.textContent = interChecked ? "Attivo" : "Non Attivo";
+                            });
+
+                            prezzi.forEach((p) => {
+                                p.textContent = interChecked ? "36,00€" : "0,00€";
+                            });
+
+                            aggiornaTotale();
+                        }
+
+            
+                    function aggiornaTotale() {
+                                console.log("Aggiorna Totale");
+
+                                function prendiPrimoPrezzo(classe) {
+                                    const el = document.querySelector(`.${classe}`);
+                                    if (!el) return 0;
+                                    const match = el.textContent.replace(',', '.').match(/[\d.]+/);
+                                    return match ? parseFloat(match[0]) : 0;
+                                }
+
+                                const prezzoDipendenti = prendiPrimoPrezzo('prezzoDipendenti');
+                                console.log("💰 Dipendenti:", prezzoDipendenti);
+                                const prezzoGPS = prendiPrimoPrezzo('prezzoGPS');
+                                const prezzoInterscambio = prendiPrimoPrezzo('prezzoInterscambio');
+
+                                const totale = prezzoDipendenti + prezzoGPS + prezzoInterscambio;
+                                const totaleFormatted = totale.toFixed(2).replace('.', ',');
+
+                                document.querySelectorAll('.totaleImporto').forEach(el => {
+                                    el.textContent = `${totaleFormatted}€`;
+                                });
+                            }
+
+
+            
+                    function aggiornaDataFineProva() {
+                                    const oggi = new Date();
+                                    oggi.setDate(oggi.getDate() + 30);
+                                    const opzioni = { day: 'numeric', month: 'long' };
+                                    const dataStr = oggi.toLocaleDateString('it-IT', opzioni);
+
+                                    document.querySelectorAll('.fineProvaData').forEach(el => {
+                                        el.textContent = dataStr;
+                                    });
+                                }
+
+
+                    (function () {
+                                        const checkboxes = document.querySelectorAll('.isBusiness');
+                                        const fieldsets = document.querySelectorAll('.businessFields');
+
+                                        checkboxes.forEach((checkbox, index) => {
+                                            const fields = fieldsets[index];
+                                            if (!fields) return;
+
+                                            function toggleBusinessFields() {
+                                                fields.style.display = checkbox.checked ? 'block' : 'none';
+                                            }
+
+                                            checkbox.addEventListener('change', toggleBusinessFields);
+                                            toggleBusinessFields(); // inizializza stato all'avvio
+                                        });
+                                    })();
+
     </script>
+
+<script>
+    const stripe = Stripe('pk_test_51HQrXLEF8NjwgIEOCRLexg5Kb1y7rleJlbG8fHJ7yQ8L26Wy5Ps9Jz3XFFhtcCGCcq2loYG4pUoTBjRGjM4acOGr00XREbmlA0'); // **
+    const elements = stripe.elements();
+
+    const card = elements.create('card', {
+        style: {
+            base: {
+                fontSize: '16px',
+                color: '#32325d',
+                fontFamily: 'Arial, sans-serif',
+                '::placeholder': { color: '#aab7c4' }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        }
+    });
+
+    // Monta solo sull’elemento visibile
+    const visibleCardElement = [...document.querySelectorAll('.card-element')]
+        .find(el => window.getComputedStyle(el).display !== 'none');
+
+    if (visibleCardElement) {
+        card.mount(visibleCardElement);
+    } else {
+        console.error("❌ Nessun .card-element visibile trovato per Stripe.");
+    }
+
+
+    document.querySelectorAll('.attivaProvaBtn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                console.log("Click su 'Paga'");
+
+                const spinner = document.getElementById('spinnerSectionStep3');
+                const firstName = document.getElementById('cardFirstName').value.trim();
+                const lastName = document.getElementById('cardLastName').value.trim();
+
+                if (!firstName || !lastName) {
+                    document.getElementById('card-errors').textContent = 'Compila tutti i campi.';
+                    spinner.style.display = 'none';
+                    btn.disabled = false;
+                    return;
+                }
+
+                const isBusiness = document.querySelector('.isBusiness')?.checked;
+                let companyName = '', vatNumber = '', companyAddress = '';
+                if (isBusiness) {
+                    companyName = document.getElementById('companyName').value.trim();
+                    vatNumber = document.getElementById('vatNumber').value.trim();
+                    companyAddress = document.getElementById('companyAddress').value.trim();
+                    if (!companyName || !vatNumber || !companyAddress) {
+                        document.getElementById('card-errors').textContent = 'Compila tutti i dati aziendali.';
+                        spinner.style.display = 'none';
+                        btn.disabled = false;
+                        return;
+                    }
+                }
+
+                document.getElementById('card-errors').textContent = '';
+                btn.disabled = true;
+                spinner.style.display = 'inline-block';
+                const email = window.email_cliente || document.getElementById('email').value.trim();
+
+                const { paymentMethod, error: setupError } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: card,
+                    billing_details: { email }
+                });
+
+                if (setupError) {
+                    alert(setupError.message);
+                    return;
+                }
+
+                let piano = "START";
+                if (window.dipendenti_cliente === "11") piano = "TEAMS";
+                else if (window.dipendenti_cliente === "99999") piano = "BUSINESS";
+                window.piano_cliente = piano;
+
+                const res = await fetch('/create-subscription', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email,
+                        payment_method: paymentMethod.id,
+                        piano,
+                        gps: window.gps_cliente,
+                        interscambio: window.interscambio_cliente,
+                        ragionesociale_cliente: companyName || undefined,
+                        partitaiva_cliente: vatNumber || undefined,
+                        indirizzo_cliente: companyAddress || undefined
+                    })
+                });
+
+                const data = await res.json();
+                window.customer_id_stripe = data.customerId;
+
+                if (!data.clientSecret) {
+                    vaiStep4();
+                    return;
+                }
+
+                const result = await stripe.confirmCardPayment(data.clientSecret);
+                if (result.error) {
+                    alert("Errore pagamento: " + result.error.message);
+                } else {
+                    alert("Iscrizione attivata con successo!");
+                }
+            });
+        });
+
+</script>
 
 </body>
 
