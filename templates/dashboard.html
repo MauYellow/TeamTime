@@ -220,19 +220,26 @@
                                     <div class="alert alert-warning d-flex align-items-center mb-0" role="alert" style="font-size: 0.85rem;">
                                           <i class="bx bx-mobile-alt me-2"></i>
                                           <div>
-                                                Per registrare nuove entrate è necessaria l'app mobile!
-                                                <a href="#" class="fw-bold text-dark text-decoration-underline"
+                                                <!-- Testo visibile solo su desktop -->
+                                                <span class="d-none d-md-inline">
+                                                      Per registrare nuove entrate è necessaria l'app mobile!
+                                                </span>
+                                    
+                                                <!-- Link sempre visibile -->
+                                                <a href="#" class="fw-bold text-dark text-decoration-underline ms-1"
                                                       onclick="document.getElementById('welcomeModal').style.display = 'block'; showStep(1); return false;">
-                                                      Vedi il breve tutorial
+                                                      Vedi Tutorial
                                                 </a>
                                           </div>
                                     </div>
+
                         
                                     <!-- 🔹 Pulsanti e avatar -->
                                     <ul class="navbar-nav flex-row align-items-center ms-auto">
-                                          <a href="https://beacons.ai/teamtime" target="_blank" class="btn btn-outline-primary me-2">
+                                          <a href="https://beacons.ai/teamtime" target="_blank" class="btn btn-outline-primary me-2 d-none d-md-inline-block">
                                                 <i class="bx bx-download me-1"></i> Scarica App Mobile
                                           </a>
+
                         
                                           <!-- User -->
                                           <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -291,15 +298,20 @@
                                                                         </h5>
                                                                         <p class="mb-4">
                                                                               Al momento ci sono
-                                                                              <span class="fw-bold">
-                                                                                    {{ counter_al_lavoro }}
-                                                                              </span>
+                                                                              <span class="fw-bold">{{ counter_al_lavoro }}</span>
                                                                               dipendenti a lavoro
                                                                         </p>
-                                                                        <a href="{{ url_for('static', filename='qr_codes/' + data['Locale'] + '.pdf') }}" download class="btn btn-outline-danger">
+                                                                  
+                                                                        <a href="{{ url_for('static', filename='qr_codes/' + data['Locale'] + '.pdf') }}" download
+                                                                              class="btn btn-outline-danger w-100 mb-2">
                                                                               Scarica QR Code
                                                                         </a>
+                                                                  
+                                                                        <a href="https://beacons.ai/teamtime" target="_blank" class="btn btn-outline-danger w-100 d-block d-md-none">
+                                                                              Scarica App Mobile
+                                                                        </a>
                                                                   </div>
+
                                                             </div>
                                                             <div class="col-sm-5 text-center text-sm-left">
                                                                   <div class="card-body pb-0 px-0 px-md-4">
@@ -1254,7 +1266,8 @@
           <h5><p><strong>Passo 1</strong>:<br> Scarica l'app TeamTime per registrarti come dipendente!</p></h5>
           <img src="/static/qr_codes/teamtimedownloadQRcode.jpg" alt="QR Code App"
                style="width: 120px;" class="my-2"><br>
-          <p>Inquadra questo QR Code con il tuo telefono</p>
+          <p>Inquadra questo QR Code con il tuo telefono per scaricarla</p>
+          <p>O <a href="https://beacons.ai/teamtime" target="_blank">scaricala da qui</a> se navighi da mobiile</p>
           <button class="btn btn-danger mt-3" onclick="showStep(2)">Ho fatto!</button>
         </div>
 
@@ -1262,7 +1275,7 @@
         <div id="step2" style="display:none;">
           <h5 class="modal-title mb-3">👤 <strong>Passo 2</strong>: Registra un dipendente</h5>
           <p>Apri l’app TeamTime, leggi il breve tutorial ed infine clicca su <strong>“Continua come Dipendente”</strong>.<br>
-            Inserisci all'interno dell'app i tuoi dati e seleziona l'azienda per iniziare.</p><br>
+            Inserisci all'interno dell'app i tuoi dati e seleziona l'azienda (<strong>{{ data.Locale }}</strong>) per iniziare.</p><br>
           <p>✅ Ricorda, la tua azienda è già registrata!</p>
           <button class="btn btn-danger mt-3" onclick="showStep(3)">Avanti</button>
         </div>
@@ -1271,7 +1284,7 @@
         <div id="step3" style="display:none;">
           <h5 class="modal-title mb-3">📲 <strong>Passo 3</strong>: Primo Scan</h5>
           <p>Usa il QR code ricevuto via email per fare il tuo primo <strong>“Scan Entrata”</strong> dall’app!</p><br>
-          <p>Eccone una copia:</p>
+          <p>Eccone una copia, puoi scaricarlo quando vuoi dalla dashboard:</p>
           <img src="{{ data.QRCode }}"><br>
           <p>Nome QR Code: <strong>{{ data.Locale }}</strong></p>
           <button class="btn btn-success mt-3" onclick="closeWelcome()">Inizia!</button>

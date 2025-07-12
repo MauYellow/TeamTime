@@ -68,7 +68,7 @@ def messaggio_inviato():
 
 @app.route('/prova') #**
 def provaa():
-    return render_template('inizia-prova-gratuita-TEST.html')
+    return render_template('inizia-prova-gratuita-PROD.html')
 
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -118,7 +118,7 @@ def stripe_webhook():
     
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET_KOYEB #** forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET?
+            payload, sig_header, STRIPE_WEBHOOK_SECRET #_KOYEB #** forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET - dovrò metterne una con koyeb
         )
     except stripe.error.SignatureVerificationError as e:
         return jsonify({"error": str(e)}), 400
