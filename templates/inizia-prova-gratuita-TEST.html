@@ -74,6 +74,18 @@
             position: relative;
             z-index: 2;
         }
+
+        @media (max-width: 768px) {
+  .modal-dialog {
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .modal-content {
+    min-height: 100%;
+  }
+}
+
     
         .step {
             display: flex;
@@ -247,7 +259,8 @@
                     </div>
 
                     <!-- STEP 2 (inizialmente nascosto) -->
-                    <div id="step2" style="display: none;" class="p-4 p-md-5 bg-white bg-opacity-90 rounded">
+                    <div id="step2" style="display: none; background-color: rgba(255,255,255,0.93);" class="p-4 p-md-5 rounded">
+
                         <!-- Step Indicator -->
                         <div class="d-flex align-items-center justify-content-start gap-4 mb-4 flex-wrap">
                             <div class="step active">
@@ -344,7 +357,8 @@
                     </div>
 
                     <!-- STEP 3 -->
-                    <div id="step3" style="display: none;" class="p-4 p-md-5 bg-white bg-opacity-90 rounded">
+                    <div id="step3" style="display: none; background-color: rgba(255,255,255,0.93);" class="p-4 p-md-5 rounded">
+
                         <!-- Step Indicator (in alto, centrato) -->
                         <div class="d-flex align-items-center justify-content-start gap-4 mb-4 flex-wrap">
                             <div class="step current">
@@ -726,7 +740,78 @@
                         </div>
                         
                     </div>
+
+                    <!-- STEP 4 -->
+                    <!-- STEP 4 - VERSIONE MINIMA la vera sta in backup -->
+                    <div id="step4" style="display: none; background-color: rgba(255,255,255,0.93); border-radius: 10px;"
+                        class="p-4 p-md-5">
+
+                        <div class="p-4 p-md-5">
+                            <!-- Step Indicator (in alto, centrato) -->
+                            <div class="d-flex align-items-center justify-content-center gap-4 mb-3">
+                                <div class="step current">
+                                    <div class="circle">1</div>
+                                    <div class="label"><strong>Informazioni</strong></div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="step current">
+                                    <div class="circle">2</div>
+                                    <div class="label"><strong>Revisione</strong></div>
+                                </div>
+                                <div class="divider"></div>
+                                <div class="step active">
+                                    <div class="circle">3</div>
+                                    <div class="label"><strong>Fine</strong></div>
+                                </div>
+                            </div>
+                    
+                            <div class="text-center py-5" id="step4content">
+                    
+                                <!-- Icona Successo -->
+                                <img src="https://img.icons8.com/color/96/checked--v1.png" alt="Successo"
+                                    style="width: 80px; height: 80px;" />
+                    
+                                <h5 class="fw-bold mt-4">Transazione di 0,00€ effettuata con successo</h5>
+                    
+                                <div class="mt-2 mb-4" style="font-size: 0.85rem; color: #444;">
+                                    Grazie per il tuo acquisto.
+                                </div>
+                    
+                                <!-- Spinner e messaggio -->
+                                <div class="d-flex flex-column align-items-center justify-content-center mb-4">
+                                    <div id="spinnerSectionStep4" class="spinner-border text-danger" role="status"
+                                        style="width: 2.5rem; height: 2.5rem;">
+                                    </div>
+                                    <div class="mt-3" style="font-size: 1.1rem; color: #444;">
+                                        <img src="https://img.icons8.com/?size=100&id=xLIkjgcmFOsC&format=png&color=000000"
+                                            style="width: 28px; height: 28px">
+                                        Riceverai le credenziali per l'accesso ed il QR Code per mail
+                                    </div>
+                                    <div class="mt-2" style="font-size: 0.85rem; color: #888; text-align: center;">
+                                        Se non arriva nei prossimi minuti, controlla nella cartella
+                                        <strong>SPAM</strong>.
+                                    </div>
+                    
+                                </div>
+                    
+                                <!-- Bottone disabilitato -->
+                                <a href="/login" id="vaiDashboard" class="btn btn-danger fw-semibold px-5 py-2 rounded-pill disabled"
+                                    style="font-size: 1rem; pointer-events: none;">
+                                    Accedi alla Dashboard
+                                </a>
+                    
+                    
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
+
+
                 </form>
+
+                
             </div>
         </div>
     </div>
@@ -759,7 +844,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 e.stopImmediatePropagation();
-                vaiStep2();
+                vaiStep2(); //**
             });
         });
 
@@ -770,6 +855,16 @@
             document.getElementById('step2').style.display = 'block';
             document.getElementById('step3').style.display = 'none';
         }
+
+       /** function vaiStep5() {
+                console.log("✅ FUNZIONE vaiStep2 CHIAMATA");
+                document.getElementById('boxStep1').style.display = 'none';
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'none';
+                document.getElementById('step4').style.display = 'block';
+            } **/
+
+        
 
         function vaiStep3() {
                 // Validazione campi obbligatori
@@ -816,7 +911,7 @@
                 aggiornaDataFineProva();
             }
 
-            function aggiornaRiepilogoDipendenti() {
+        function aggiornaRiepilogoDipendenti() {
                     var val = window.dipendenti_cliente;
                     console.log("⚙️ aggiornaRiepilogoDipendenti →", val);
                     var riepiloghi = document.querySelectorAll('.riepilogoDipendenti');
@@ -850,7 +945,7 @@
                 }
 
 
-                function aggiornaRiepilogoGPS() {
+        function aggiornaRiepilogoGPS() {
                         const gpsChecked = window.gps_cliente === "yes";
                         const riepiloghi = document.querySelectorAll('.riepilogoGPS');
                         const prezzi = document.querySelectorAll('.prezzoGPS');
@@ -867,7 +962,7 @@
                     }
 
             
-                function aggiornaRiepilogoInterscambio() {
+        function aggiornaRiepilogoInterscambio() {
                             const interChecked = window.interscambio_cliente === "yes";
                             const riepiloghi = document.querySelectorAll('.riepilogoInterscambio');
                             const prezzi = document.querySelectorAll('.prezzoInterscambio');
@@ -884,7 +979,7 @@
                         }
 
             
-                    function aggiornaTotale() {
+        function aggiornaTotale() {
                                 console.log("Aggiorna Totale");
 
                                 function prendiPrimoPrezzo(classe) {
@@ -909,7 +1004,7 @@
 
 
             
-                    function aggiornaDataFineProva() {
+        function aggiornaDataFineProva() {
                                     const oggi = new Date();
                                     oggi.setDate(oggi.getDate() + 30);
                                     const opzioni = { day: 'numeric', month: 'long' };
@@ -1061,20 +1156,38 @@
         });
 
         function vaiStep4() {
+                console.log("Step4 Attivato");
+
+                // Nasconde gli step precedenti
                 document.getElementById('boxStep1').style.display = 'none';
                 document.getElementById('step2').style.display = 'none';
                 const s3 = document.getElementById('step3');
                 if (s3) s3.style.display = 'none';
 
+                // Mostra lo step 4
                 const s4 = document.getElementById('step4');
                 if (s4) {
                     s4.style.display = 'block';
                     s4.style.position = 'relative';
-                    s4.style.zIndex = 10;
+                    s4.style.zIndex = '9999';
                     s4.style.background = 'rgba(255,255,255,0.9)';
                     s4.style.borderRadius = '5px';
+                    s4.style.minHeight = '100vh';
+                    s4.style.paddingBottom = '50px';
 
-                    // ✅ Avvia chiamata backend
+                    // Scroll forzato su mobile
+                    setTimeout(() => {
+                        s4.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                        // Fix overflow mobile se necessario
+                        const modalDialog = document.querySelector('.modal-dialog');
+                        if (modalDialog) {
+                            modalDialog.style.overflowY = 'auto';
+                            modalDialog.style.maxHeight = '100vh';
+                        }
+                    }, 100);
+
+                    // Chiamata al backend
                     fetch('/start-airtable', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1088,14 +1201,12 @@
                             ragionesociale_cliente: document.getElementById('companyName')?.value || "No companyName",
                             indirizzo_cliente: document.getElementById('companyAddress')?.value || "No companyAddress",
                             customer_id: window.customer_id_stripe
-                        }) // <--- qui passiamo la variabile globale
+                        })
                     })
                         .then(res => res.json())
                         .then(data => {
                             if (data.success) {
-                                // Nascondi spinner (step 4)
                                 document.getElementById('spinnerSectionStep4').style.display = 'none';
-                                // Abilita entrambi i bottoni
                                 document.getElementById('vaiDashboard').classList.remove('disabled');
                                 document.getElementById('vaiDashboard').style.pointerEvents = 'auto';
                             }
