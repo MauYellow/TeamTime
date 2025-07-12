@@ -35,6 +35,8 @@ AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 api = Api(AIRTABLE_TOKEN)
 
+print(f"✅ Chiave Stripe in uso: {stripe.api_key}") #**
+
 
 # Configura Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -118,7 +120,7 @@ def stripe_webhook():
     
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET #_KOYEB #** forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET - dovrò metterne una con koyeb
+            payload, sig_header, STRIPE_WEBHOOK_SECRET_KOYEB #_KOYEB #** forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET - dovrò metterne una con koyeb
         )
     except stripe.error.SignatureVerificationError as e:
         return jsonify({"error": str(e)}), 400
@@ -497,6 +499,7 @@ def inizia_prova():
 
 @app.route('/create-subscription', methods=['POST'])
 def create_subscription():
+    print(f"✅ Chiave Stripe in uso: {stripe.api_key}")
     try:
         data = request.json
         email = data['email']
@@ -510,8 +513,7 @@ def create_subscription():
           "TEAMS": os.environ.get('STRIPE_PRICE_TEAMS'),
           "BUSINESS": os.environ.get('STRIPE_PRICE_BUSINESS'),
 }
-        price_id = price_lookup.get(piano, os.environ.get('STRIPE_PRICE_START')) #"price_1RaCHuEF8NjwgIEOlnXSVo8k" #
-
+        price_id = price_lookup.get(piano, os.environ.get('STRIPE_PRICE_START')) #"price_1RaCHuEF8NjwgIEOlnXSVo8k" 
         items = [{'price': price_id}]
 
         if data.get('gps') == 'yes':
@@ -558,6 +560,7 @@ def create_subscription():
 
     except Exception as e:
         errore = str(e)
+        print(f"Errore durante la creazione della sottoscrizione: {errore}")
         msg = Message(
             subject="❌ Errore TeamTime - Stripe",
             sender=app.config['MAIL_USERNAME'],
