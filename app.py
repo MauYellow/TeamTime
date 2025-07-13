@@ -138,22 +138,22 @@ def stripe_webhook():
     elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento/ non serve perché già la riceve dopo
        invoice = event['data']['object']
        customer_id = invoice['customer']
-       record = table.first(formula=match({"Stripe Customer ID": customer_id}))
-       print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}, in {record['fields']['Locale']}")
+       #record = table.first(formula=match({"Stripe Customer ID": customer_id})) non lo ha ancora, crea dopo il record in airtable!
+       print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}")
        
     elif event['type'] == 'invoice.payment_succeeded': # Questo evento si verifica circa un'ora dopo che il customer subscription created o updated
         invoice = event['data']['object']
         customer_id = invoice['customer']
         billing_reason = invoice.get('billing_reason', 'unknown')
-        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
+        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Non lo ha ancora!
         amount = invoice['amount_paid'] / 100  # converti da cent a €
         if amount == 0:
-          print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}")
+          print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}") #, locale: {record['fields']['Locale']}") non lo ha ancora!
         else:
-          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}")
+          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #Qui lo dovrebbe avere perché è il pagamento dopo la prova
           try: 
             table.update(record["id"], {"Pagato": 'Si'})
-            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") 
+            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #, ") 
           except Exception as e:
             print(f"Errore durante l'aggiornamento dello stato 'Pagato in Airtable per {customer_id}: {e}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}")
 
@@ -395,10 +395,14 @@ def dashboard():
        
     counter_ore_lavorate_mese = round(counter_ore_lavorate_mese, 2)
     try:
-       media_ore_mese = round(counter_ore_lavorate_mese / len_mese_records, 2) #counter_ore_lavorate_mese
+       media_ore_mese = round(counter_ore_lavorate_mese / len_mese_records, 2) #counter_ore_lavorate_mese** Questo da spesso problemi
     except Exception as e:
        print(f"Errore Media Mese Giornaliera: {e}")
-       return "N/A"
+       return """
+    Errore nel ricevere le informazioni.<br>
+    Svuota la cache del browser o contatta l’assistenza a <a href='mailto:help.teamtime@gmail.com'>help.teamtime@gmail.com</a>.<br>
+    <a href='https://www.teamtimeapp.it/login'>🔁 Riprova il login</a>
+    """, 200, {'Content-Type': 'text/html'}
     
     TABLE_NAME = "Locali Approvati"
     table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
