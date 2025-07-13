@@ -29,13 +29,13 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY") #, "una-chiave-molto-segreta-e-lu
 
 stripe.api_key = STRIPE_SECRET_KEY
 STRIPE_PRICE_ID = STRIPE_PRICE_ID
-STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET #'whsec_b7142045be6eda2db162e890c9acd6ac2d348dfd24f4401b9d334eb8a672e781' #di prova nel locale, scade dopo 90 giorni**
+STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET
 STRIPE_WEBHOOK_SECRET_KOYEB = os.getenv("STRIPE_WEBHOOK_SECRET_KOYEB")
 AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 api = Api(AIRTABLE_TOKEN)
 
-print(f"✅ Chiave Stripe in uso: {stripe.api_key}") #**
+#print(f"✅ Chiave Stripe in uso: {stripe.api_key}")
 
 
 # Configura Flask-Mail
@@ -68,9 +68,6 @@ def piani():
 def messaggio_inviato():
     return render_template('messaggio_inviato.html')
 
-@app.route('/prova') #**
-def provaa():
-    return render_template('inizia-prova-gratuita-PROD.html')
 
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -120,12 +117,14 @@ def stripe_webhook():
     
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_WEBHOOK_SECRET_KOYEB #_KOYEB #** forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET - dovrò metterne una con koyeb
+            payload, sig_header, STRIPE_WEBHOOK_SECRET_KOYEB  #forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET (da tenere per test interni) - dovrò metterne una con koyeb
         )
     except stripe.error.SignatureVerificationError as e:
+        print(f"Errore: {e}")
         return jsonify({"error": str(e)}), 400
     
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+    record = table.first(formula=match({"Stripe Customer ID": customer_id}))
     
     
     
@@ -142,20 +141,21 @@ def stripe_webhook():
        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
        print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}")
 
-    elif event['type'] == 'invoice.payment_succeeded': #** Questo evento si verifica molto dopo il customer subscription created o updated, però si verifica
+    elif event['type'] == 'invoice.payment_succeeded': # Questo evento si verifica circa un'ora dopo che il customer subscription created o updated
         invoice = event['data']['object']
         customer_id = invoice['customer']
+        billing_reason = invoice.get('billing_reason', 'unknown')
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         amount = invoice['amount_paid'] / 100  # converti da cent a €
         if amount == 0:
-          print(f"💰 Prova Gratuita Attivata da {customer_id}: {amount}€")
+          print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}")
         else:
-          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€")
+          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}, billing_reason: {billing_reason}€")
           try: 
             table.update(record["id"], {"Pagato": 'Si'})
-            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}") 
+            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}") 
           except Exception as e:
-            print(f"Errore durante l'aggiornamento dello stato 'Pagato in Airtable per {customer_id}: {e}")
+            print(f"Errore durante l'aggiornamento dello stato 'Pagato in Airtable per {customer_id}: {e}, billing_reason: {billing_reason}")
 
     elif event['type'] == 'customer.subscription.updated': # Questi sono i casi in cui l'abbonamento cambia, tipo si rinnova o è disdetto o si attiva dopo il periodo di prova
       subscription = event['data']['object']
@@ -167,6 +167,7 @@ def stripe_webhook():
       if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): #** Inviare una mail
         print(f"❌ Abbonamento disdetto per: {customer_id}")
         try: 
+          record = table.first(formula=match({"Stripe Customer ID": customer_id}))
           table.update(record["id"], {"Status": 'Disattivato'})
           print(f"❌ Abbonamento aggiornato su Airtable per: {customer_id}")
         except Exception as e:
@@ -176,6 +177,7 @@ def stripe_webhook():
     # Caso: Riattivazione (cancel_at_period_end = False)
       if previous_attributes.get("cancel_at_period_end") == True and subscription.get("cancel_at_period_end") == False:
         print(f"✅ Abbonamento riattivato per: {customer_id}")
+        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         try: 
           table.update(record["id"], {"Status": 'Attivo'})
           print(f"✅ Abbonamento aggiornato su Airtable per: {customer_id}")
@@ -184,6 +186,7 @@ def stripe_webhook():
 
     # Caso: Finita la prova e abbonamento attivato
       if previous_attributes.get("status") == "trialing" and subscription['status'] == 'active':
+        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         print(f"✅ Attivazione Abbonamento dopo periodo di prova per {customer_id}")
         table.update(record["id"], {"Status": 'Attivo'})
 
@@ -192,14 +195,29 @@ def stripe_webhook():
         print(f"🔁 Altra modifica all’abbonamento per: {customer_id}")
 
     # ❌ Pagamento fallito
-    elif event['type'] == 'invoice.payment_failed': #** qui bisogna svilupparlo
+    elif event['type'] == 'invoice.payment_failed':
         invoice = event['data']['object']
         customer_id = invoice['customer']
+        billing_reason = invoice.get('billing_reason', 'unknown')
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
-        print(f"❌ invoice.payment_failed → Pagamento fallito per {customer_id}")
+        print(f"❌ invoice.payment_failed → Pagamento fallito per {customer_id}, billing_reason: {billing_reason}")
         try: 
           table.update(record["id"], {"Status": 'Disattivato'})
           print(f"❌ Pagamento non riuscito per: {customer_id}")
+          msg = Message(subject=f"PAGAMENTO FALLITO",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=[f"{record['fields']['Mail']}", 'help.teamtime@gmail.com'],
+                  body=f"""Gentile cliente,
+
+ci risulta che il pagamento previsto al termine dei 30 giorni di prova dell’applicazione TeamTime – Registro Presenze non è andato a buon fine.
+Per questo motivo, il suo profilo è stato temporaneamente disattivato.
+
+La invitiamo a contattarci al più presto per ripristinare il servizio e mantenere attivi i suoi privilegi.
+Può rispondere direttamente a questa email per ricevere assistenza.
+
+Cordiali saluti,
+TeamTime Staff""")
+          mail.send(msg)
         except Exception as e:
           print(f"Errore durante il pagamento: {e}")
 
@@ -234,7 +252,7 @@ def login():
             #print(f"Session: {session['data']}")
               return redirect(url_for('dashboard')) 
             else:
-              return redirect(url_for('login_failed', motivo="Username e Password errate")) #**
+              return redirect(url_for('login_failed', motivo="Username e Password errate"))
         else:
             return redirect(url_for('login_failed', motivo="Il servizio per questo QR Code è stato disattivato, contatta l'assistenza"))
 
@@ -243,7 +261,7 @@ def login():
 
 @app.route('/login-failed')
 def login_failed():
-    motivo = request.args.get('motivo', 'Username o Password errata') #**
+    motivo = request.args.get('motivo', 'Username o Password errata')
     TABLE_NAME = "Locali Approvati"
     table = Table(AIRTABLE_TOKEN, AIRTABLE_BASE_ID, TABLE_NAME)
     if request.method == 'POST':
@@ -279,6 +297,16 @@ def dashboard():
     mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
     if not data:
         return redirect(url_for('login'))
+
+    table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+    record = table.first(formula=match({"Locale": data['Locale']}))
+    status_locale = record["fields"].get("Status", "")
+
+    if status_locale != "Attivo":
+        print(f"❌ Accesso negato: status = {status_locale}")
+        session.clear()
+        return redirect(url_for('login_failed', motivo="Il servizio su questo QR Code è stato disattivato, contattare l'assistenza."))
+
     
     TABLE_NAME = data['Locale']
     table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
@@ -492,14 +520,14 @@ def calendario_demo():
 def report_demo():
     return render_template('/report_demo.html')
 
-@app.route('/inizia-prova') # **
+@app.route('/inizia-prova')
 def inizia_prova():
-    return render_template('/inizia-prova-gratuita.html')#/prova_popup.html')#/inizia-prova-gratuita.html')**
+    return render_template('/inizia-prova-gratuita.html')
 
 
 @app.route('/create-subscription', methods=['POST'])
 def create_subscription():
-    print(f"✅ Chiave Stripe in uso: {stripe.api_key}")
+    #print(f"✅ Chiave Stripe in uso: {stripe.api_key}")
     try:
         data = request.json
         email = data['email']
@@ -534,15 +562,15 @@ def create_subscription():
         #print("Cerco Subscription")
         #print(f"Price ID selezionato: {price_id}")
         #print(f"Items: {items}")
-        trial_end_timestamp = int(time.time()) + 60  # Ora + 60 secondi . ** Questo va cancellato poi in produzione
+        #trial_end_timestamp = int(time.time()) + 60  # Ora + 60 secondi . Questo va cancellato poi in produzione
 
         try:
             subscription = stripe.Subscription.create(
             customer=customer.id,
             items=items,
             expand=['latest_invoice.payment_intent'],
-            trial_end=trial_end_timestamp, #** da cancellare in produzione
-            #trial_period_days=1 #** qui vanno messi i periodi di prova con trial_period = 30,
+            #trial_end=trial_end_timestamp, #da cancellare in produzione
+            trial_period_days=30
         )
             print("Tutto ok")
         except Exception as e:
@@ -643,10 +671,8 @@ def start_airtable():
     table = api.table(AIRTABLE_BASE_ID, "SendWebLogin")
     table.create({"Mail": f'{email_cliente}', "Password": f'{nuova_password}', "Telefono": f'{telefono_cliente}', "Max Dipendenti": f"{dipendenti_cliente}", "GPS": f"{gps_cliente}", "Interscambio": f"{interscambio_cliente}", "Fine Prova": f"{fine_prova}", "Locale": f"{table_scelta}", "Attachment": [{"url": file_url}]})
 
-    #table = api.table(AIRTABLE_BASE_ID, "MailReminder") #**
-    #table.create({"Mail": f'{email_cliente}', "Inviata": "no", "Locale": f"{table_scelta}", "Stripe Customer ID": f"{customer_id}", "Link Annullamento": f"https://www.teamtimeapp.it/termina-abbonamento/{customer_id}"})
-
-    
+    table = api.table(AIRTABLE_BASE_ID, "MailReminder")
+    table.create({"Mail": f'{email_cliente}', "Inviata": "no", "Locale": f"{table_scelta}", "Stripe Customer ID": f"{customer_id}", "Link Annullamento": f"https://www.teamtimeapp.it/termina-abbonamento/{customer_id}"})
 
     return jsonify({"success": True})
 
@@ -708,7 +734,7 @@ def correggi_uscita():
     except Exception as e:
         return f"Errore: {e}", 500
 
-def check_status_abbonamenti(): #**leggere check_status_abbonamenti in basso il
+def check_status_abbonamenti(): #**leggere check_status_abbonamenti, legato a run_schedule (per me si può cancellare) in basso il #Aggiornamento: al momento questo lo fa stripe con webhook, il pagamento è automatico e se non effettuato dopo circa un'ora arriva il payment_failed e aggiorna in automatico lo status a Disattivato
     print("Controllo abbonamenti")
     table_name = "Locali Approvati"
     table = api.table(AIRTABLE_BASE_ID, table_name)
@@ -727,13 +753,11 @@ def check_status_abbonamenti(): #**leggere check_status_abbonamenti in basso il
                 
         except Exception as e:
             print(f"Errore nel parsing di Fine Prova per {fields.get('Mail', 'Sconosciuto')}: {e}")
+          
 
+#check_status_abbonamenti() Funziona bene, solo che fa il check dell'abbonamento ma può essere che l'abbonamentp è scaduto ma il pagamento di Stripe è andato a buon fine, serve webhook con stripe, Occhio che serve riattivare il threading qui sotto per farlo funzionare
 
-              
-
-#check_status_abbonamenti() *** Funziona bene, solo che fa il check dell'abbonamento ma può essere che l'abbonamentp è scaduto ma il pagamento di Stripe è andato a buon fine, serve webhook con stripe, Occhio che serve riattivare il threading qui sotto per farlo funzionare
-
-def run_schedule():
+def run_schedule(): #Al momento questo non è attivo, leggi su def check_status_abbonamenti
     schedule.every().day.at("11:45").do(check_status_abbonamenti)
     while True:
         schedule.run_pending()
