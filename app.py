@@ -49,6 +49,13 @@ mail = Mail(app)
 
 @app.route('/')
 def home():
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    timestamp = datetime.now().isoformat()
+    response = requests.get(f"https://ipinfo.io/{ip}/json")
+    geo = response.json()
+    print(f"Nuovo accesso: {ip}, {geo}, {user_agent}, {path}, {timestamp} ")
     return render_template('index.html')
 
 @app.route('/robots.txt')
