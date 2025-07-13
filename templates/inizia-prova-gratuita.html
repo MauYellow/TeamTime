@@ -1179,6 +1179,13 @@
                 const data = await res.json();
                 window.customer_id_stripe = data.customerId;
 
+                if (!res.ok || data.success === false) {
+                    alert("Errore durante la creazione dell'abbonamento: " + (data.error || "Errore sconosciuto"));
+                    spinner.style.display = 'none';
+                    btn.disabled = false;
+                    return;
+                }
+
                 if (!data.clientSecret) {
                     vaiStep4();
                     return;

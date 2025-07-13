@@ -614,12 +614,20 @@ def create_subscription():
             )
             print(f"✅ Subscription Stripe {subscription.id}")
             payment_intent = subscription.latest_invoice.get('payment_intent')
-            return jsonify({
-                'subscriptionId': subscription.id,
-                'clientSecret': payment_intent['client_secret'] if payment_intent else None,
-                'customerId': customer.id
-            })
+            
+            # ✅ STOP se pagamento fallisce
+            if payment_intent and payment_intent['status'] != 'succeeded':
+              errore = f"Pagamento rifiutato: {payment_intent['status']}"
+              print(f"❌ {errore}")
+              return jsonify({"success": False, "error": errore}), 402
 
+            else:
+               return jsonify({
+              'subscriptionId': subscription.id,
+              'clientSecret': payment_intent['client_secret'] if payment_intent else None,
+              'customerId': customer.id
+            })
+        
         except Exception as e:
             errore = str(e)
             print(f"Errore durante la creazione della sottoscrizione: {errore}")
