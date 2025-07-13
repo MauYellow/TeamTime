@@ -574,7 +574,67 @@ def inizia_prova():
 
 
 @app.route('/create-subscription', methods=['POST'])
+@app.route('/create-subscription', methods=['POST'])
 def create_subscription():
+    try:
+        data = request.json
+        email = data['email']
+        payment_method_id = data['payment_method']
+        
+        piano = data.get('piano', 'START').upper()
+        print(f"Piano Scelto {piano}")
+        price_lookup = {
+            "START": os.environ.get('STRIPE_PRICE_START'),
+            "TEAMS": os.environ.get('STRIPE_PRICE_TEAMS'),
+            "BUSINESS": os.environ.get('STRIPE_PRICE_BUSINESS'),
+        }
+        price_id = price_lookup.get(piano, os.environ.get('STRIPE_PRICE_START'))
+        items = [{'price': price_id}]
+
+        if data.get('gps') == 'yes':
+            items.append({'price': os.environ.get('STRIPE_PRICE_GPS')})
+        if data.get('interscambio') == 'yes':
+            items.append({'price': os.environ.get('STRIPE_PRICE_INTERSCAMBIO')})
+
+        customer = stripe.Customer.create(
+            email=email,
+            payment_method=payment_method_id,
+            invoice_settings={'default_payment_method': payment_method_id},
+        )
+
+        try:
+            subscription = stripe.Subscription.create(
+                customer=customer.id,
+                items=items,
+                expand=['latest_invoice.payment_intent'],
+                trial_period_days=30
+            )
+            print(f"✅ Subscription Stripe {subscription.id}")
+            payment_intent = subscription.latest_invoice.get('payment_intent')
+            return jsonify({
+                'subscriptionId': subscription.id,
+                'clientSecret': payment_intent['client_secret'] if payment_intent else None,
+                'customerId': customer.id
+            })
+
+        except Exception as e:
+            errore = str(e)
+            print(f"Errore durante la creazione della sottoscrizione: {errore}")
+            msg = Message(
+                subject="❌ Errore TeamTime - Stripe",
+                sender=app.config['MAIL_USERNAME'],
+                recipients=["help.teamtime@gmail.com"],
+                body=f"Errore durante la creazione della sottoscrizione:\n\n{errore}"
+            )
+            mail.send(msg)
+            return jsonify({"success": False, "error": errore}), 500
+
+    except Exception as e:
+        errore = str(e)
+        print(f"Errore generale: {errore}")
+        return jsonify({"success": False, "error": errore}), 500
+
+def create_subscription_old(): #**backup - errore che se la carta era scaduta continuava comunque a dare accesso
     #print(f"✅ Chiave Stripe in uso: {stripe.api_key}")
     try:
         data = request.json
@@ -614,11 +674,11 @@ def create_subscription():
 
         try:
             subscription = stripe.Subscription.create(
-            customer=customer.id,
-            items=items,
-            expand=['latest_invoice.payment_intent'],
-            #trial_end=trial_end_timestamp, #da cancellare in produzione
-            trial_period_days=30
+              customer=customer.id,
+              items=items,
+              expand=['latest_invoice.payment_intent'],
+              #trial_end=trial_end_timestamp, #da cancellare in produzione
+              trial_period_days=30
         )
             print("Tutto ok")
         except Exception as e:
