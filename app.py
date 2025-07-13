@@ -34,8 +34,8 @@ STRIPE_WEBHOOK_SECRET_KOYEB = os.getenv("STRIPE_WEBHOOK_SECRET_KOYEB")
 AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 api = Api(AIRTABLE_TOKEN)
-
-#print(f"✅ Chiave Stripe in uso: {stripe.api_key}")
+TELEGRAM_BOT_KEY = os.getenv("TELEGRAM_BOT_KEY")
+CHANNEL_ID = os.getenv("CHANNEL_ID")
 
 
 # Configura Flask-Mail
@@ -55,7 +55,7 @@ def home():
     timestamp = datetime.now().isoformat()
     response = requests.get(f"https://ipinfo.io/{ip}/json")
     geo = response.json()
-    print(f"Nuovo accesso: {ip}, {geo}, {user_agent}, {path}, {timestamp} ")
+    telegram(f"Nuovo accesso: {ip}, {geo}, {user_agent}, path: {path}, {timestamp}")
     return render_template('index.html')
 
 @app.route('/robots.txt')
@@ -68,6 +68,7 @@ def sitemap():
 
 @app.route('/piani')
 def piani():
+    telegram("Browse: piani")
     return render_template('piani.html')
 
 
@@ -78,6 +79,7 @@ def messaggio_inviato():
 
 @app.route('/contact', methods=['POST'])
 def contact():
+    telegram("Browse: contact")
     name = request.form['name']
     telefono = request.form['telefono']
     dipendenti = request.form['dipendenti']
@@ -569,6 +571,7 @@ def privacy():
 
 @app.route('/dashboard_demo')
 def dashboard_demo():
+    telegram("Browse: dashboard DEMO")
     return render_template('dashboard_demo.html')
 
 @app.route('/calendario_demo')
@@ -581,6 +584,7 @@ def report_demo():
 
 @app.route('/inizia-prova')
 def inizia_prova():
+    telegram("Browse: inizia-prova")
     return render_template('/inizia-prova-gratuita.html')
 
 
@@ -889,6 +893,19 @@ def run_schedule(): #Al momento questo non è attivo, leggi su def check_status_
         schedule.run_pending()
         time.sleep(5)
 
+def telegram(message):
+   url = f"https://api.telegram.org/bot{TELEGRAM_BOT_KEY}/sendMessage"
+   payload = {
+    "chat_id": CHANNEL_ID,
+    "text": message
+}
+   try:
+        response = requests.post(url, data=payload)
+        response.raise_for_status()  # Solleva un'eccezione se lo status code è >= 400
+   except requests.RequestException as e:
+        print(f"Errore durante l'invio a Telegram: {e}")
+
+ 
 # Avvia il thread per lo scheduling
 #threading.Thread(target=run_schedule, daemon=True).start()
 
