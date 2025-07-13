@@ -578,7 +578,6 @@ def inizia_prova():
 
 
 @app.route('/create-subscription', methods=['POST'])
-@app.route('/create-subscription', methods=['POST'])
 def create_subscription():
     try:
         data = request.json
