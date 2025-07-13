@@ -54,6 +54,11 @@
       display: none !important;
     }
     }
+    @media (max-width: 767px) {
+  .no-placeholder-mobile::placeholder {
+    color: transparent;
+  }
+}
   </style>
 
 
@@ -89,8 +94,8 @@
             <ul class="nav">
               <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
               <li class="scroll-to-section"><a href="/dashboard" target="_blank">Dashboard</a></li>
-              <li class="scroll-to-section"><a href="#about">About Us</a></li>
-              <li class="scroll-to-section"><a href="#services">Servizi</a></li>
+              <li class="scroll-to-section"><a href="#about">Servizi</a></li>
+              <li class="scroll-to-section"><a href="#services">Come Funziona</a></li>
               <li class="scroll-to-section"><a href="#portfolio">Piani</a></li>
               <li class="scroll-to-section"><a href="#blog">News</a></li>
               <li class="scroll-to-section"><a href="#contact">Richiedi DEMO</a></li>
@@ -124,8 +129,8 @@
                 aziende di ogni dimensione.</p>
                 <form id="search" onsubmit="handleFormRedirect(event)">
                   <fieldset>
-                    <input type="address" name="address" class="email" placeholder="Inserisci il nome dell'azienda..."
-                      autocomplete="on" required>
+                    <input type="address" name="address" class="email no-placeholder-mobile" placeholder="Inserisci il nome dell'azienda..."
+                      autocomplete="on">
                   </fieldset>
                   <fieldset>
                     <button type="submit" class="main-button">Prova Gratis</button>
@@ -210,16 +215,23 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 align-self-center  wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0.2s">
-          <div class="left-image">
+          <div class="left-image d-none d-md-block">
             <img src="/static/assets_index/images/services-left-image.png" alt="">
           </div>
         </div>
         <div class="col-lg-6 wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.2s">
           <div class="section-heading">
-            <h2>L'app intelligente per il controllo degli accessi in <em>Entrata</em> &amp; in <span>Uscita</span>.</h2>
-            <p>TeamTime è l’app che automatizza la gestione delle presenze tramite scansione QR. Ogni
-            timbratura viene salvata in un database user-friendly calendarizzato protetto da password. <br>Risparmia tempo nella
-            revisione e concentrati su ciò che davvero conta per la tua azienda.</p>
+            <h2>Come funziona l'app intelligente per il controllo degli accessi in <em>Entrata</em> &amp; in <span>Uscita</span>.</h2>
+            <p><em>1.</em> I dipendenti effettuano la timbratura di ingresso e uscita scannerizzando un QR Code unico per la
+            propria azienda.<br>
+            <em>2.</em> Ogni timbratura viene registrata in un gestionale online sicuro, calendarizzato e protetto da password. <br>
+            
+            <em>3.</em> Consulta il calendario aggiornato delle presenze, visualizza lo staff, accedi alle statistiche e genera report mensili ovunque
+            ti trovi, con un clic.
+            <br>
+            <span>4.</span> Risparmia tempo nella gestione delle presenze e dedica le tue energie a ciò che conta davvero per la tua azienda.<br><br>
+          
+          Inizia una <a href="/inizia-prova">prova gratuita di 30 giorni</a> oppure esplora la <a href="/dashboard_demo">DEMO del gestionale</a> </p>
           </div>
           <div class="row">
             <div class="col-lg-12">

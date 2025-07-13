@@ -1180,7 +1180,7 @@
                 window.customer_id_stripe = data.customerId;
 
                 if (!res.ok || data.success === false) {
-                    alert("Errore durante la creazione dell'abbonamento: " + (data.error || "Errore sconosciuto"));
+                    alert("Errore durante la creazione dell'abbonamento, controlla i dati e riprova. " + (data.error || "Errore sconosciuto"));
                     spinner.style.display = 'none';
                     btn.disabled = false;
                     return;
