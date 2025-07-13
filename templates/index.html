@@ -128,7 +128,7 @@
                       autocomplete="on" required>
                   </fieldset>
                   <fieldset>
-                    <button type="submit" class="main-button">Inizia Ora</button>
+                    <button type="submit" class="main-button">Prova Gratis</button>
                   </fieldset>
                 </form>
               </div>
@@ -489,20 +489,8 @@
   <script src="/static/assets_index/js/templatemo-custom.js"></script>
   <script>
     function handleFormRedirect(event) {
-      event.preventDefault(); // Evita il submit tradizionale
-      const azienda = document.querySelector('#search input[name="address"]').value;
-
-      // Popola il campo "Nome Azienda" nel form di contatto
-      const nomeAziendaInput = document.querySelector('#contact input[name="name"]');
-      if (nomeAziendaInput) {
-        nomeAziendaInput.value = azienda;
-      }
-
-      // Scrolla fino al form di contatto
-      const contactSection = document.querySelector('#contact');
-      if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth' });
-      }
+      event.preventDefault();
+      window.location.href = "/inizia-prova";
     }
   </script>
 
