@@ -732,11 +732,7 @@
                                                                         </div>
                                                                         <div class="col-3 text-end">
                                                                               <div class="form-check form-switch">
-                                                                                    <input class="form-check-input"
-                                                                                          type="checkbox" role="switch"
-                                                                                          disabled {% if data['Mail
-                                                                                          Report Premium']=='yes'
-                                                                                          %}checked{% endif %} />
+                                                                                    <input class="form-check-input" type="checkbox" role="switch" disabled {% if data['Mail Report Premium']=='yes' %}checked{% endif %} />
                                                                               </div>
                                                                         </div>
                                                                   </div>
@@ -1268,12 +1264,12 @@
                style="width: 120px;" class="my-2"><br>
           <p>Inquadra questo QR Code con il tuo telefono per scaricarla</p>
           <p>O <a href="https://beacons.ai/teamtime" target="_blank">scaricala da qui</a> se navighi da mobiile</p>
-          <button class="btn btn-danger mt-3" onclick="showStep(2)">Ho fatto!</button>
+          <button class="btn btn-danger mt-3" onclick="showStep(2)">Ho scaricato l'app!</button>
         </div>
 
         <!-- Step 2 -->
         <div id="step2" style="display:none;">
-          <h5 class="modal-title mb-3">👤 <strong>Passo 2</strong>: Registra un dipendente</h5>
+          <h5 class="modal-title mb-3">👤 <strong>Passo 2</strong>: Registrati come dipendente</h5>
           <p>Apri l’app TeamTime, leggi il breve tutorial ed infine clicca su <strong>“Continua come Dipendente”</strong>.<br>
             Inserisci all'interno dell'app i tuoi dati e seleziona l'azienda (<strong>{{ data.Locale }}</strong>) per iniziare.</p><br>
           <p>✅ Ricorda, la tua azienda è già registrata!</p>

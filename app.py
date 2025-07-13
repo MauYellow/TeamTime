@@ -124,7 +124,7 @@ def stripe_webhook():
         return jsonify({"error": str(e)}), 400
     
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
-    record = table.first(formula=match({"Stripe Customer ID": customer_id}))
+    #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Qui non serve perché non ha il dato customer_id non avendo eventi
     
     
     
@@ -135,12 +135,12 @@ def stripe_webhook():
         #** Azioni: crea record Airtable, invia email, ecc.
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
-    elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento
+    elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento/ non serve perché già la riceve dopo
        invoice = event['data']['object']
        customer_id = invoice['customer']
        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
-       print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}")
-
+       print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}, in {record['fields']['Locale']}")
+       
     elif event['type'] == 'invoice.payment_succeeded': # Questo evento si verifica circa un'ora dopo che il customer subscription created o updated
         invoice = event['data']['object']
         customer_id = invoice['customer']
@@ -148,14 +148,14 @@ def stripe_webhook():
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         amount = invoice['amount_paid'] / 100  # converti da cent a €
         if amount == 0:
-          print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}")
+          print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}")
         else:
-          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}, billing_reason: {billing_reason}€")
+          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}")
           try: 
             table.update(record["id"], {"Pagato": 'Si'})
-            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}") 
+            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") 
           except Exception as e:
-            print(f"Errore durante l'aggiornamento dello stato 'Pagato in Airtable per {customer_id}: {e}, billing_reason: {billing_reason}")
+            print(f"Errore durante l'aggiornamento dello stato 'Pagato in Airtable per {customer_id}: {e}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}")
 
     elif event['type'] == 'customer.subscription.updated': # Questi sono i casi in cui l'abbonamento cambia, tipo si rinnova o è disdetto o si attiva dopo il periodo di prova
       subscription = event['data']['object']
@@ -166,8 +166,25 @@ def stripe_webhook():
     # Caso: Disdetta pianificata
       if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): #** Inviare una mail
         print(f"❌ Abbonamento disdetto per: {customer_id}")
+        msg = Message(
+          subject="Abbonamento Annullato - TeamTime",
+          sender=app.config['MAIL_USERNAME'],
+          recipients=[record['fields']['Mail']],
+          body=f"""Gentile utente,
+
+abbiamo ricevuto la tua richiesta di annullamento dell’abbonamento a TeamTime – Registro Presenze.
+
+L'accesso verrà automaticamente disattivato.
+
+Se hai bisogno di supporto o vuoi condividere un feedback sull’esperienza, ti invitiamo a rispondere direttamente a questa email.
+Saremo felici di aiutarti o di migliorare grazie ai tuoi suggerimenti!
+
+A presto,
+Il Team di TeamTime"""
+)
+        mail.send(msg)
+
         try: 
-          record = table.first(formula=match({"Stripe Customer ID": customer_id}))
           table.update(record["id"], {"Status": 'Disattivato'})
           print(f"❌ Abbonamento aggiornato su Airtable per: {customer_id}")
         except Exception as e:
@@ -181,6 +198,22 @@ def stripe_webhook():
         try: 
           table.update(record["id"], {"Status": 'Attivo'})
           print(f"✅ Abbonamento aggiornato su Airtable per: {customer_id}")
+          msg = Message(
+            subject="Abbonamento Riattivato - TeamTime",
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[record['fields']['Mail']],
+            body=f"""Gentile utente,
+
+il tuo abbonamento a TeamTime – Registro Presenze è stato riattivato con successo.
+Tutti i tuoi dati e le funzionalità sono di nuovo pienamente accessibili.
+
+Grazie per aver scelto di continuare con noi!
+Per qualsiasi necessità, puoi rispondere direttamente a questa email: siamo sempre disponibili ad aiutarti.
+
+Buon lavoro con TeamTime!
+Il Team di TeamTime"""
+)
+          mail.send(msg)
         except Exception as e:
           print(f"Errore durante rinnovo manuale abbonamento in Airtable {e}")
 
@@ -189,6 +222,21 @@ def stripe_webhook():
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         print(f"✅ Attivazione Abbonamento dopo periodo di prova per {customer_id}")
         table.update(record["id"], {"Status": 'Attivo'})
+        msg = Message(
+          subject="Benvenuto ufficialmente in TeamTime",
+          sender=app.config['MAIL_USERNAME'],
+          recipients=[record['fields']['Mail']],
+          body=f"""Gentile utente,
+
+il tuo periodo di prova gratuito è terminato e siamo felici di darti il benvenuto ufficiale tra gli abbonati di TeamTime – Registro Presenze!
+
+Per qualsiasi dubbio o necessità, il nostro staff è sempre a tua disposizione.
+Puoi rispondere direttamente a questa email.
+
+Grazie per averci scelto,
+Il Team di TeamTime"""
+)
+        mail.send(msg)
 
 
       else:
@@ -204,7 +252,7 @@ def stripe_webhook():
         try: 
           table.update(record["id"], {"Status": 'Disattivato'})
           print(f"❌ Pagamento non riuscito per: {customer_id}")
-          msg = Message(subject=f"PAGAMENTO FALLITO",
+          msg = Message(subject=f"Pagamento Fallito - TeamTime",
                   sender=app.config['MAIL_USERNAME'],
                   recipients=[f"{record['fields']['Mail']}", 'help.teamtime@gmail.com'],
                   body=f"""Gentile cliente,
