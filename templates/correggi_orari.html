@@ -403,8 +403,7 @@
               mensile?</button>
             <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('alLavoro')">📌 Cosa significa “al
               lavoro”?</button>
-            <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('Assistenza')">Contatta il servizio
-              clienti</button>
+            <button class="btn btn-outline-success btn-sm" onclick="showAnswer('Assistenza')">Chat Whatsapp</button>
           </div>
         </div>
         
@@ -437,7 +436,7 @@
             } else if (type === 'alLavoro') {
               answer = "Quando un dipendente risulta 'Al lavoro', significa che non ha ancora registrato l'orario di uscita.";
             } else if (type === 'Assistenza') {
-              answer = `Per ricevere ulteriore supporto, <a href="/#contact" class="text-primary" target="_blank">clicca qui</a>.`;
+              answer = `Per ricevere supporto Whatsapp, <a href="https://wa.me/393931367530?text=Salve%2C%20ho%20bisogno%20di%20assistenza%20per%20TeamTime" class="text-primary" target="_blank">clicca qui</a>.`;
             } else if (type === 'primoscan') {
               answer = `Scarica l'app mobile > Registrati come dipendente e legati al QR Code > Scannerizza il QR Code
         <br><a href="#" onclick="document.getElementById('welcomeModal').style.display = 'block'; showStep(1); return false;" style="text-decoration: underline; font-size: 0.85rem; color: #007bff;">📘 Inizia Tutorial</a>`;
