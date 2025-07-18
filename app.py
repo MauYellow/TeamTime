@@ -175,8 +175,8 @@ def stripe_webhook():
     # Caso: Disdetta pianificata
       if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): 
         print(f"❌ Abbonamento disdetto per: {customer_id}, "
-      f"Motivo: {subscription['cancellation_details'].get('reason', 'Nessuno')}, "
-      f"Feedback: {subscription['cancellation_details'].get('feedback', 'Nessuno')}")
+      f"Motivo: {subscription['cancellation_details'].get('feedback', 'Nessuno')}, "
+      f"Feedback: {subscription['cancellation_details'].get('comment', 'Nessuno')}")
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         msg = Message(
     subject="Abbonamento Annullato - TeamTime",
@@ -516,7 +516,7 @@ def report():
         forza_generazione = request.form.get("forza_generazione") == "1"
         check_dipendenti_lavoro = any(r['fields'].get("Uscita", "").strip().lower() == "al lavoro" for r in filtered)
         if check_dipendenti_lavoro and not forza_generazione:
-          return render_template("report.html", mesi_disponibili=mesi_disponibili, show_popup=True, mese_preselezionato=mese_selezionato)
+          return render_template("report.html", mesi_disponibili=mesi_disponibili, show_popup=True, mese_preselezionato=mese_selezionato, data=data)
 
 
         # Organizza i dati: mappa → nome → giorno → ore
