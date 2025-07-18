@@ -55,7 +55,7 @@ def home():
     timestamp = datetime.now().isoformat()
     response = requests.get(f"https://ipinfo.io/{ip}/json")
     geo = response.json()
-    telegram(f"Nuovo accesso: {ip}, {geo}, {user_agent}, path: {path}, {timestamp}")
+    telegram(f"Home: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('index.html')
 
 @app.route('/robots.txt')
@@ -312,6 +312,7 @@ def login():
           #print(f"User Password da Airtable: {user_password}")
         except Exception as e:
           print(f"Errore: {e}")
+          telegram(f"Login Errato per {email}")
           return redirect(url_for('login_failed', motivo="Username e Password errate")) 
         
         # Logica di autenticazione
@@ -320,10 +321,14 @@ def login():
             #print(f"Data Fields {data['fields']}")
               session['data'] = data['fields']
             #print(f"Session: {session['data']}")
+              telegram(f"Login Effettuato: {email}")
               return redirect(url_for('dashboard')) 
             else:
+              telegram(f"Login Fallito: {email}")
               return redirect(url_for('login_failed', motivo="Username e Password errate"))
+              
         else:
+            telegram(f"Login Fallito: Servizio Disattivato")
             return redirect(url_for('login_failed', motivo="Il servizio per questo QR Code è stato disattivato, contatta l'assistenza"))
 
     # Se è una richiesta GET → mostra il form
@@ -363,11 +368,13 @@ def login_failed():
 def dashboard():
     data = session.get("data")
     print(f"Data da Login: {data}")
+    
     oggi = datetime.now().strftime('%Y-%m-%d')
     mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
     if not data:
         return redirect(url_for('login'))
-
+    
+    telegram(f"Dashboard: {data['Locale']}")
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
     record = table.first(formula=match({"Locale": data['Locale']}))
     status_locale = record["fields"].get("Status", "")
@@ -466,6 +473,7 @@ def calendario():
     data = session.get("data")
     if not data:
         return redirect(url_for('login'))
+    telegram(f"Calendario: {data['Locale']}")
     monitor_url = data.get('URL Monitor')
     monitor_url = monitor_url.replace("https://airtable.com/", "https://airtable.com/embed/")
     full_url = monitor_url + "?viewControls=on"
@@ -479,6 +487,7 @@ def staff():
     #print(data)
     if not data:
         return redirect(url_for('login'))
+    telegram(f"Staff: {data['Locale']}")
     staff_url = data.get('Monitor Ore Mensili')
     print(staff_url)
     staff_url = staff_url.replace("https://airtable.com/", "https://airtable.com/embed/")
@@ -494,7 +503,8 @@ def report():
 
     if not data:
         return redirect(url_for('login'))
-    
+    telegram(f"Report: {data['Locale']}")
+
     TABLE_NAME = data['Locale']
     table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
 
@@ -589,10 +599,12 @@ def dashboard_demo():
 
 @app.route('/calendario_demo')
 def calendario_demo():
+    telegram("Browse: Calendario DEMO")
     return render_template('calendario_demo.html')
 
 @app.route('/report_demo')
 def report_demo():
+    telegram("Browse: Report DEMO")
     return render_template('/report_demo.html')
 
 @app.route('/inizia-prova')
@@ -821,6 +833,7 @@ def start_airtable():
 
 @app.route('/termina-abbonamento/<customer_id>')
 def genera_link_disdetta(customer_id):
+    telegram("Browse: termina abbonamento")
     session = stripe.billing_portal.Session.create(
         customer=customer_id,
         return_url="https://teamtimeapp.it/"  # ← oppure una tua pagina di conferma
@@ -834,6 +847,7 @@ def dipendenti_al_lavoro():
 
     if not data:
         return redirect(url_for('login'))
+    telegram(f"Correggi Orari: {data['Locale']}")
     
     TABLE_NAME = data['Locale']
     table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
