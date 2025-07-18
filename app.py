@@ -52,9 +52,6 @@ def home():
     ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
     path = request.path
-    timestamp = datetime.now().isoformat()
-    response = requests.get(f"https://ipinfo.io/{ip}/json")
-    geo = response.json()
     telegram(f"Home: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('index.html')
 
@@ -149,6 +146,7 @@ def stripe_webhook():
        customer_id = invoice['customer']
        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) non lo ha ancora, crea dopo il record in airtable!
        print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}")
+       telegram("Nuovo Abbonamento Gratuito Creato")
        
     elif event['type'] == 'invoice.payment_succeeded': # Questo evento si verifica circa un'ora dopo che il customer subscription created o updated
         invoice = event['data']['object']
@@ -160,6 +158,7 @@ def stripe_webhook():
           print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}") #, locale: {record['fields']['Locale']}") non lo ha ancora!
         else:
           print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #Qui lo dovrebbe avere perché è il pagamento dopo la prova
+          telegram("Nuovo Pagamento Ricevuto")
           try: 
             table.update(record["id"], {"Pagato": 'Si'})
             print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #, ") 
@@ -178,6 +177,7 @@ def stripe_webhook():
       f"Motivo: {subscription['cancellation_details'].get('feedback', 'Nessuno')}, "
       f"Feedback: {subscription['cancellation_details'].get('comment', 'Nessuno')}")
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
+        telegram("Abbonamento disdetto")
         msg = Message(
     subject="Abbonamento Annullato - TeamTime",
     sender=app.config['MAIL_USERNAME'],
@@ -217,6 +217,7 @@ Saremo felici di aiutarti o di migliorare grazie ai tuoi suggerimenti!</p>
       if previous_attributes.get("cancel_at_period_end") == True and subscription.get("cancel_at_period_end") == False:
         print(f"✅ Abbonamento riattivato per: {customer_id}")
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
+        telegram("Abbonamento Riattivato")
         try: 
           table.update(record["id"], {"Status": 'Attivo'})
           print(f"✅ Abbonamento aggiornato su Airtable per: {customer_id}")
@@ -243,6 +244,7 @@ Il Team di TeamTime"""
       if previous_attributes.get("status") == "trialing" and subscription['status'] == 'active':
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         print(f"✅ Attivazione Abbonamento dopo periodo di prova per {customer_id}")
+        telegram("Abbonamento attivato dopo periodo di prova")
         table.update(record["id"], {"Status": 'Attivo'})
         msg = Message(
           subject="Benvenuto ufficialmente in TeamTime",
@@ -271,6 +273,7 @@ Il Team di TeamTime"""
         billing_reason = invoice.get('billing_reason', 'unknown')
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         print(f"❌ invoice.payment_failed → Pagamento fallito per {customer_id}, billing_reason: {billing_reason}")
+        telegram("Pagamento Fallito")
         try: 
           table.update(record["id"], {"Status": 'Disattivato'})
           print(f"❌ Pagamento non riuscito per: {customer_id}")
@@ -441,7 +444,7 @@ def dashboard():
        try:
         table.update(record["id"], {"Primo Accesso": "no"})
        except Exception as e:
-        print(f"Errore aggiornando la casella 'Primo Accesso' sul database:{e}")
+        print(f"Errore aggiornando# la casella 'Primo Accesso' sul database:{e}")
     else:
        try:
         table.update(record["id"], {"Primo Accesso": "yes"})

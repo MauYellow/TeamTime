@@ -993,11 +993,15 @@
 
       <script>
             document.addEventListener("DOMContentLoaded", function () {
-                  const primoAccesso = "{{ data['Primo Accesso'] | lower }}";
+                  const primoAccesso = {{ data['Primo Accesso'] | tojson | lower}};
+                  console.log("Primo Accesso:", primoAccesso);
                   if (primoAccesso === "yes") {
                         document.getElementById("welcomeModal").style.display = "block";
                   }
-
+                  if (primoAccesso === "no") {
+                              document.getElementById("welcomeModal").style.display = "none";
+                        }
+                 
                   const categorieOrarie = {{ grafico_etichette_ore | tojson
             }};
             const datiIngressi = {{ grafico_valori | tojson }};
@@ -1100,7 +1104,7 @@
       <!-- Capienza Database -->
       <script>
             const growthChartOptions = {
-                  series: [{{ percentage }} ],
+                  series: [{{ percentage }}],
                   labels: ['Capienza'],
                   chart: {
                         height: 240,
@@ -1312,10 +1316,7 @@
                   document.getElementById('welcomeModal').style.display = 'none';
             }
 
-            window.onload = () => {
-                  document.getElementById('welcomeModal').style.display = 'block';
-                  showStep(1);
-            };
+            
       </script>
 
       <script>
