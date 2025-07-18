@@ -52,7 +52,8 @@ def home():
     ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
     path = request.path
-    telegram(f"Home: {ip}, User Agent: {user_agent}, sorgente: {path}")
+    referer = request.headers.get('Referer', 'Diretto')
+    telegram(f"Home: {ip}, User Agent: {user_agent}, sorgente: {referer}")
     return render_template('index.html')
 
 @app.route('/robots.txt')
@@ -65,7 +66,10 @@ def sitemap():
 
 @app.route('/piani')
 def piani():
-    telegram("Browse: piani")
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"Piani: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('piani.html')
 
 
@@ -597,22 +601,34 @@ def privacy():
 
 @app.route('/dashboard_demo')
 def dashboard_demo():
-    telegram("Browse: dashboard DEMO")
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"DEMO Dashboard: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('dashboard_demo.html')
 
 @app.route('/calendario_demo')
 def calendario_demo():
-    telegram("Browse: Calendario DEMO")
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"DEMO Calendario: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('calendario_demo.html')
 
 @app.route('/report_demo')
 def report_demo():
-    telegram("Browse: Report DEMO")
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"DEMO Report: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('/report_demo.html')
 
 @app.route('/inizia-prova')
 def inizia_prova():
-    telegram("Browse: inizia-prova")
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"Inizia-Prova: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('/inizia-prova-gratuita.html')
 
 
