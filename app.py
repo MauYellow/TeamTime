@@ -173,8 +173,10 @@ def stripe_webhook():
       previous_attributes = event['data'].get('previous_attributes', {})
     
     # Caso: Disdetta pianificata
-      if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): #** Inviare una mail
-        print(f"❌ Abbonamento disdetto per: {customer_id}")
+      if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): 
+        print(f"❌ Abbonamento disdetto per: {customer_id}, "
+      f"Motivo: {subscription['cancellation_details'].get('reason', 'Nessuno')}, "
+      f"Feedback: {subscription['cancellation_details'].get('feedback', 'Nessuno')}")
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         msg = Message(
     subject="Abbonamento Annullato - TeamTime",
