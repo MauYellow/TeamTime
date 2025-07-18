@@ -175,22 +175,33 @@ def stripe_webhook():
     # Caso: Disdetta pianificata
       if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): #** Inviare una mail
         print(f"❌ Abbonamento disdetto per: {customer_id}")
+        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         msg = Message(
-          subject="Abbonamento Annullato - TeamTime",
-          sender=app.config['MAIL_USERNAME'],
-          recipients=[record['fields']['Mail']],
-          body=f"""Gentile utente,
+    subject="Abbonamento Annullato - TeamTime",
+    sender=app.config['MAIL_USERNAME'],
+    recipients=[record['fields']['Mail']],
+    body="""Gentile utente,
 
 abbiamo ricevuto la tua richiesta di annullamento dell’abbonamento a TeamTime – Registro Presenze.
 
 L'accesso verrà automaticamente disattivato.
+Per riattivarlo in qualsiasi momento, puoi cliccare qui: https://google.com
 
 Se hai bisogno di supporto o vuoi condividere un feedback sull’esperienza, ti invitiamo a rispondere direttamente a questa email.
 Saremo felici di aiutarti o di migliorare grazie ai tuoi suggerimenti!
 
 A presto,
-Il Team di TeamTime"""
+Il Team di TeamTime
+""",
+    html=f"""<p>Gentile utente,</p>
+<p>Abbiamo ricevuto la tua richiesta di annullamento dell’abbonamento a <strong>TeamTime – Registro Presenze</strong>.</p>
+<p>L'accesso verrà automaticamente disattivato.<br>
+Per riattivarlo in qualsiasi momento, puoi <a href="{record['fields']['Link Annullamento']}">cliccare qui</a>.</p>
+<p>Se hai bisogno di supporto o vuoi condividere un feedback sull’esperienza, ti invitiamo a rispondere direttamente a questa email.<br>
+Saremo felici di aiutarti o di migliorare grazie ai tuoi suggerimenti!</p>
+<p>A presto,<br>Il Team di TeamTime</p>"""
 )
+
         mail.send(msg)
 
         try: 
