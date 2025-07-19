@@ -642,10 +642,28 @@ def report_demo():
 
 @app.route('/inizia-prova')
 def inizia_prova():
+    STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+    #print(STRIPE_PUBLIC_KEY)
     ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
     path = request.path
     telegram(f"Inizia-Prova: {ip}, User Agent: {user_agent}, sorgente: {path}")
+    return render_template('/inizia-prova-gratuita.html', STRIPE_PUBLIC_KEY=STRIPE_PUBLIC_KEY)
+
+@app.route('/inizia-prova-TEST') #**
+def inizia_prova_TEST():
+    ref = request.args.get('ref')  # cerca il ref nella query
+
+    if ref:
+        session['ref'] = ref  # salva in sessione
+        print(f"Referral preso dalla query = {ref}")
+    else:
+        ref = session.get('ref')  # recupera dalla sessione se non presente nella query
+        if ref:
+            print(f"Referral preso dalla sessione = {ref}")
+        else:
+            print("Nessun referral trovato")
+
     return render_template('/inizia-prova-gratuita.html')
 
 

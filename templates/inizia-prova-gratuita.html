@@ -1074,7 +1074,7 @@
     </script>
 
     <script>
-        const stripe = Stripe('pk_live_51HQrXLEF8NjwgIEO0MCkgmn6yrYeG5N3qsgrHvy9BAnnpvjVsyOrvbMax0ipP6xYy0ge05pUjs5aak1DHv4hEZ1F00uzE8Dxtw'); // ** test pk_test_51HQrXLEF8NjwgIEOCRLexg5Kb1y7rleJlbG8fHJ7yQ8L26Wy5Ps9Jz3XFFhtcCGCcq2loYG4pUoTBjRGjM4acOGr00XREbmlA0
+        const stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
         const elements = stripe.elements();
 
         const card = elements.create('card', {
