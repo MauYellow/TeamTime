@@ -416,8 +416,7 @@
             } else if (type === 'Assistenza') {
               answer = `Per ricevere supporto Whatsapp, <a href="https://wa.me/393931367530?text=Salve%2C%20ho%20bisogno%20di%20assistenza%20per%20TeamTime" class="text-primary" target="_blank">clicca qui</a>.`;
             } else if (type === 'primoscan') {
-              answer = `Scarica l'app mobile > Registrati come dipendente e legati al QR Code > Scannerizza il QR Code
-        <br><a href="#" onclick="document.getElementById('welcomeModal').style.display = 'block'; showStep(1); return false;" style="text-decoration: underline; font-size: 0.85rem; color: #007bff;">📘 Inizia Tutorial</a>`;
+              answer = `Scarica l'app mobile > Registrati come dipendente e legati al QR Code > Scannerizza il QR Code<br><a href="/primi_passi">📘 Inizia Tutorial</a>`;
             }
 
             const domanda = document.querySelector(`button[onclick*="${type}"]`).innerText;

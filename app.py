@@ -589,6 +589,9 @@ def report():
             workbook  = writer.book
             worksheet = writer.sheets["Report"]
             worksheet.set_column(0, 0, 30)  # Colonna 0 = prima colonna, larghezza 30
+            last_row = len(df) + 2
+            worksheet.write(f"A{last_row + 2}", "Report generato automaticamente")
+            worksheet.write_url(f"A{last_row + 3}", "https://teamtimeapp.it", string="TeamTime App - Registro Presenze", cell_format=workbook.add_format({'font_color': 'blue', 'underline':  1}))
         output.seek(0)
         msg = Message(subject=f"[TeamTimeWeb Report] {data['Locale']}, {mese_selezionato}",
                   sender=app.config['MAIL_USERNAME'],
