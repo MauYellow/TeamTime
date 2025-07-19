@@ -27,7 +27,7 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>List groups - UI elements | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+    <title>Tabs and pills - UI elements | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
 
     <meta name="description" content="" />
 
@@ -305,7 +305,7 @@
                     <div data-i18n="Footer">Footer</div>
                   </a>
                 </li>
-                <li class="menu-item active">
+                <li class="menu-item">
                   <a href="ui-list-groups.html" class="menu-link">
                     <div data-i18n="List Groups">List groups</div>
                   </a>
@@ -340,7 +340,7 @@
                     <div data-i18n="Spinners">Spinners</div>
                   </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item active">
                   <a href="ui-tabs-pills.html" class="menu-link">
                     <div data-i18n="Tabs &amp; Pills">Tabs &amp; Pills</div>
                   </a>
@@ -575,393 +575,350 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">UI elements /</span> List groups</h4>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">UI elements /</span> Tabs & Pills</h4>
 
-              <div class="card mb-4">
-                <h5 class="card-header">List groups</h5>
-                <div class="card-body">
-                  <div class="row">
-                    <!-- Basic List group -->
-                    <div class="col-lg-6 mb-4 mb-xl-0">
-                      <small class="text-light fw-semibold">Basic</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <div class="list-group">
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action active"
-                            >Bear claw cake biscuit</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Soufflé pastry pie ice</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action disabled"
-                            >Tart tiramisu cake</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Bonbon toffee muffin</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Dragée tootsie roll</a
-                          >
-                        </div>
+              <!-- Tabs -->
+              <h5 class="py-3 my-4">Tabs</h5>
+
+              <div class="row">
+                <div class="col-xl-6">
+                  <h6 class="text-muted">Basic</h6>
+                  <div class="nav-align-top mb-4">
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link active"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-top-home"
+                          aria-controls="navs-top-home"
+                          aria-selected="true"
+                        >
+                          Home
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-top-profile"
+                          aria-controls="navs-top-profile"
+                          aria-selected="false"
+                        >
+                          Profile
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-top-messages"
+                          aria-controls="navs-top-messages"
+                          aria-selected="false"
+                        >
+                          Messages
+                        </button>
+                      </li>
+                    </ul>
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="navs-top-home" role="tabpanel">
+                        <p>
+                          Icing pastry pudding oat cake. Lemon drops cotton candy caramels cake caramels sesame snaps
+                          powder. Bear claw candy topping.
+                        </p>
+                        <p class="mb-0">
+                          Tootsie roll fruitcake cookie. Dessert topping pie. Jujubes wafer carrot cake jelly. Bonbon
+                          jelly-o jelly-o ice cream jelly beans candy canes cake bonbon. Cookie jelly beans marshmallow
+                          jujubes sweet.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
+                        <p>
+                          Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
+                          cream. Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
+                          cheesecake fruitcake.
+                        </p>
+                        <p class="mb-0">
+                          Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
+                          cotton candy liquorice caramels.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
+                        <p>
+                          Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
+                          cupcake gummi bears cake chocolate.
+                        </p>
+                        <p class="mb-0">
+                          Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
+                          roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
+                          jelly-o tart brownie jelly.
+                        </p>
                       </div>
                     </div>
-                    <!--/ Basic List group -->
-                    <!-- List group with Badges & Pills -->
-                    <div class="col-lg-6">
-                      <small class="text-light fw-semibold">With Bagdes & Pills</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <ul class="list-group">
-                          <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Soufflé pastry pie ice
-                            <span class="badge bg-primary">5</span>
-                          </li>
-                          <li class="list-group-item disabled">Bear claw cake biscuit</li>
-                          <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Tart tiramisu cake
-                            <span class="badge bg-success">2</span>
-                          </li>
-                          <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Bonbon toffee muffin
-                            <span class="badge bg-danger rounded-pill">3</span>
-                          </li>
-                          <li class="list-group-item">Dragée tootsie roll</li>
-                        </ul>
-                      </div>
-                    </div>
-                    <!--/ List group with Badges & Pills -->
                   </div>
                 </div>
-                <hr class="m-0" />
-                <div class="card-body">
-                  <div class="row">
-                    <!-- List group Flush (Without main border) -->
-                    <div class="col-lg-6 mb-4 mb-xl-0">
-                      <small class="text-light fw-semibold">Flush</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <div class="list-group list-group-flush">
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Bear claw cake biscuit</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Soufflé pastry pie ice</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Tart tiramisu cake</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Bonbon toffee muffin</a
-                          >
-                          <a href="javascript:void(0);" class="list-group-item list-group-item-action"
-                            >Dragée tootsie roll</a
-                          >
-                        </div>
+                <div class="col-xl-6">
+                  <h6 class="text-muted">Filled Tabs</h6>
+                  <div class="nav-align-top mb-4">
+                    <ul class="nav nav-tabs nav-fill" role="tablist">
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link active"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-justified-home"
+                          aria-controls="navs-justified-home"
+                          aria-selected="true"
+                        >
+                          <i class="tf-icons bx bx-home"></i> Home
+                          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-label-danger">3</span>
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-justified-profile"
+                          aria-controls="navs-justified-profile"
+                          aria-selected="false"
+                        >
+                          <i class="tf-icons bx bx-user"></i> Profile
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-justified-messages"
+                          aria-controls="navs-justified-messages"
+                          aria-selected="false"
+                        >
+                          <i class="tf-icons bx bx-message-square"></i> Messages
+                        </button>
+                      </li>
+                    </ul>
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="navs-justified-home" role="tabpanel">
+                        <p>
+                          Icing pastry pudding oat cake. Lemon drops cotton candy caramels cake caramels sesame snaps
+                          powder. Bear claw candy topping.
+                        </p>
+                        <p class="mb-0">
+                          Tootsie roll fruitcake cookie. Dessert topping pie. Jujubes wafer carrot cake jelly. Bonbon
+                          jelly-o jelly-o ice cream jelly beans candy canes cake bonbon. Cookie jelly beans marshmallow
+                          jujubes sweet.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-justified-profile" role="tabpanel">
+                        <p>
+                          Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
+                          cream. Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
+                          cheesecake fruitcake.
+                        </p>
+                        <p class="mb-0">
+                          Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
+                          cotton candy liquorice caramels.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-justified-messages" role="tabpanel">
+                        <p>
+                          Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
+                          cupcake gummi bears cake chocolate.
+                        </p>
+                        <p class="mb-0">
+                          Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
+                          roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
+                          jelly-o tart brownie jelly.
+                        </p>
                       </div>
                     </div>
-                    <!--/ List group Flush (Without main border) -->
-                    <!-- List group Icons -->
-                    <div class="col-lg-6">
-                      <small class="text-light fw-semibold">With Icons</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <ul class="list-group">
-                          <li class="list-group-item d-flex align-items-center">
-                            <i class="bx bx-tv me-2"></i>
-                            Soufflé pastry pie ice
-                          </li>
-                          <li class="list-group-item d-flex align-items-center">
-                            <i class="bx bx-bell me-2"></i>
-                            Bear claw cake biscuit
-                          </li>
-                          <li class="list-group-item d-flex align-items-center">
-                            <i class="bx bx-support me-2"></i>
-                            Tart tiramisu cake
-                          </li>
-                          <li class="list-group-item d-flex align-items-center">
-                            <i class="bx bx-purchase-tag-alt me-2"></i>
-                            Bonbon toffee muffin
-                          </li>
-                          <li class="list-group-item d-flex align-items-center">
-                            <i class="bx bx-closet me-2"></i>
-                            Dragée tootsie roll
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <!--/ List group Icons -->
-                  </div>
-                </div>
-                <hr class="m-0" />
-                <div class="card-body">
-                  <div class="row">
-                    <!-- List group Numbered -->
-                    <div class="col-lg-6 mb-4 mb-xl-0">
-                      <small class="text-light fw-semibold">Numbered</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <ol class="list-group list-group-numbered">
-                          <li class="list-group-item">Bear claw cake biscuit</li>
-                          <li class="list-group-item">Soufflé pastry pie ice</li>
-                          <li class="list-group-item">Tart tiramisu cake</li>
-                          <li class="list-group-item">Bonbon toffee muffin</li>
-                          <li class="list-group-item">Dragée tootsie roll</li>
-                        </ol>
-                      </div>
-                    </div>
-                    <!--/ List group Numbered -->
-                    <!-- List group checkbox -->
-                    <div class="col-lg-6">
-                      <small class="text-light fw-semibold">List Group With Checkbox</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <div class="list-group">
-                          <label class="list-group-item">
-                            <input class="form-check-input me-1" type="checkbox" value="" />
-                            Soufflé pastry pie ice
-                          </label>
-                          <label class="list-group-item">
-                            <input class="form-check-input me-1" type="checkbox" value="" />
-                            Bear claw cake biscuit
-                          </label>
-                          <label class="list-group-item">
-                            <input class="form-check-input me-1" type="checkbox" value="" />
-                            Tart tiramisu cake
-                          </label>
-                          <label class="list-group-item">
-                            <input class="form-check-input me-1" type="checkbox" value="" />
-                            Bonbon toffee muffin
-                          </label>
-                          <label class="list-group-item">
-                            <input class="form-check-input me-1" type="checkbox" value="" />
-                            Dragée tootsie roll
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <!--/ List group checkbox -->
-                  </div>
-                </div>
-                <hr class="m-0" />
-                <div class="card-body">
-                  <div class="row">
-                    <!-- Contextual List group -->
-                    <div class="col-lg-6 mb-4 mb-xl-0">
-                      <small class="text-light fw-semibold">Contextual classes</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <ul class="list-group">
-                          <li class="list-group-item list-group-item-primary">Primary list group item</li>
-                          <li class="list-group-item list-group-item-secondary">Secondary list group item</li>
-                          <li class="list-group-item list-group-item-success">Success list group item</li>
-                          <li class="list-group-item list-group-item-danger">Danger list group item</li>
-                          <li class="list-group-item list-group-item-warning">Warning list group item</li>
-                          <li class="list-group-item list-group-item-info">Info list group item</li>
-                          <li class="list-group-item list-group-item-dark">Dark list group item</li>
-                        </ul>
-                      </div>
-                    </div>
-                    <!--/ Contextual List group -->
-                    <!-- Custom content with heading -->
-                    <div class="col-lg-6">
-                      <small class="text-light fw-semibold">Custom content</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <div class="list-group">
-                          <a
-                            href="javascript:void(0);"
-                            class="list-group-item list-group-item-action flex-column align-items-start active"
-                          >
-                            <div class="d-flex justify-content-between w-100">
-                              <h6>List group item heading</h6>
-                              <small>3 days ago</small>
-                            </div>
-                            <p class="mb-1">
-                              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
-                              blandit.
-                            </p>
-                            <small>Donec id elit non mi porta.</small>
-                          </a>
-                          <a
-                            href="javascript:void(0);"
-                            class="list-group-item list-group-item-action flex-column align-items-start"
-                          >
-                            <div class="d-flex justify-content-between w-100">
-                              <h6>List group item heading</h6>
-                              <small class="text-muted">3 days ago</small>
-                            </div>
-                            <p class="mb-1">
-                              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
-                              blandit.
-                            </p>
-                            <small class="text-muted">Donec id elit non mi porta.</small>
-                          </a>
-                          <a
-                            href="javascript:void(0);"
-                            class="list-group-item list-group-item-action flex-column align-items-start"
-                          >
-                            <div class="d-flex justify-content-between w-100">
-                              <h6>List group item heading</h6>
-                              <small class="text-muted">3 days ago</small>
-                            </div>
-                            <p class="mb-1">
-                              Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius
-                              blandit.
-                            </p>
-                            <small class="text-muted">Donec id elit non mi porta.</small>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <!--/ Custom content with heading -->
                   </div>
                 </div>
               </div>
+              <!-- Tabs -->
 
-              <div class="card mb-4">
-                <h5 class="card-header">Javascript behavior</h5>
-                <div class="card-body">
-                  <div class="row">
-                    <!-- Custom content with heading -->
-                    <div class="col-lg-6 mb-4 mb-xl-0">
-                      <small class="text-light fw-semibold">Vertical</small>
-                      <div class="mt-3">
-                        <div class="row">
-                          <div class="col-md-4 col-12 mb-3 mb-md-0">
-                            <div class="list-group">
-                              <a
-                                class="list-group-item list-group-item-action active"
-                                id="list-home-list"
-                                data-bs-toggle="list"
-                                href="#list-home"
-                                >Home</a
-                              >
-                              <a
-                                class="list-group-item list-group-item-action"
-                                id="list-profile-list"
-                                data-bs-toggle="list"
-                                href="#list-profile"
-                                >Profile</a
-                              >
-                              <a
-                                class="list-group-item list-group-item-action"
-                                id="list-messages-list"
-                                data-bs-toggle="list"
-                                href="#list-messages"
-                                >Messages</a
-                              >
-                              <a
-                                class="list-group-item list-group-item-action"
-                                id="list-settings-list"
-                                data-bs-toggle="list"
-                                href="#list-settings"
-                                >Settings</a
-                              >
-                            </div>
-                          </div>
-                          <div class="col-md-8 col-12">
-                            <div class="tab-content p-0">
-                              <div class="tab-pane fade show active" id="list-home">
-                                Donut sugar plum sweet roll biscuit. Cake oat cake gummi bears. Tart wafer wafer halvah
-                                gummi bears cheesecake. Topping croissant cake sweet roll. Dessert fruitcake gingerbread
-                                halvah marshmallow pudding bear claw cheesecake. Bonbon dragée cookie gummies. Pudding
-                                marzipan liquorice. Sugar plum dragée cupcake cupcake cake dessert chocolate bar. Pastry
-                                lollipop lemon drops lollipop halvah croissant. Pastry sweet gingerbread lemon drops
-                                topping ice cream.
-                              </div>
-                              <div class="tab-pane fade" id="list-profile">
-                                Muffin lemon drops chocolate chupa chups jelly beans dessert jelly-o. Soufflé gummies
-                                gummies. Ice cream powder marshmallow cotton candy oat cake wafer. Marshmallow
-                                gingerbread tootsie roll. Chocolate cake bonbon jelly beans lollipop jelly beans halvah
-                                marzipan danish pie. Oat cake chocolate cake pudding bear claw liquorice gingerbread
-                                icing sugar plum brownie. Toffee cookie apple pie cheesecake bear claw sugar plum wafer
-                                gummi bears fruitcake.
-                              </div>
-                              <div class="tab-pane fade" id="list-messages">
-                                Ice cream dessert candy sugar plum croissant cupcake tart pie apple pie. Pastry
-                                chocolate chupa chups tiramisu. Tiramisu cookie oat cake. Pudding brownie bonbon. Pie
-                                carrot cake chocolate macaroon. Halvah jelly jelly beans cake macaroon jelly-o. Danish
-                                pastry dessert gingerbread powder halvah. Muffin bonbon fruitcake dragée sweet sesame
-                                snaps oat cake marshmallow cheesecake. Cupcake donut sweet bonbon cheesecake soufflé
-                                chocolate bar.
-                              </div>
-                              <div class="tab-pane fade" id="list-settings">
-                                Marzipan cake oat cake. Marshmallow pie chocolate. Liquorice oat cake donut halvah
-                                jelly-o. Jelly-o muffin macaroon cake gingerbread candy cupcake. Cake lollipop lollipop
-                                jelly brownie cake topping chocolate. Pie oat cake jelly. Lemon drops halvah jelly
-                                cookie bonbon cake cupcake ice cream. Donut tart bonbon sweet roll soufflé gummies
-                                biscuit. Wafer toffee topping jelly beans icing pie apple pie toffee pudding. Tiramisu
-                                powder macaroon tiramisu cake halvah.
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+              <hr class="container-m-nx border-light mt-5" />
+
+              <!-- Pills -->
+              <h5 class="py-3 my-4">Pills</h5>
+
+              <div class="row">
+                <div class="col-xl-6">
+                  <h6 class="text-muted">Basic</h6>
+                  <div class="nav-align-top mb-4">
+                    <ul class="nav nav-pills mb-3" role="tablist">
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link active"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-top-home"
+                          aria-controls="navs-pills-top-home"
+                          aria-selected="true"
+                        >
+                          Home
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-top-profile"
+                          aria-controls="navs-pills-top-profile"
+                          aria-selected="false"
+                        >
+                          Profile
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-top-messages"
+                          aria-controls="navs-pills-top-messages"
+                          aria-selected="false"
+                        >
+                          Messages
+                        </button>
+                      </li>
+                    </ul>
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+                        <p>
+                          Icing pastry pudding oat cake. Lemon drops cotton candy caramels cake caramels sesame snaps
+                          powder. Bear claw candy topping.
+                        </p>
+                        <p class="mb-0">
+                          Tootsie roll fruitcake cookie. Dessert topping pie. Jujubes wafer carrot cake jelly. Bonbon
+                          jelly-o jelly-o ice cream jelly beans candy canes cake bonbon. Cookie jelly beans marshmallow
+                          jujubes sweet.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
+                        <p>
+                          Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
+                          cream. Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
+                          cheesecake fruitcake.
+                        </p>
+                        <p class="mb-0">
+                          Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
+                          cotton candy liquorice caramels.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
+                        <p>
+                          Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
+                          cupcake gummi bears cake chocolate.
+                        </p>
+                        <p class="mb-0">
+                          Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
+                          roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
+                          jelly-o tart brownie jelly.
+                        </p>
                       </div>
                     </div>
-                    <div class="col-lg-6">
-                      <small class="text-light fw-semibold">Horizontal</small>
-                      <div class="demo-inline-spacing mt-3">
-                        <div class="list-group list-group-horizontal-md text-md-center">
-                          <a
-                            class="list-group-item list-group-item-action active"
-                            id="home-list-item"
-                            data-bs-toggle="list"
-                            href="#horizontal-home"
-                            >Home</a
-                          >
-                          <a
-                            class="list-group-item list-group-item-action"
-                            id="profile-list-item"
-                            data-bs-toggle="list"
-                            href="#horizontal-profile"
-                            >Profile</a
-                          >
-                          <a
-                            class="list-group-item list-group-item-action"
-                            id="messages-list-item"
-                            data-bs-toggle="list"
-                            href="#horizontal-messages"
-                            >Messages</a
-                          >
-                          <a
-                            class="list-group-item list-group-item-action"
-                            id="settings-list-item"
-                            data-bs-toggle="list"
-                            href="#horizontal-settings"
-                            >Settings</a
-                          >
-                        </div>
-                        <div class="tab-content px-0 mt-0">
-                          <div class="tab-pane fade show active" id="horizontal-home">
-                            Donut sugar plum sweet roll biscuit. Cake oat cake gummi bears. Tart wafer wafer halvah
-                            gummi bears cheesecake. Topping croissant cake sweet roll. Dessert fruitcake gingerbread
-                            halvah marshmallow pudding bear claw cheesecake. Bonbon dragée cookie gummies. Pudding
-                            marzipan liquorice. Sugar plum dragée cupcake cupcake cake dessert chocolate bar. Pastry
-                            lollipop lemon drops lollipop halvah croissant. Pastry sweet gingerbread lemon drops topping
-                            ice cream.
-                          </div>
-                          <div class="tab-pane fade" id="horizontal-profile">
-                            Muffin lemon drops chocolate chupa chups jelly beans dessert jelly-o. Soufflé gummies
-                            gummies. Ice cream powder marshmallow cotton candy oat cake wafer. Marshmallow gingerbread
-                            tootsie roll. Chocolate cake bonbon jelly beans lollipop jelly beans halvah marzipan danish
-                            pie. Oat cake chocolate cake pudding bear claw liquorice gingerbread icing sugar plum
-                            brownie. Toffee cookie apple pie cheesecake bear claw sugar plum wafer gummi bears
-                            fruitcake.
-                          </div>
-                          <div class="tab-pane fade" id="horizontal-messages">
-                            Ice cream dessert candy sugar plum croissant cupcake tart pie apple pie. Pastry chocolate
-                            chupa chups tiramisu. Tiramisu cookie oat cake. Pudding brownie bonbon. Pie carrot cake
-                            chocolate macaroon. Halvah jelly jelly beans cake macaroon jelly-o. Danish pastry dessert
-                            gingerbread powder halvah. Muffin bonbon fruitcake dragée sweet sesame snaps oat cake
-                            marshmallow cheesecake. Cupcake donut sweet bonbon cheesecake soufflé chocolate bar.
-                          </div>
-                          <div class="tab-pane fade" id="horizontal-settings">
-                            Marzipan cake oat cake. Marshmallow pie chocolate. Liquorice oat cake donut halvah jelly-o.
-                            Jelly-o muffin macaroon cake gingerbread candy cupcake. Cake lollipop lollipop jelly brownie
-                            cake topping chocolate. Pie oat cake jelly. Lemon drops halvah jelly cookie bonbon cake
-                            cupcake ice cream. Donut tart bonbon sweet roll soufflé gummies biscuit. Wafer toffee
-                            topping jelly beans icing pie apple pie toffee pudding. Tiramisu powder macaroon tiramisu
-                            cake halvah.
-                          </div>
-                        </div>
+                  </div>
+                </div>
+
+                <div class="col-xl-6">
+                  <h6 class="text-muted">Filled Pills</h6>
+                  <div class="nav-align-top mb-4">
+                    <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link active"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-justified-home"
+                          aria-controls="navs-pills-justified-home"
+                          aria-selected="true"
+                        >
+                          <i class="tf-icons bx bx-home"></i> Home
+                          <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger">3</span>
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-justified-profile"
+                          aria-controls="navs-pills-justified-profile"
+                          aria-selected="false"
+                        >
+                          <i class="tf-icons bx bx-user"></i> Profile
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button
+                          type="button"
+                          class="nav-link"
+                          role="tab"
+                          data-bs-toggle="tab"
+                          data-bs-target="#navs-pills-justified-messages"
+                          aria-controls="navs-pills-justified-messages"
+                          aria-selected="false"
+                        >
+                          <i class="tf-icons bx bx-message-square"></i> Messages
+                        </button>
+                      </li>
+                    </ul>
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
+                        <p>
+                          Icing pastry pudding oat cake. Lemon drops cotton candy caramels cake caramels sesame snaps
+                          powder. Bear claw candy topping.
+                        </p>
+                        <p class="mb-0">
+                          Tootsie roll fruitcake cookie. Dessert topping pie. Jujubes wafer carrot cake jelly. Bonbon
+                          jelly-o jelly-o ice cream jelly beans candy canes cake bonbon. Cookie jelly beans marshmallow
+                          jujubes sweet.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
+                        <p>
+                          Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
+                          cream. Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
+                          cheesecake fruitcake.
+                        </p>
+                        <p class="mb-0">
+                          Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
+                          cotton candy liquorice caramels.
+                        </p>
+                      </div>
+                      <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+                        <p>
+                          Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
+                          cupcake gummi bears cake chocolate.
+                        </p>
+                        <p class="mb-0">
+                          Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake. Sweet
+                          roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding jelly
+                          jelly-o tart brownie jelly.
+                        </p>
                       </div>
                     </div>
-                    <!--/ Custom content with heading -->
                   </div>
                 </div>
               </div>
+              <!-- Pills -->
             </div>
             <!-- / Content -->
 

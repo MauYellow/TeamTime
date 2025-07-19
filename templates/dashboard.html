@@ -72,12 +72,11 @@
                                           TeamTime
                                     </span>
                               </a>
-                              <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
-                                    href="javascript:void(0);">
+                              <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" href="javascript:void(0);">
                                     <i class="bx bx-chevron-left bx-sm align-middle"></i>
                               </a>
                         </div>
-
+                  
                         <div class="menu-inner-shadow">
                         </div>
                         <ul class="menu-inner py-1">
@@ -88,6 +87,14 @@
                                           </i>
                                           <div data-i18n="Analytics">
                                                 Dashboard
+                                          </div>
+                                    </a>
+                              </li>
+                              <li class="menu-item">
+                                    <a class="menu-link" href="/primi_passi">
+                                          <i class="menu-icon tf-icons bx bx-help-circle"></i>
+                                          <div data-i18n="Account Settings">
+                                                Tutorial
                                           </div>
                                     </a>
                               </li>
@@ -117,51 +124,18 @@
                                           <i class="menu-icon tf-icons bx bx-edit"></i>
                                           <div data-i18n="Support">
                                                 Correggi Orari
-                                                <span class="badge bg-warning text-dark ms-2"
-                                                      style="font-size: 0.6rem;">Beta</span>
+                                                <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
                                           </div>
                                     </a>
                               </li>
-
-
-
+                  
+                  
+                  
                               <!-- Documenti -->
                               <li class="menu-header small text-uppercase">
                                     <span class="menu-header-text">
                                           Documenti
                                     </span>
-                              </li>
-                              <li class="menu-item">
-                                    <a class="menu-link menu-toggle" href="javascript:void(0);">
-                                          <i class="menu-icon tf-icons bx bx-euro">
-                                          </i>
-                                          <div data-i18n="Account Settings">
-                                                Piani
-                                          </div>
-                                    </a>
-                                    <ul class="menu-sub">
-                                          <li class="menu-item">
-                                                <a class="menu-link" href="piani" target="_blank">
-                                                      <div data-i18n="Account">
-                                                            Piano Start
-                                                      </div>
-                                                </a>
-                                          </li>
-                                          <li class="menu-item">
-                                                <a class="menu-link" href="piani" target="_blank">
-                                                      <div data-i18n="Notifications">
-                                                            Piano Teams
-                                                      </div>
-                                                </a>
-                                          </li>
-                                          <li class="menu-item">
-                                                <a class="menu-link" href="piani" target="_blank">
-                                                      <div data-i18n="Connections">
-                                                            Piano Business
-                                                      </div>
-                                                </a>
-                                          </li>
-                                    </ul>
                               </li>
                               <li class="menu-item">
                                     <a class="menu-link" href="/report">
@@ -188,9 +162,9 @@
                                           <i class="menu-icon tf-icons bx bx-repeat"></i>
                                           <div data-i18n="Subscription">Gestisci Abbonamento</div>
                                     </a>
-                                    {% endif %}                           
+                                    {% endif %}
                               </li>
-                                  
+                  
                               <li class="menu-item">
                                     <a class="menu-link" href="{{ url_for('logout') }}">
                                           <i class="menu-icon tf-icons bx bx-log-out"></i>

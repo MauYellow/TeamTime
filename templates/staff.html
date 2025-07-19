@@ -84,6 +84,14 @@
                             </div>
                         </a>
                     </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="/primi_passi">
+                            <i class="menu-icon tf-icons bx bx-help-circle"></i>
+                            <div data-i18n="Account Settings">
+                                Tutorial
+                            </div>
+                        </a>
+                    </li>
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">
                             Dipendenti
@@ -112,7 +120,9 @@
                                 Correggi Orari
                                 <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
                             </div>
-                        </a>       </li>
+                        </a>
+                    </li>
+            
             
             
                     <!-- Documenti -->
@@ -120,38 +130,6 @@
                         <span class="menu-header-text">
                             Documenti
                         </span>
-                    </li>
-                    <li class="menu-item">
-                        <a class="menu-link menu-toggle" href="javascript:void(0);">
-                            <i class="menu-icon tf-icons bx bx-euro">
-                            </i>
-                            <div data-i18n="Account Settings">
-                                Piani
-                            </div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a class="menu-link" href="piani" target="_blank">
-                                    <div data-i18n="Account">
-                                        Piano Start
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a class="menu-link" href="piani" target="_blank">
-                                    <div data-i18n="Notifications">
-                                        Piano Teams
-                                    </div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a class="menu-link" href="piani" target="_blank">
-                                    <div data-i18n="Connections">
-                                        Piano Business
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li class="menu-item">
                         <a class="menu-link" href="/report">
@@ -180,6 +158,7 @@
                         </a>
                         {% endif %}
                     </li>
+            
                     <li class="menu-item">
                         <a class="menu-link" href="{{ url_for('logout') }}">
                             <i class="menu-icon tf-icons bx bx-log-out"></i>

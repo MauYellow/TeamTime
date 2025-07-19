@@ -475,6 +475,20 @@ def dashboard():
     return render_template("dashboard.html", data=data, GPS_labels=GPS_labels, GPS_series=GPS_series, ultimi6_records=ultimi6_records, media_ore_mese=media_ore_mese, mese_corrente=mese_corrente, counter_ore_lavorate_oggi=counter_ore_lavorate_oggi, counter_ore_lavorate_mese=counter_ore_lavorate_mese, counter_al_lavoro=counter_al_lavoro, percentage=percentage, len_records=len_records, len_mese_records=len_mese_records, len_oggi_records=len_oggi_records, records=records, oggi_records=oggi_records, grafico_etichette_ore=grafico_etichette_ore,
     grafico_valori=grafico_valori)
 
+@app.route('/primi_passi')
+def primi_passi():
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"Primi Passi: {ip}, User Agent: {user_agent}, sorgente: {path}")
+    data = session.get("data")
+    print(f"Data da Login: {data}")
+    
+    if not data:
+        return redirect(url_for('login'))
+    
+    return render_template('primi_passi.html', data=data)
+
 @app.route('/calendario')
 def calendario():
     data = session.get("data")
@@ -528,7 +542,7 @@ def report():
 
         # Filtra i record per il mese selezionato
         filtered = [r for r in records if r['fields'].get('Mese Nome', '').lower() == mese_selezionato.lower()]
-        print(filtered)
+        #print(filtered)
 
         forza_generazione = request.form.get("forza_generazione") == "1"
         check_dipendenti_lavoro = any(r['fields'].get("Uscita", "").strip().lower() == "al lavoro" for r in filtered)

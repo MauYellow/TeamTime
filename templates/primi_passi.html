@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html class="light-style layout-menu-fixed" data-assets-path="/static/" data-template="vertical-menu-template-free"
+  data-theme="theme-default" dir="ltr" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    name="viewport" />
+  <title>
+    Dashboard - Analytics | TeamTime
+  </title>
+  <meta content="" name="description" />
+  <!-- Favicon -->
+  <!-- FAVICON -->
+  <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png" />
+  <link rel="icon" type="image/svg+xml" href="/static/img/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/static/img/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&amp;display=swap"
+    rel="stylesheet" />
+  <!-- Icons. Uncomment required icon fonts -->
+  <link href="/static/vendor/fonts/boxicons.css" rel="stylesheet" />
+  <!-- Core CSS -->
+  <link class="template-customizer-core-css" href="/static/vendor/css/core.css" rel="stylesheet" />
+  <link class="template-customizer-theme-css" href="/static/vendor/css/theme-default.css" rel="stylesheet" />
+  <link href="/static/css/demo.css" rel="stylesheet" />
+  <!-- Vendors CSS -->
+  <link href="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" />
+  <link href="/static/vendor/libs/apex-charts/apex-charts.css" rel="stylesheet" />
+  <!-- Page CSS -->
+  <!-- Helpers -->
+  <script src="/static/vendor/js/helpers.js"></script>
+  <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+  <!--? Config: Mandatory theme config file containing global vars & default theme options -->
+  <script src="/static/js/config.js"></script>
+</head>
+
+<style>
+  .step-indicator {
+    width: 12px;
+    height: 12px;
+    background-color: #ddd;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s;
+  }
+
+  .step-indicator.active {
+    background-color: #dc3545;
+    /* rosso Bootstrap */
+  }
+</style>
+
+
+<body>
+  <!-- Layout wrapper -->
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu -->
+      <aside class="layout-menu menu-vertical menu bg-menu-theme" id="layout-menu">
+        <div class="app-brand demo">
+          <a class="app-brand-link" href="/">
+            <span class="app-brand-logo demo">
+              <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}" alt="TeamTime Logo"
+                height="32">
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder ms-2">
+              TeamTime
+            </span>
+          </a>
+          <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" href="javascript:void(0);">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow">
+        </div>
+        <ul class="menu-inner py-1">
+          <!-- Dashboard -->
+          <li class="menu-item active">
+            <a class="menu-link" href="{{ url_for('dashboard') }}">
+              <i class="menu-icon tf-icons bx bx-home-circle">
+              </i>
+              <div data-i18n="Analytics">
+                Dashboard
+              </div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="/primi_passi">
+              <i class="menu-icon tf-icons bx bx-help-circle"></i>
+              <div data-i18n="Account Settings">
+                Tutorial
+              </div>
+            </a>
+          </li>
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">
+              Dipendenti
+            </span>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="{{ url_for('calendario') }}">
+              <i class="menu-icon tf-icons bx bx-calendar"></i>
+              <div data-i18n="Authentications">
+                Calendario
+              </div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="{{ url_for('staff') }}">
+              <i class="menu-icon tf-icons bx bx-group"></i>
+              <div data-i18n="Support">
+                Staff
+              </div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="{{ url_for('dipendenti_al_lavoro') }}">
+              <i class="menu-icon tf-icons bx bx-edit"></i>
+              <div data-i18n="Support">
+                Correggi Orari
+                <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
+              </div>
+            </a>
+          </li>
+
+
+
+          <!-- Documenti -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">
+              Documenti
+            </span>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="/report">
+              <i class="menu-icon tf-icons bx bx-file">
+              </i>
+              <div data-i18n="Support">
+                Report
+              </div>
+            </a>
+          </li>
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">
+              Profilo
+            </span>
+          </li>
+          <li class="menu-item">
+            {% if data['Link Annullamento'] %}
+            <a class="menu-link" href="{{ data['Link Annullamento'] }}" target="_blank">
+              <i class="menu-icon tf-icons bx bx-repeat"></i>
+              <div data-i18n="Subscription">Gestisci Abbonamento</div>
+            </a>
+            {% else %}
+            <a class="menu-link" href="#" onclick="mostraPopupAbbonamento()">
+              <i class="menu-icon tf-icons bx bx-repeat"></i>
+              <div data-i18n="Subscription">Gestisci Abbonamento</div>
+            </a>
+            {% endif %}
+          </li>
+
+          <li class="menu-item">
+            <a class="menu-link" href="{{ url_for('logout') }}">
+              <i class="menu-icon tf-icons bx bx-log-out"></i>
+              </i>
+              <div data-i18n="Documentation">
+                Log Out
+              </div>
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu -->
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar">
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center justify-content-between w-100" id="navbar-collapse">
+
+            <!-- 🔹 Pulsanti e avatar -->
+            <ul class="navbar-nav flex-row align-items-center ms-auto">
+              <a href="https://beacons.ai/teamtime" target="_blank"
+                class="btn btn-outline-primary me-2 d-none d-md-inline-block">
+                <i class="bx bx-download me-1"></i> Scarica App Mobile
+              </a>
+
+
+              <!-- User -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown" href="javascript:void(0);">
+                  <div class="avatar avatar-online">
+                    <img alt="" class="w-px-40 h-auto rounded-circle"
+                      src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            <img alt="" class="w-px-40 h-auto rounded-circle"
+                              src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png" />
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">{{ data.Nome }}</span>
+                          <small class="text-muted">Admin</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="dropdown-divider"></div>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{{ url_for('logout') }}">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Log Out</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- / Navbar -->
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card mb-4">
+              <h5 class="card-header">Guida al primo Scan QR Code</h5>
+              <div class="card-body">
+                <div class="row">
+                  <!-- Custom content with heading -->
+                  <div class="col-lg-12 mb-4 mb-xl-0">
+                    <small class="text-light fw-semibold">Vertical</small>
+                    <div class="mt-3">
+                      <div class="row">
+                        <div class="col-md-4 col-12 mb-3 mb-md-0">
+                          <div class="list-group">
+                            <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list"
+                              href="#list-inizio">1. Inizio - Scarica l'app</a>
+                            <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list"
+                              href="#list-primoaccesso">2. Primo Accesso</a>
+                            <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list"
+                              href="#list-tutorial">3. Tutorial</a>
+                            <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list"
+                              href="#list-registrazione">4. Registrazione Dipendente</a>
+                            <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list"
+                                href="#list-accessodipendente">5. Accesso come Dipendente</a>
+                            <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list"
+                              href="#list-primoscan">6. Primo Scan Entrata/Uscita</a>
+                            <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list"
+                              href="#list-registro">7. Accesso Registro Orario</a>
+                          </div>
+                        </div>
+                        <div class="col-md-8 col-12">
+                          <div class="tab-content p-0">
+                            <div class="tab-pane fade show active" id="list-inizio">
+                              <strong>Inizio: Scarica l’app e fai la prima timbratura di prova</strong>
+                              
+                              <p>
+                                Se sei arrivato fin qui, significa che la tua <strong>azienda è già registrata correttamente</strong>.
+                                Ora è il momento di completare la configurazione provando il sistema come farebbe uno dei tuoi dipendenti.
+                              </p>
+                              
+                              <hr>
+                              
+                              <strong>Scarica l’app sul tuo dispositivo Apple o Android</strong>
+                              
+                              <p>
+                                Puoi scaricare l’app in uno dei seguenti modi:
+                              <ul>
+                                <li>Clicca su questo link: <a href="https://beacons.ai/teamtime" target="_blank">Scarica l’App</a></li>
+                                <li>Oppure scansiona questo QR Code dal tuo smartphone</li>
+                                <img src="/static/qr_codes/teamtimedownloadQRcode.jpg" alt="QR Code App" style="width: 150px;" class="my-2">
+                              </ul>
+                              </p>
+
+                              <hr>
+
+                              <strong>Perché è importante?</strong>
+                              
+                              <p>
+                                Questa è la stessa procedura che seguiranno i tuoi dipendenti. Farla in prima persona ti permette di:
+                              </p>
+                              
+                              <ul>
+                                <li>Comprendere come funziona il sistema</li>
+                                <li>Verificare che tutto sia configurato correttamente per il tuo team</li>
+                              </ul>
+                            </div>
+                            <div class="tab-pane fade" id="list-primoaccesso">
+                                <strong>Primo accesso all’applicazione</strong>
+                                
+                                <p>
+                                  Una volta scaricata e aperta l’app, vedrai una schermata introduttiva.
+                                  Al primo accesso ti verrà mostrato automaticamente un breve tutorial, che ti guiderà nei passaggi iniziali.
+                                </p>
+                                <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini.jpg" style="width: 250px;" class="my-2">
+
+                              
+                            </div>
+
+                            <div class="tab-pane fade" id="list-tutorial">
+                              <p>
+                                Una volta scaricata e aperta l’app:
+                              </p>
+                              
+                              <ul>
+                                <li>Ti verrà mostrato un breve tutorial automatico.</li>
+                                <li>Al termine, clicca su <span class="badge bg-danger">Continua come dipendente</span>.<br>
+                                  ✅ Ricorda: La tua azienda è stata già registrata, ora è il momento del dipendente.</li>
+                              </ul>
+
+                              <div class="col-xl-6">
+                                <h6 class="text-muted">Screenshots</h6>
+                                <div class="nav-align-top mb-4">
+                                  <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item">
+                                      <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-home"
+                                        aria-controls="navs-top-home" aria-selected="true">
+                                        Step 1
+                                      </button>
+                                    </li>
+                                    <li class="nav-item">
+                                      <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-profile"
+                                        aria-controls="navs-top-profile" aria-selected="false">
+                                        Step 2
+                                      </button>
+                                    </li>
+                                    <li class="nav-item">
+                                      <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-messages"
+                                        aria-controls="navs-top-messages" aria-selected="false">
+                                        Step 3
+                                      </button>
+                                    </li>
+                                  </ul>
+                                  <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="navs-top-home" role="tabpanel">
+                                      <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini2.jpg" style="width: 250px;" class="my-2">
+                                      <p class="mb-0">
+                                        Leggi e procedi con <span class="badge bg-danger">Continua</span>
+                                      </p>
+                                    </div>
+                                    <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
+                                      <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini3.jpg"
+                                        style="width: 250px;" class="my-2">
+                                        <p class="mb-0">
+                                          Leggi e procedi con <span class="badge bg-danger">Continua</span>
+                                        </p>
+                                    </div>
+                                    <div class="tab-pane fade" id="navs-top-messages" role="tabpanel">
+                                      <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini4.jpg"
+                                        style="width: 250px;" class="my-2">
+                                      <p class="mb-0">
+                                        Continua cliccando su <span class="badge bg-danger">Continua come dipendente</span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="list-registrazione">
+                              <strong>Registrazione come dipendente</strong>
+                              
+                              <p>
+                                Nella schermata di registrazione del dipendente, il primo passo è inserire <strong>Nome e Cognome</strong>.
+                                È importante compilare entrambi i campi in modo completo e corretto, cliccando poi <span class="badge bg-danger">Continua</span>.
+                              </p>
+                              
+                              <p>
+                                <strong>Attenzione:</strong>
+                              <ul>
+                                <li>Non usare iniziali</li>
+                                <li>Non usare acronimi</li>
+                                <li>Non usare diminutivi</li>
+                              </ul>
+                              </p>
+
+                              <strong>Associazione all’azienda</strong>
+                              
+                              <p>
+                                Nella seconda schermata ti verrà chiesto di legarti all’azienda. Puoi farlo in due modi:
+                              </p>
+                              
+                              <ul>
+                                <li>Cliccando <span class="badge bg-danger">Scan QR Code</span> potrai scannerizzare il QR Code ricevuto via mail insieme alle credenziali d’accesso e legare automaticamente dipendente e azienda.</li>
+                                <li>Oppure selezionando l’azienda dall’elenco completo cliccando su <strong>“Scan non riuscito? Vedi l’elenco
+                                    completo”</strong> e cercando il nome del QR Code ricevuto sempre via mail.</li>
+                              </ul>
+                             
+                              <br>
+                              Al termina dell'operazione, l'applicazione verrà riavviata.
+                              <br>
+                              <br>
+                              
+                              <strong>Supporto</strong>
+                              
+                              <p>
+                                Per qualsiasi domanda o necessità di aiuto, clicca sul pulsante <span class="badge bg-danger">Assistenza</span> che trovi in basso in
+                                questa pagina.
+                              </p>
+
+                              <div class="col-xl-6">
+                                <h6 class="text-muted">Screenshots</h6>
+                                <div class="nav-align-top mb-4">
+                                  <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item">
+                                      <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-reg"
+                                        aria-controls="navs-top-reg" aria-selected="true">
+                                        Step 1
+                                      </button>
+                                    </li>
+                                    <li class="nav-item">
+                                      <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-reg2"
+                                        aria-controls="navs-top-reg2" aria-selected="false">
+                                        Step 2
+                                      </button>
+                                    </li>
+                                    <li class="nav-item">
+                                      <button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#navs-top-reg3"
+                                        aria-controls="navs-top-reg3" aria-selected="false">
+                                        Step 3
+                                      </button>
+                                    </li>
+                                  </ul>
+                                  <div class="tab-content">
+                                    <div class="tab-pane fade show active" id="navs-top-reg" role="tabpanel">
+                                      <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini5.jpg"
+                                        style="width: 250px;" class="my-2">
+                                        <p>La schermata di registrazione dipendente</p>
+                                    </div>
+                                    <div class="tab-pane fade" id="navs-top-reg2" role="tabpanel">
+                                      <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini6.jpg"
+                                        style="width: 250px;" class="my-2">
+                                        <p>Nel caso non avessi il QR Code con te, puoi scegliere il nome del QR Code dalla lista.</p>
+                                    </div>
+                                    <div class="tab-pane fade" id="navs-top-reg3" role="tabpanel">
+                                      <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini7.jpg"
+                                        style="width: 250px;" class="my-2">
+                                        <p>Registrazione completata, l'app sarà riavviata.</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="tab-pane fade" id="list-accessodipendente">
+                              <strong>Autorizzazione alla Geolocalizzazione (GPS)</strong>
+                              
+                              <p>
+                                Se il tuo piano include la funzionalità GPS, in questa fase l’app ti chiederà l’autorizzazione per accedere alla
+                                posizione del dispositivo.
+                              </p>
+                              
+                              <p>
+                                <strong>Nota importante:</strong> per conformità alle normative internazionali sulla privacy, non è possibile obbligare
+                                l’utente a condividere la propria posizione.
+                                L’app mostrerà una richiesta di autorizzazione, ma sarà sempre l’utente a scegliere se concedere o negare il permesso.
+                              </p>
+                              
+                              <p>
+                                Nessuna applicazione sul mercato – compresa questa – può forzare l’accesso ai dati di localizzazione senza il consenso
+                                esplicito dell’utente.
+                              </p>
+
+                              
+                            </div>
+                            <div class="tab-pane fade" id="list-primoscan">
+                              <strong>Effettua la timbratura di Entrata e Uscita</strong>
+                              
+                              <p>
+                                Una volta arrivato alla schermata principale dell’app, troverai due pulsanti:
+                              </p>
+                              
+                              <ul>
+                                <li><span class="badge bg-danger">Scan Entrata</span></li>
+                                <li><span class="badge bg-danger">Scan Uscita</span></li>
+                              </ul>
+                              
+                              <p>
+                                Cliccando su <span class="badge bg-danger">Scan Entrata</span> verrà attivata la fotocamera del tuo dispositivo per scannerizzare il
+                                QR Code che hai ricevuto via mail insieme alle credenziali d’accesso.
+                              </p>
+                              
+                              <p>
+                                ✅ Effettuato lo scan, dopo pochi secondi riceverai un messaggio di conferma per l’avvenuta registrazione della presenza.
+                              </p>
+                              
+                              <p>
+                                Puoi anche provare a fare un <span class="badge bg-danger">Scan Uscita</span> per simulare l’intera procedura.
+                              </p>
+                              
+                              <hr>
+                              
+                              <strong>Verifica delle timbrature</strong>
+                              
+                              <p>
+                                Appena effettuato il primo scan, la registrazione sarà immediatamente visibile nella sezione
+                                <strong>“Calendario”</strong> o <strong>“Staff”</strong> dell’app.
+                                Questo processo sarà identico per tutte le timbrature effettuate dai tuoi dipendenti.
+                              </p>
+                              <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini8.jpg"
+                                style="width: 250px;" class="my-2">
+                            </div>
+                            <div class="tab-pane fade" id="list-registro">
+                              <strong>Accedi al pannello di controllo dall’app</strong>
+                              
+                              <p>
+                                All’interno dell’applicazione, nel menu in basso troverai il pulsante <strong>“Registro Online”</strong>.
+                                Da lì potrai accedere al pannello di controllo inserendo:
+                              </p>
+
+                              <img src="/static/img/screenshots/teamtime app registro presenze intelligente smart maurizio polverini9.jpg"
+                                style="width: 250px;" class="my-2">
+                              
+                              <ul>
+                                <li><strong>Nome Azienda:</strong> il nome del tuo QR Code (ad esempio <em>teamtime001</em>)</li>
+                                <li><strong>Password:</strong> la tua password ricevuta via mail</li>
+                              </ul>
+                              
+                              <p>
+                                <strong>Attenzione:</strong> il sistema distingue tra maiuscole e minuscole, assicurati di inserire i dati
+                                correttamente.
+                              </p>
+                              
+                              <hr>
+                              
+                              <strong>Stampa e affiggi il QR Code</strong>
+                              
+                              <p>
+                                Ora è tutto pronto: puoi stampare il QR Code ricevuto e affiggerlo nel punto che preferisci.
+                                Da questo momento i tuoi dipendenti potranno scaricare l’app e iniziare a timbrare.
+                              </p>
+                              
+                              <hr>
+                                                            
+                              <strong>Buon lavoro con TeamTime!</strong>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!--/ Custom content with heading -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- / Content -->
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0">
+                ©
+                <script>
+                  document.write(new Date().getFullYear());
+                </script>
+                , Designed with ❤️ by
+                <a class="footer-link fw-bolder" href="https://www.app-eleven.it" target="_blank">
+                  AppEleven
+                </a>
+              </div>
+              <div>
+                <a class="footer-link me-4" href="https://themeselection.com/license/" target="_blank">
+                  License
+                </a>
+                <a class="footer-link me-4" href="{{ url_for('home') }}#contact" target="_blank">
+                  Support
+                </a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+          <div class="content-backdrop fade">
+          </div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle">
+    </div>
+  </div>
+  <!-- / Layout wrapper -->
+
+  <!-- Pulsante Assistenza -->
+  <div class="buy-now" id="assistenza-button">
+    <button class="btn btn-danger btn-buy-now" onclick="apriChat()">
+      Assistenza
+    </button>
+  </div>
+
+  <!-- Chat Assistenza -->
+  <div id="chat-assistenza" class="card p-3 mb-4 position-fixed end-0 bottom-0 m-4 shadow"
+    style="width: 350px; max-width: 90vw; display: none; z-index: 9999;">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="mb-0">🤖 Assistenza TeamTime</h6>
+      <button class="btn-close" aria-label="Close" onclick="toggleChat()"></button>
+    </div>
+
+    <div id="chat-box" class="border rounded bg-light p-3 mb-3"
+      style="min-height: 150px; max-height: 200px; overflow-y: auto;">
+      <p><i>Benvenuto! Seleziona una domanda per ricevere assistenza.</i></p>
+    </div>
+
+    <div class="d-grid gap-2">
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('primoscan')"> 🚪 Come registrare
+        un'entrata?</button>
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('correggi')">👤 Un dipendente si è
+        dimenticato di timbrare l'uscita</button>
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('report')">📊 Come scarico il
+        report
+        mensile?</button>
+      <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('alLavoro')">📌 Cosa significa “al
+        lavoro”?</button>
+      <button class="btn btn-outline-success btn-sm" onclick="showAnswer('Assistenza')">Chat Whatsapp</button>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script>
+    function apriChat() {
+      document.getElementById("chat-assistenza").style.display = "block";
+      document.getElementById("assistenza-button").style.display = "none";
+    }
+
+    function toggleChat() {
+      const chat = document.getElementById("chat-assistenza");
+      if (chat.style.display === "none") {
+        chat.style.display = "block";
+        document.getElementById("assistenza-button").style.display = "none";
+      } else {
+        chat.style.display = "none";
+        document.getElementById("assistenza-button").style.display = "block";
+      }
+    }
+
+    function showAnswer(type) {
+      const chatBox = document.getElementById("chat-box");
+      let answer = "";
+
+      if (type === 'correggi') {
+        answer = "Nessun problema! Vai su <strong>Correggi Orari</strong> (nel menu a sinistra) > Cerca il dipendente > Clicca '<strong>Correggi</strong>' > Immetti l'orario di uscita > clicca '<strong>Salva</strong>'";
+      } else if (type === 'report') {
+        answer = "Puoi scaricare il report mensile accedendo alla sezione 'Report' e selezionando il mese desiderato.";
+      } else if (type === 'alLavoro') {
+        answer = "Quando un dipendente risulta 'Al lavoro', significa che non ha ancora registrato l'orario di uscita.";
+      } else if (type === 'Assistenza') {
+        answer = `Per ricevere supporto Whatsapp, <a href="https://wa.me/393931367530?text=Salve%2C%20ho%20bisogno%20di%20assistenza%20per%20TeamTime" class="text-primary" target="_blank">clicca qui</a>.`;
+      } else if (type === 'primoscan') {
+        answer = `Scarica l'app mobile > Registrati come dipendente e legati al QR Code > Scannerizza il QR Code
+    <br><a href="#" onclick="document.getElementById('welcomeModal').style.display = 'block'; showStep(1); return false;" style="text-decoration: underline; font-size: 0.85rem; color: #007bff;">📘 Inizia Tutorial</a>`;
+      }
+
+      const domanda = document.querySelector(`button[onclick*="${type}"]`).innerText;
+      chatBox.innerHTML += `<p><b> Tu :</b> ${domanda}</p>`;
+      chatBox.innerHTML += `<p><b>TeamTimeBot:</b> ${answer}</p>`;
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  </script>
+
+
+
+  <!-- Core JS -->
+  <!-- build:js /vendor/js/core.js -->
+  <script src="/static/vendor/libs/jquery/jquery.js"></script>
+  <script src="/static/vendor/libs/popper/popper.js"></script>
+  <script src="/static/vendor/js/bootstrap.js"></script>
+  <script src="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+  <script src="/static/vendor/js/menu.js"></script>
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  <script src="/static/vendor/libs/apex-charts/apexcharts.js"></script>
+
+  <!-- Main JS -->
+  <script src="/static/js/main.js"></script>
+
+  <!-- Page JS -->
+  <script src="/static/js/dashboards-analytics.js"></script>
+
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+
+  <script>
+    function showStep(n) {
+      // Mostra solo lo step richiesto
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById('step' + i).style.display = (i === n) ? 'block' : 'none';
+        document.getElementById('dot' + i).classList.toggle('active', i === n);
+      }
+    }
+
+    function closeWelcome() {
+      document.getElementById('welcomeModal').style.display = 'none';
+    }
+
+
+  </script>
+
+  <script>
+    function mostraPopupAbbonamento() {
+      alert("Per informazioni sul tuo abbonamento contatta il commerciale di riferimento.");
+    }
+  </script>
+
+
+
+
+
+</body>
+
+</html>
