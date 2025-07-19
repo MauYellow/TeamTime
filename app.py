@@ -643,11 +643,21 @@ def report_demo():
 @app.route('/inizia-prova')
 def inizia_prova():
     STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
-    #print(STRIPE_PUBLIC_KEY)
     ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
     path = request.path
     telegram(f"Inizia-Prova: {ip}, User Agent: {user_agent}, sorgente: {path}")
+    ref = request.args.get('ref')  # cerca il ref nella query
+
+    if ref:
+        session['ref'] = ref  # salva in sessione
+        telegram(f"[REF] Nuovo click per: {ref}")
+    else:
+        ref = session.get('ref')  # recupera dalla sessione se non presente nella query
+        if ref:
+            telegram(f"[REF] Nuovo click (sessione) per: {ref}")
+        else:
+            print("Nessun referral trovato")
     return render_template('/inizia-prova-gratuita.html', STRIPE_PUBLIC_KEY=STRIPE_PUBLIC_KEY)
 
 @app.route('/inizia-prova-TEST') #**
@@ -976,7 +986,13 @@ def run_schedule(): #Al momento questo non è attivo, leggi su def check_status_
 
 def telegram(message):
    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_KEY}/sendMessage"
-   payload = {
+   if "[REF]" in message:
+      payload = {
+    "chat_id": "-4908005000",
+    "text": message
+}
+   else:
+     payload = {
     "chat_id": CHANNEL_ID,
     "text": message
 }
