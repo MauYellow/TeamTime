@@ -183,7 +183,6 @@ def stripe_webhook():
         print(f"❌ Abbonamento disdetto per: {customer_id}, "
       f"Motivo: {subscription['cancellation_details'].get('feedback', 'Nessuno')}, "
       f"Feedback: {subscription['cancellation_details'].get('comment', 'Nessuno')}")
-        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         telegram("Abbonamento disdetto")
         telegram(f"[REF] Abbonamento disdetto per referral: {record['fields']['Referral']}")
         msg = Message(
@@ -435,7 +434,10 @@ def dashboard():
        
     counter_ore_lavorate_mese = round(counter_ore_lavorate_mese, 2)
     try:
-       media_ore_mese = round(counter_ore_lavorate_mese / len_mese_records, 2) #counter_ore_lavorate_mese** Questo da spesso problemi
+       if len_mese_records:
+        media_ore_mese = round(counter_ore_lavorate_mese / len_mese_records, 2)
+       else:
+        media_ore_mese = 0
     except Exception as e:
        print(f"Errore Media Mese Giornaliera: {e}")
        return """
