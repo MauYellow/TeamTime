@@ -152,17 +152,20 @@ def stripe_webhook():
        print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}")
        telegram("Nuovo Abbonamento Gratuito Creato")
        
-    elif event['type'] == 'invoice.payment_succeeded': # Questo evento si verifica circa un'ora dopo che il customer subscription created o updated
+    elif event['type'] == 'invoice.payment_succeeded': # Questo evento si verifica circa un'ora dopo che il customer subscription created o updated. No, questo si crea anche subito al created, si crea un'ora dopo il pagamento
         invoice = event['data']['object']
         customer_id = invoice['customer']
         billing_reason = invoice.get('billing_reason', 'unknown')
-        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Non lo ha ancora!
+        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Non lo ha ancora! **Da vedere bene
         amount = invoice['amount_paid'] / 100  # converti da cent a €
         if amount == 0:
           print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}") #, locale: {record['fields']['Locale']}") non lo ha ancora!
         else:
+          record = table.first(formula=match({"Stripe Customer ID": customer_id}))
           print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #Qui lo dovrebbe avere perché è il pagamento dopo la prova
           telegram("Nuovo Pagamento Ricevuto")
+          if record['fields']['Referral'] and record['fields']['Referral'] != "-":
+             telegram(f"[REF] Periodo di prova terminato con successo. Riconosciuto reward per referral: {record['fields']['Referral']}")
           try: 
             table.update(record["id"], {"Pagato": 'Si'})
             print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #, ") 
@@ -182,6 +185,7 @@ def stripe_webhook():
       f"Feedback: {subscription['cancellation_details'].get('comment', 'Nessuno')}")
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         telegram("Abbonamento disdetto")
+        telegram(f"[REF] Abbonamento disdetto per referral: {record['fields']['Referral']}")
         msg = Message(
     subject="Abbonamento Annullato - TeamTime",
     sender=app.config['MAIL_USERNAME'],
@@ -660,22 +664,6 @@ def inizia_prova():
             print("Nessun referral trovato")
     return render_template('/inizia-prova-gratuita.html', STRIPE_PUBLIC_KEY=STRIPE_PUBLIC_KEY)
 
-@app.route('/inizia-prova-TEST') #**
-def inizia_prova_TEST():
-    ref = request.args.get('ref')  # cerca il ref nella query
-
-    if ref:
-        session['ref'] = ref  # salva in sessione
-        print(f"Referral preso dalla query = {ref}")
-    else:
-        ref = session.get('ref')  # recupera dalla sessione se non presente nella query
-        if ref:
-            print(f"Referral preso dalla sessione = {ref}")
-        else:
-            print("Nessun referral trovato")
-
-    return render_template('/inizia-prova-gratuita.html')
-
 
 @app.route('/create-subscription', methods=['POST'])
 def create_subscription():
@@ -820,6 +808,7 @@ def create_subscription_old(): #**backup - errore che se la carta era scaduta co
 
 @app.route('/start-airtable', methods=['POST'])
 def start_airtable():
+    ref = session.get('ref', '-')
     data_json = request.get_json()
     email_cliente = data_json.get('email_cliente', 'nessuna@email.it')
     telefono_cliente = data_json.get('telefono_cliente', 'Nessun Telefono')
@@ -830,7 +819,6 @@ def start_airtable():
     ragionesociale_cliente = data_json.get('ragionesociale_cliente', 'No companyName')
     indirizzo_cliente = data_json.get('indirizzo_cliente', 'No companyAddress')
     customer_id = data_json.get('customer_id', 'Nessun ID Stripe')
-    #print(f"Customer ID: {customer_id}")
 
     print("🔁 Inizio ricerca tabella vuota...")
     for i in range(21, 51):  # da teamtime020 a teamtime050 inclusi
@@ -881,8 +869,10 @@ def start_airtable():
     
      
     if record:
-      table.update(record["id"], {"Mail": f'{email_cliente}', "Password": f"{nuova_password}", "Nome": f"{table_scelta}", "Primo Accesso": "yes", "Telefono": f'{telefono_cliente}', "GPS": f"{gps_cliente}", "Intercambio": f"{interscambio_cliente}", "Max Dipendenti": f"{dipendenti_cliente}", "Ragione Sociale": f"{ragionesociale_cliente}", "Partita IVA": f"{partitaiva_cliente}", "Indirizzo": f"{indirizzo_cliente}", "Stripe Customer ID": f"{customer_id}", "Link Annullamento": f"https://www.teamtimeapp.it/termina-abbonamento/{customer_id}", "Fine Prova": f"{fine_prova}", "Status": "Attivo", "Pagato": "No"})
+      table.update(record["id"], {"Mail": f'{email_cliente}', "Password": f"{nuova_password}", "Nome": f"{table_scelta}", "Primo Accesso": "yes", "Telefono": f'{telefono_cliente}', "GPS": f"{gps_cliente}", "Intercambio": f"{interscambio_cliente}", "Max Dipendenti": f"{dipendenti_cliente}", "Ragione Sociale": f"{ragionesociale_cliente}", "Partita IVA": f"{partitaiva_cliente}", "Indirizzo": f"{indirizzo_cliente}", "Stripe Customer ID": f"{customer_id}", "Link Annullamento": f"https://www.teamtimeapp.it/termina-abbonamento/{customer_id}", "Fine Prova": f"{fine_prova}", "Status": "Attivo", "Pagato": "No", "Referral": f"{ref}"})
       print(f"✅ Record aggiornato: {table_name} → Mail ={email_cliente}")
+      if ref != "-":
+        telegram(f"[REF] Nuova Prova Gratuita di 30 Giorni Iniziata per referral: {ref}")
     else:
       print(f"❌ Nessun record trovato per Locale: {table_name} in Locali Approvati")
 
