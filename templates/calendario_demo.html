@@ -9,7 +9,38 @@
             rel="stylesheet" />
 
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Calendario - TeamTime</title>
+      
+      <!-- SEO BASE -->
+      <title>Demo Calendario Presenze | TeamTime – Registro Presenze Smart</title>
+      <meta name="description"
+            content="Guarda il calendario demo di TeamTime: app registro presenze dipendenti con timbratura QR code, gestione turni, orari di lavoro e presenze in tempo reale. Inizia Gratis.">
+      <meta name="keywords"
+            content="demo calendario presenze, esempio calendario lavoro, gestione turni, app timbratura QR code, gestione presenze dipendenti, calendario orari lavoro, app registro presenze">
+      <meta name="author" content="Maurizio Polverini">
+      <meta name="robots" content="index, follow">
+      <link rel="canonical" href="{{ url_for('calendario_demo', _external=True) }}">
+      <meta name="theme-color" content="#0ea5e9">
+      
+      <!-- OPEN GRAPH -->
+      <meta property="og:title" content="Demo Calendario Presenze | TeamTime – Registro Presenze Smart">
+      <meta property="og:description"
+            content="Visualizza il calendario demo di TeamTime e scopri come organizzare turni e orari con QR code e gestione presenze in tempo reale.">
+      <meta property="og:url" content="{{ url_for('calendario_demo', _external=True) }}">
+      <meta property="og:type" content="website">
+      <meta property="og:site_name" content="TeamTime">
+      <meta property="og:locale" content="it_IT">
+      <meta property="og:image" content="https://www.teamtimeapp.it/static/assets_index/images/og-preview.jpg">
+      <meta property="og:image:alt" content="TeamTime - Demo Calendario Registro Presenze Smart">
+      
+      <!-- TWITTER CARD -->
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:site" content="@TeamTimeApp">
+      <meta name="twitter:title" content="Demo Calendario Presenze | TeamTime – Registro Presenze Smart">
+      <meta name="twitter:description"
+            content="Guarda il calendario demo di TeamTime: gestione turni, orari di lavoro e presenze in tempo reale con timbratura QR code.">
+      <meta name="twitter:image" content="https://www.teamtimeapp.it/static/assets_index/images/og-preview.jpg">
+
+
       <link rel="icon" type="image/png" href="/static/img/favicon/favicon-96x96.png" />
       <link rel="stylesheet" href="/static/vendor/fonts/boxicons.css" />
       <link rel="stylesheet" href="/static/vendor/css/core.css" />
@@ -17,6 +48,7 @@
       <link rel="stylesheet" href="/static/css/demo.css" />
       <script src="/static/vendor/js/helpers.js"></script>
       <script src="/static/js/config.js"></script>
+
       <style>
             html,
             body {

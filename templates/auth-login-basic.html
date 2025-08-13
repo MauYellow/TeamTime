@@ -27,11 +27,33 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
 
-    <title>Login Basic - Pages | TeamTime</title>
+    <!-- SEO BASE -->
+    <title>Login Dashboard | TeamTime – Registro Presenze Smart per Dipendenti</title>
+    <meta name="description"
+      content="Accedi alla dashboard di TeamTime per gestire il registro presenze con QR code, report automatici e gestione orari.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url_for('login', _external=True) }}">
+    <meta name="theme-color" content="#0ea5e9">
+    
+    <!-- OPEN GRAPH -->
+    <meta property="og:title" content="Login Dashboard | TeamTime – Registro Presenze Smart">
+    <meta property="og:description"
+      content="Accedi alla dashboard di TeamTime per monitorare presenze e orari con QR code.">
+    <meta property="og:url" content="{{ url_for('login', _external=True) }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="TeamTime">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:image" content="https://www.teamtimeapp.it/static/assets_index/images/og-preview.jpg">
+    <meta property="og:image:alt" content="TeamTime - App Registro Presenze con QR Code">
+    
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@TeamTimeApp">
+    <meta name="twitter:title" content="Login Dashboard | TeamTime – Registro Presenze Smart">
+    <meta name="twitter:description" content="Accedi alla dashboard di TeamTime e gestisci presenze e orari con QR code.">
+    <meta name="twitter:image" content="https://www.teamtimeapp.it/static/assets_index/images/og-preview.jpg">
 
-    <meta name="description" content="" />
 
-    <!-- Favicon -->
     <!-- FAVICON -->
     <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png" />
     <link rel="icon" type="image/svg+xml" href="/static/img/favicon/favicon.svg" />
@@ -59,7 +81,6 @@
     <link rel="stylesheet" href="../static/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <!-- Page CSS -->
-    <!-- Page -->
     <link rel="stylesheet" href="../static/vendor/css/pages/page-auth.css" />
     <!-- Helpers -->
     <script src="../static/vendor/js/helpers.js"></script>
