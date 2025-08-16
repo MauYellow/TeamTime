@@ -1,6 +1,6 @@
 import stripe
 import os
-from flask import Flask, render_template, redirect, url_for, request, jsonify, send_from_directory, session, send_file, make_response
+from flask import Flask, render_template, redirect, url_for, request, jsonify, send_from_directory, session, send_file, abort
 from flask_mail import Mail, Message
 from config import STRIPE_SECRET_KEY, STRIPE_PRICE_ID, STRIPE_WEBHOOK_SECRET, MAIL_USERNAME, MAIL_PASSWORD
 from pyairtable import Table, Api
@@ -18,7 +18,11 @@ from reportlab.lib.units import cm
 import requests
 import random, string
 import schedule
-import threading
+from openai import OpenAI
+import json
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 
 load_dotenv()
 
@@ -36,6 +40,11 @@ AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 api = Api(AIRTABLE_TOKEN)
 TELEGRAM_BOT_KEY = os.getenv("TELEGRAM_BOT_KEY")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
+OPENAI_APIKEY = os.getenv("OPENAI_APIKEY")
+CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
+CLOUDINARY_APIKEY = os.getenv("CLOUDINARY_APIKEY")
+CLOUDINARY_APISECRET = os.getenv("CLOUDINARY_APISECRET")
+CLOUDINARY_CLOUDNAME = os.getenv("CLOUDINARY_CLOUDNAME")
 
 
 # Configura Flask-Mail
@@ -946,6 +955,218 @@ def correggi_uscita():
         return "✅ Modifica salvata, attendi l'aggiornamento della pagina", 200
     except Exception as e:
         return f"Errore: {e}", 500
+
+from flask import render_template
+
+@app.route('/blog')
+@app.route('/blog/')
+def blog_index():
+    table = api.table(AIRTABLE_BASE_ID, "Blog")
+    records = table.all(formula="{Published} = 1", sort=["-Created"])
+
+    def map_record(record):
+        field = record.get("fields", {})
+        data_pubblicazione = field.get("Data") or (record.get("createdTime", "")[:10])
+        return {
+            "title":   field.get("TitoloCorto"),
+            "slug":    field.get("Slug"),
+            "image":   field.get("Immagine") or field.get("OgImage"),
+            "category":field.get("Categoria") or "Senza Categoria",
+            "author":  field.get("Autore") or "Redazione",
+            "date":    data_pubblicazione,
+            "excerpt": field.get("Excerpt") or field.get("DescrizioneCorta") or "",
+            "reads":   field.get("Letture") or 0,
+        }
+
+    articoli = [map_record(r) for r in records]
+    return render_template('blog/blogindex.html', articoli=articoli)
+
+@app.route('/blog/<slug>')
+@app.route('/blog/<slug>/')
+def blog_post(slug):
+    table = api.table(AIRTABLE_BASE_ID, "Blog")
+
+    safe_slug = (slug or "").replace("'", "\\'")
+    formula = f"AND({{Published}} = 1, LOWER({{Slug}}) = '{safe_slug.lower()}')"
+    records = table.all(formula=formula, max_records=1)
+    #print(records)
+    if not records:
+        abort(404)
+    record = records[0]
+    field = record.get("fields", {})
+    immagine = field.get("Immagine") or field.get("OgImage")
+    toc_items = [line.strip() for line in (field.get("TOC") or "").split("\n") if line.strip()]
+
+    articolo = {
+        "title":   field.get("TitoloCorto") or field.get("TitoloLungo") or "Senza titolo",
+        "slug":    field.get("Slug") or record.get("id"),
+        "cover":   immagine,
+        "og_image": field.get("OgImage"),
+        "author":  field.get("Autore") or "Redazione",
+        "authorbio": field.get("AutoreBio"),
+        "date":    field.get("Data") or (record.get("createdTime", "")[:10]),
+        "category":field.get("Categoria") or "Senza categoria",
+        "excerpt": field.get("Excerpt") or field.get("DescrizioneCorta") or "",
+        "meta_description": field.get("MetaDescrizione") or field.get("DescrizioneCorta") or "",
+        "reads":   field.get("Letture") or 0,
+        "toc":     toc_items,
+        "blocks":  [field.get("Blocco1") or "", field.get("Blocco2") or "", field.get("Blocco3") or ""],
+        "keywords": field.get("Keyword") or "",
+        "introduction": field.get("Introduzione")
+    }
+
+    table.update(record.get("id"), {"Letture": field.get("Letture") + 1})
+    return render_template("blog/post.html", articolo=articolo)   
+
+def AI_crea_blog_post(argomento, keyword, context_name, link):
+    print("Preparazione AI in corso..")
+    client = OpenAI(api_key=OPENAI_APIKEY)
+
+    def AI_crea_immagine():
+       print("Creazione immagine AI in corso..")
+       immagine_AI = client.images.generate(
+       model="dall-e-3",
+       prompt=f"Realistico semplice, assolutamente nessuna scritta né numeri di nessun tipo solo immagini semplici, relativo a: {argomento}. Semplifica al massimo no scritte né numeri",
+       n=1,
+       size="1024x1024"
+       
+       )
+
+       # CLODUINARY Configuration       
+       cloudinary.config( 
+         cloud_name = CLOUDINARY_CLOUDNAME, 
+         api_key = CLOUDINARY_APIKEY, 
+         api_secret = CLOUDINARY_APISECRET,
+         secure=True
+         )
+       
+       try:
+          upload_result = cloudinary.uploader.upload(f"{immagine_AI.data[0].url}", public_id="TeamTimeSoftwareBlog")
+          print(upload_result["secure_url"])
+          try:
+            immagine_AI_URL = upload_result["secure_url"]
+          except Exception as e:
+            immagine_AI_URL = "https://i.postimg.cc/mgPsrgX4/image-H-Pt-Zq-Ab-I5q-LFst-JEJL9.webp"
+            print(f"Errore caricamento immagine blog: {e}")
+       except Exception as e:
+          print(f"Error caricamento foto blog su Cloudinary: {e}")
+          immagine_AI_URL = "https://i.postimg.cc/mgPsrgX4/image-H-Pt-Zq-Ab-I5q-LFst-JEJL9.webp"
+
+       #immagine_AI_URL = immagine_AI.data[0].url
+       
+       return immagine_AI_URL
+    
+    image_url = AI_crea_immagine() #immagine_AI_URL #"https://i.postimg.cc/mgPsrgX4/image-H-Pt-Zq-Ab-I5q-LFst-JEJL9.webp" #
+       
+
+    print("Analisi contesto..")
+    if context_name == "TeamTime":
+       context = """
+TeamTime è un app disponibile per Apple e Android negli store gratutitamente che semplifica la gestione entrate/uscite dei dipendenti.
+Ha anche una dashboard accessibile via pc dove si può vedere calendario e dettagli dello staff in entrata ed in uscita, unito a utili statistische come la media di ore mensili, settimanali, ore lavorate per ogni dipendente e molto altro.
+Obiettivo: conteggio automatico delle ore lavorate, eliminazione delle procedure manuali, risparmio di tempo e maggiore precisione.
+PRO: nessun badge fisico, tutto digitalizzato, si può vedere realtime le entrate e le uscite da mobile e da pc
+Funzionamento:
+	1. Registrazione azienda e dipendenti → generazione QR code univoco.
+	2. Scansione del QR code all entrata e uscita.
+	3. Supervisione → visualizzazione orari, dispositivi e GPS (facoltativo) da app o PC autorizzato.
+	4. Risparmio → report mensili con totale ore e confronti tra mesi.
+	5. Report Automatici per il commercialista, l'app genera con un click dei report in base alle presenze registrate dai dipendenti
+Accesso protetto con username e password.
+Report sia aziendale che per singolo dipendente.
+Inizia gratis per 30 giorni poi ci sono i piani annuali start, teams e business. Disdici quando vuoi, nessuna penale.
+Possibilità di correggere gli orari qualora un dipendente si sia dimenticato di registrare l'uscita
+Possibilità GPS per registrare la posizione del dipendente
+Possibilità Intercambio per poter fare in modo che il dipendente possa registrarsi a più QR Code (per esempio nei cantieri)
+"""
+    else:
+       context ="Nessun contesto"
+
+    print("Analisi prompt..")
+    system_prompt = (f"""
+    Creami un contenuto JSON per un blog basandoti su questo argomento: {argomento} seguendo tutto SEO Friendly con le {keyword}.Implementando tutti i link utilizzando HTML e non markdown: {link}
+    Stile umano, relativamente informale, sei un esperto di software e il tuo obiettivo è consigliare il meglio alle aziende. Dai del tu. Non deve sembrare una pubblicità, specialmente nel Blocco3 sii sincero e consiglia piuttosto che sembrare che stai vendendo. Inoltre tu sei un punto di vista esterno, qualsiasi cosa che ubblicizzi non è di tua proprietà, tu stai esprimendo un giudizio genuino.
+    Il testo deve essere diviso per argomenti in blocco1, blocco2 e blocco3 (di cui poi gli indici e titoli vanno nel TOC). La somma di blocco1, blocco2 e blocco3 deve essere tra 600 e 800 parole. Il tutto SEO Friendly con le keyword ({keyword}) utilizzate in maniera naturale, non forzate.
+    Il JSON segue questo schema:
+    - TitoloCorto : stile "Timbratura QR Code: Cos'è e Perché Conviene esempi di testo virali menzionando keyword,
+    - DescrizioneCorta : simile a "Dal badge cartaceo ai QR dinamici: un confronto pratico con esempi reali per semplificare le procedure e ridurre gli errori. (menzionando le keyword in modo naturale),
+    - Slug : in linea con le keyword, divise da un trattino - e tutto in minuscolo senza spazi,
+    - Introduzione : Una breve introduzione dell'argomento, almeno 70 parole (non va nel TOC), questo è lo stile "Negli ultimi anni il ruolo degli specialisti HR è profondamente cambiato grazie alla digitalizzazione. Oggi la gestione delle risorse umane è più efficace, veloce e precisa grazie a strumenti digitali avanzati. Scegliere le giuste piattaforme fa la differenza tra un lavoro caotico e uno fluido, ben organizzato ed efficace. (a capo) Vediamo insieme quali sono gli strumenti digitali essenziali per chi opera nelle risorse umane, come sceglierli e perché integrarli nelle attività quotidiane."
+    - Autore : Redazione, 
+    - AutoreBio: Siamo un team di esperti in software aziendali, con anni di esperienza nel testare, valutare e consigliare le soluzioni più efficaci per imprese di ogni dimensione. Professionali nella ricerca e nella valutazione, ma sempre con un tocco di simpatia! Ogni articolo nasce dalla nostra passione per l’innovazione e dalla voglia di condividere consigli pratici, chiari e utili.
+Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino le aziende verso le scelte software più adatte, senza rinunciare a un sorriso lungo la strada.
+    - Immagine : {image_url}
+    - Categoria : (Scegli tra Software, Mobile App o News in base al contesto)
+    - Letture: 0,
+    - Blocco1 : testo (senza la scritta Blocco1) almeno 100 parole, qui si affronta il perché della situazione, aggiungi all'inizio una frase del tipo "Come sai in questo blog ci interessiamo di tecnologia per le aziende" o un modo per presentare il blog e definirsi come esperti del settore. Aggiungi anche l'obiettivo del blog, in maniera naturale: analizzare e consigliare i migliori tool e strumenti digitali per ottimizzare o migliorare i processi aziendali
+    - Blocco2: testo (senza la scritta Blocco2) almeno 100 parole, qui si affronta lo sviluppo della situazione
+    - Blocco3 : testo (senza la scritta Blocco3), qui inserirai la soluzione (se necessaria) altrimenti una conclusione edi link se presenti: {link} in HTML non markdown sottolineati e con colore blu, tipico formato dell'ipertestuale, simile a questo esempio: <a href='http://www.teamtimeapp.it' style='color:blue; text-decoration:underline;'>TESTO</a>
+    - Keyword : {keyword},
+    - MetaDescrizione : Qui metti una MetaDescrizione in linea per la SEO
+    - Published: 1,
+    - OgImage : la stessa di Immagine,
+    - Excerpt : un excerpt consono,
+    - TOC: genera una stringa unica con 3 titoli separati da carattere newline `\n`. Non usare liste né markdown. Esempio: "Titolo 1\nTitolo 2\nTitolo 3"
+    """
+    )
+
+    # Costruiamo i messaggi: istruzioni + CONTEXT_JSON + domanda utente
+    print("Generazione messaggio..")
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "system", "content": f"CONTEXT_JSON:\n{context}"},
+    ]
+
+    print("Generazione risposta..")
+    resp = client.chat.completions.create(
+        model="gpt-4o",
+        messages=messages,
+        temperature=0.8,
+    )
+
+    reply = resp.choices[0].message.content
+    if "```json" in reply:
+      reply = reply.split("```json")[-1].split("```")[0].strip()
+    print(reply)
+
+    try:
+        print("Risposta > JSON..")
+        blog_data = json.loads(reply)
+    except json.JSONDecodeError as e:
+        print("Errore parsing JSON:", e)
+        print("Risposta ricevuta:")
+        print(reply)
+        return
+    
+    table = api.table(AIRTABLE_BASE_ID, "Blog")
+    try:
+       print("Invio ad Airtable..")
+       toc = blog_data.get("TOC")
+
+       if isinstance(toc, list):
+       # Se è una lista: unisci con newline
+         blog_data["TOC"] = "\n".join(toc)
+
+       elif isinstance(toc, str):
+       # Se è una stringa multilinea reale (con ritorni a capo veri), normalizzala
+         blog_data["TOC"] = "\n".join([line.strip() for line in toc.splitlines() if line.strip()])
+
+       else:
+       # Se è altro o None: assegna stringa vuota per evitare errori
+         blog_data["TOC"] = ""
+       table.create(blog_data)
+       print("Completato!")
+    except Exception as e:
+       print(f"Errore Creazione Airtable: {e}")
+       return
+    
+    
+#AI_crea_blog_post("App rilevazione presenze personale gratis","app registro presenze, app registro dipendenti", "TeamTime", "www.teamtimeapp.it (home), www.teamtimeapp.it/inizia-prova (prova gratuita 30 giorni)")
+#AI_crea_blog_post("una mobile app che aiuta gli chef di tutto il mondo a calcolare il food cost, per capire quanto costa ed il prezzo migliore di vendita","food cost italia, app food cost, quanto costa un piatto, app calcolare food cost", "Food Cost Italia è un'app sviluppata da App Eleveb, permette di inserire gli ingredienti con precisione e calcolare il food cost, suggerisce anche un prezzo di vendita", "www.teamtimeapp.it (link ufficiale), www.teamtimeapp.it/inizia-prova (link per scaricarla negli store apple e android)")
+
+#AI_crea_blog_post("Chakra, come nasce, a che serve, come sbloccarlo? e altre inormazioni utili", "Yoga", "Yoga", "www.viaggiaconsimona.blogspot.com (home page)")
+
+
 
 def check_status_abbonamenti(): #**leggere check_status_abbonamenti, legato a run_schedule (per me si può cancellare) in basso il #Aggiornamento: al momento questo lo fa stripe con webhook, il pagamento è automatico e se non effettuato dopo circa un'ora arriva il payment_failed e aggiorna in automatico lo status a Disattivato
     print("Controllo abbonamenti")

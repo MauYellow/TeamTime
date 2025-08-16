@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{{ articolo.title }} – Blog</title>
+
+    <!-- SEO base -->
+    <meta name="description" content="{{ articolo.meta_description }}">
+    {% if articolo.keywords %}
+    <meta name="keywords" content="{{ articolo.keywords }}">{% endif %}
+    <link rel="canonical" href="{{ url_for('blog_post', slug=articolo.slug, _external=True) }}">
+
+    <!-- Open Graph -->
+    {% set _cover_meta = (
+    articolo.og_image if articolo.og_image
+    else (articolo.cover if articolo.cover is string
+    else (articolo.cover[0]['url'] if articolo.cover and articolo.cover[0] and 'url' in articolo.cover[0] else ''))
+    ) %}
+    <meta property="og:title" content="{{ articolo.title }}">
+    <meta property="og:description" content="{{ articolo.meta_description or articolo.excerpt }}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{{ url_for('blog_post', slug=articolo.slug, _external=True) }}">
+    <meta property="og:image" content="{{ _cover_meta }}">
+    <meta property="og:locale" content="it_IT">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --brand: #0ea5e9;
+            --brand-dark: #0a85bc;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --bg: #f5f7fb;
+            --card: #ffffff;
+            --line: #e5e7eb;
+            --accent: #111827;
+            --shadow: 0 6px 22px rgba(15, 23, 42, 0.08)
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial;
+            color: var(--ink);
+            background: var(--bg)
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            border-radius: 12px
+        }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 16px
+        }
+
+        /* Topbar */
+        .topbar {
+            background: var(--brand);
+            color: #fff;
+            font-size: 14px
+        }
+
+        .topbar .inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0
+        }
+
+        .topnav {
+            display: flex;
+            gap: 18px
+        }
+
+        .topnav a {
+            opacity: .95
+        }
+
+        .topnav a:hover {
+            opacity: 1;
+            text-decoration: underline
+        }
+
+        .socials {
+            display: flex;
+            gap: 12px
+        }
+
+        .socials a {
+            opacity: .9
+        }
+
+        .socials a:hover {
+            opacity: 1
+        }
+
+        /* Header */
+        header.site {
+            background: #fff;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .branding {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: .2px
+        }
+
+        .logo .mark {
+            width: 32px;
+            height: 32px;
+            background: var(--ink);
+            border-radius: 10px
+        }
+
+        .adbar {
+            width: 728px;
+            max-width: 100%;
+            height: 90px;
+            border: 2px dashed var(--line);
+            border-radius: 12px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        /* Menubar */
+        .menubar {
+            background: #1f2937;
+            color: #fff
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 12px 0
+        }
+
+        .menu a {
+            color: #fff;
+            opacity: .95
+        }
+
+        .menu a:hover {
+            opacity: 1
+        }
+
+        .menu .cta {
+            margin-left: auto;
+            background: #fff;
+            color: #111827;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-weight: 600
+        }
+
+        .dropdown {
+            position: relative
+        }
+
+        .dropdown>a::after {
+            content: "▾";
+            margin-left: 6px;
+            font-size: 12px
+        }
+
+        .drop {
+            position: absolute;
+            top: 36px;
+            left: 0;
+            background: #fff;
+            color: var(--ink);
+            min-width: 220px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: none;
+            z-index: 20
+        }
+
+        .drop a {
+            display: block;
+            padding: 10px 12px
+        }
+
+        .drop a:hover {
+            background: #f1f5f9
+        }
+
+        .dropdown:hover .drop {
+            display: block
+        }
+
+        /* Article */
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--muted)
+        }
+
+        .breadcrumb a {
+            color: var(--muted)
+        }
+
+        .article {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 24px
+        }
+
+        .article header h1 {
+            font-size: clamp(26px, 3.2vw, 40px);
+            line-height: 1.15;
+            margin: 6px 0 10px
+        }
+
+        .meta {
+            font-size: 12px;
+            color: var(--muted);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .readtime {
+            background: #f1f5f9;
+            border-radius: 999px;
+            padding: 4px 10px
+        }
+
+        .cover {
+            margin: 16px 0 18px
+        }
+
+        .cover img {
+            border-radius: 16px
+        }
+
+        .toc {
+            background: #f8fafc;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+            margin: 10px 0 20px
+        }
+
+        .toc h3 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            letter-spacing: .4px
+        }
+
+        .toc ul {
+            margin: 0;
+            padding-left: 18px
+        }
+
+        .toc a {
+            color: #0a85bc
+        }
+
+        .article-body {
+            color: #0f172a
+        }
+
+        .article-body p {
+            line-height: 1.75;
+            margin: 14px 0
+        }
+
+        .article-body h2 {
+            font-size: 26px;
+            margin: 28px 0 10px
+        }
+
+        .article-body h3 {
+            font-size: 20px;
+            margin: 22px 0 8px
+        }
+
+        .article-body ul {
+            padding-left: 18px
+        }
+
+        .article-body blockquote {
+            margin: 18px 0;
+            padding: 14px 16px;
+            border-left: 4px solid var(--brand);
+            background: #f8fafc;
+            border-radius: 8px;
+            color: #334155
+        }
+
+        pre,
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 14px 16px;
+            border-radius: 12px;
+            overflow: auto
+        }
+
+        .share {
+            display: flex;
+            gap: 10px;
+            margin: 18px 0
+        }
+
+        .share a {
+            padding: 8px 12px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff
+        }
+
+        .tags {
+            margin-top: 12px
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #f1f5f9;
+            color: #0f172a;
+            font-size: 12px;
+            margin: 4px 6px 0 0
+        }
+
+        .author {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 16px;
+            margin-top: 20px
+        }
+
+        .author img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%
+        }
+
+        .author h4 {
+            margin: 0 0 6px
+        }
+
+        .author p {
+            margin: 0;
+            color: #334155;
+            font-size: 14px
+        }
+
+        .nextprev {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 20px
+        }
+
+        @media(min-width:768px) {
+            .nextprev {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .nextprev a {
+            display: block;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 14px
+        }
+
+        .nextprev small {
+            color: var(--muted)
+        }
+
+        /* Sidebar */
+        .side {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 16px
+        }
+
+        .side h3 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            letter-spacing: .4px
+        }
+
+        .popular {
+            display: grid;
+            gap: 12px
+        }
+
+        .pop-item {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+            gap: 10px;
+            border-bottom: 1px dashed var(--line);
+            padding-bottom: 12px
+        }
+
+        .pop-item:last-child {
+            border-bottom: 0
+        }
+
+        .tagcloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px
+        }
+
+        .tagcloud a {
+            padding: 6px 10px;
+            background: #f1f5f9;
+            border-radius: 999px;
+            font-size: 12px
+        }
+
+        /* Progress bar */
+        .progressbar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--brand), var(--brand-dark));
+            width: 0;
+            z-index: 9999
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--line);
+            padding: 28px 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .article header .article-body {
+           font-size: 1.125rem;
+           line-height: 1.7;
+           max-width: 100%;
+           margin-bottom: 1.5em;
+}
+    </style>
+</head>
+
+<body>
+    <div class="progressbar" id="progressbar"></div>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="container inner">
+            <nav class="topnav">
+                <a href="/">Home</a>
+                <a href="/blog">Blog</a>
+                <a href="/contatti">Contact</a>
+            </nav>
+            <div class="socials">
+                <a href="#" aria-label="Twitter">Tw</a>
+                <a href="#" aria-label="Facebook">Fb</a>
+                <a href="#" aria-label="Instagram">Ig</a>
+                <a href="#" aria-label="YouTube">Yt</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="site">
+        <div class="container branding">
+            <a class="logo" href="/"><span class="mark"></span><span>Ribbon<span
+                        style="color:var(--brand)">Press</span></span></a>
+            <div class="adbar">728×90 Banner</div>
+        </div>
+        <div class="menubar">
+            <div class="container menu">
+                <a href="/blog">Home</a>
+                <div class="dropdown">
+                    <a href="#">Categorie</a>
+                    <div class="drop">
+                        <a href="#">Software</a>
+                        <a href="#">Turni</a>
+                        <a href="#">Normativa</a>
+                    </div>
+                </div>
+                <a href="/contatti">Contatti</a>
+                <a class="cta" href="/inizia-prova">Prova Gratis</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="spacer"></div>
+
+    <!-- MAIN: 1/12 + (8/12 | 4/12) + 1/12 -->
+    <main class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12 col-xl-10 offset-xl-1"><!-- 10/12 centrato -->
+                <div class="row gx-4 gy-4">
+
+                    <!-- ARTICLE -->
+                    <article class="col-12 col-xl-8">
+                        <nav class="breadcrumb mb-2">
+                            <a href="/blog">Blog</a> › <span>{{ articolo.title }}</span>
+                        </nav>
+
+                        <div class="article">
+                            <header>
+                                <div class="meta">
+                                    <span>By {{ articolo.author }}</span><span>·</span>
+                                    <time>{{ articolo.date }}</time><span>·</span>
+                                    <span>Categoria: {{ articolo.category }}</span>
+                                    <span>Letto: {{ articolo.reads }} volte</span>
+                                    {% if articolo.read_time %}<span class="readtime">{{ articolo.read_time }}
+                                        min</span>{% endif %}
+                                </div>
+                                <h1>{{ articolo.title }}</h1>
+                                <div class="article-body">
+                                    {{ articolo.introduction|safe }}
+                                </div>
+                            </header>
+
+                            {% set cover_url = (
+                            articolo.cover if articolo.cover is string
+                            else (articolo.cover[0]['url'] if articolo.cover and articolo.cover[0] and 'url' in
+                            articolo.cover[0] else None)
+                            ) %}
+                            {% if cover_url %}
+                            <figure class="cover">
+                                <img src="{{ cover_url }}" alt="{{ articolo.title }}">
+                                <!-- <figcaption class="mt-2" style="color:var(--muted);font-size:13px">Didascalia immagine</figcaption> -->
+                            </figure>
+                            {% endif %}
+
+                            {% if articolo.toc %}
+                            {% set toc_list = articolo.toc %}
+                            <aside class="toc">
+                                <h3>Indice</h3>
+                                <ul>
+                                    {% for item in toc_list %}
+                                    <li><a href="#s{{ loop.index }}">{{ item.strip() }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </aside>
+                            {% endif %}
+
+
+
+                            <div class="article-body">
+                                {% for block in articolo.blocks %}
+                                {% if block and block.strip() %}
+                                <h2 id="s{{ loop.index }}">{{ articolo.toc[loop.index0] if articolo.toc|length >=
+                                    loop.index else ('Sezione ' ~ loop.index) }}</h2>
+                                <p>{{ block|safe }}</p>
+                                {% endif %}
+                                {% endfor %}
+
+                                <!-- Share + Tag -->
+                                <div class="share">
+                                    {% set share_url = url_for('blog_post', slug=articolo.slug, _external=True) %}
+                                    <a href="https://twitter.com/intent/tweet?text={{ articolo.title|urlencode }}&url={{ share_url|urlencode }}"
+                                        target="_blank" rel="noopener">Condividi su X</a>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}"
+                                        target="_blank" rel="noopener">Condividi su Facebook</a>
+                                    <a href="#" id="copyLinkBtn">Copia Link</a>
+                                </div>
+
+                                {% if articolo.keywords %}
+                                <div class="tags">
+                                    {% for tag in articolo.keywords.split(',') %}
+                                    {% if tag.strip() %}<span class="tag">#{{ tag.strip() }}</span>{% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+
+                                <!-- Next/Prev (placeholder, da popolare più avanti) -->
+                                <nav class="nextprev">
+                                    <a href="#"><small>Articolo precedente</small><br>—</a>
+                                    <a href="#" class="text-end"><small>Articolo successivo</small><br>—</a>
+                                </nav>
+
+                                <!-- Author -->
+                                <section class="author">
+                                    <img src="https://i.postimg.cc/NF97xFxY/Redazione-2.png" alt="Avatar autore" style="width: 300px; height: 300px;">
+                                    <div>
+                                        <h4>{{ articolo.author }}</h4>
+                                        <p>{{ articolo.authorbio }}</p>
+                                    </div>
+                                </section>
+
+                               
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- SIDEBAR (statica per ora; la renderemo dinamica più avanti) -->
+                    <aside class="col-12 col-xl-4">
+                        <section class="side">
+                            <h3>POPULAR POSTS</h3>
+                            <div class="popular">
+                                <a class="pop-item" href="#">
+                                    <img src="https://picsum.photos/seed/p1/200/140" alt="Popular 1">
+                                    <div>
+                                        <div style="font-weight:600;line-height:1.3">La Migliore App per il Registro
+                                            Presenze</div>
+                                        <div class="meta">August 28, 2025</div>
+                                    </div>
+                                </a>
+                                <a class="pop-item" href="#">
+                                    <img src="https://picsum.photos/seed/p2/200/140" alt="Popular 2">
+                                    <div>
+                                        <div style="font-weight:600;line-height:1.3">Come Funzionano i QR Dinamici</div>
+                                        <div class="meta">August 26, 2025</div>
+                                    </div>
+                                </a>
+                                <a class="pop-item" href="#">
+                                    <img src="https://picsum.photos/seed/p3/200/140" alt="Popular 3">
+                                    <div>
+                                        <div style="font-weight:600;line-height:1.3">Errori Comuni nel Calendario Turni
+                                        </div>
+                                        <div class="meta">August 20, 2025</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </section>
+
+                        <section class="side">
+                            <h3>CATEGORIE</h3>
+                            <div class="tagcloud">
+                                <a href="#">Gestione</a>
+                                <a href="#">Tecnologia</a>
+                                <a href="#">Turni</a>
+                                <a href="#">Normativa</a>
+                                <a href="#">Best Practice</a>
+                                <a href="#">Guide</a>
+                            </div>
+                        </section>
+
+                        <section class="side">
+                            <h3>NEWSLETTER</h3>
+                            <p class="meta" style="margin:0 0 10px">Aggiornamenti e guide pratiche, una volta al mese.
+                            </p>
+                            <form onsubmit="return false">
+                                <input type="email" placeholder="La tua email"
+                                    style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px">
+                                <button class="btn"
+                                    style="width:100%;justify-content:center;background:var(--accent);color:#fff">Iscriviti</button>
+                            </form>
+                        </section>
+                    </aside>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">© 2025 TeamTime - App Registro Presenze · Tutti i diritti riservati · <a href="#">Privacy</a> · <a
+                href="#">Cookie</a></div>
+    </footer>
+
+    <script>
+        // Progress bar lettura
+        const bar = document.getElementById('progressbar');
+        const onScroll = () => {
+            const h = document.documentElement;
+            const st = h.scrollTop || document.body.scrollTop;
+            const sh = (h.scrollHeight - h.clientHeight);
+            const p = (st / sh) * 100; bar.style.width = p + '%';
+        };
+        document.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+        // Copia link
+        const copyBtn = document.getElementById('copyLinkBtn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const url = "{{ url_for('blog_post', slug=articolo.slug, _external=True) }}";
+                navigator.clipboard.writeText(url).then(() => {
+                    copyBtn.textContent = "Copiato!";
+                    setTimeout(() => copyBtn.textContent = "Copia Link", 1500);
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

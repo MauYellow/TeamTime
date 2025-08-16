@@ -245,14 +245,6 @@
                               Correggi
                             </button> per terminare il loro turno.
                           </h5>
-                        
-                          <div class="mt-2">
-                            <span class="badge bg-warning text-dark" style="font-size: 0.75rem;">Funzione in fase di collaudo finale</span>
-                            <small class="d-block mt-1 text-muted">
-                              Questa funzione è ancora in fase beta: potrebbero verificarsi lievi imperfezioni. In caso di problemi, contatta
-                              l’assistenza.
-                            </small>
-                          </div>
                         </div>
                         
                         <div class="card-body">
@@ -287,8 +279,9 @@
                                     <div class="modal-body d-flex align-items-center gap-3">
                                       <input type="hidden" id="recordIdInput-{{ d.record_id }}" value="{{ d.record_id }}">
                                       <div>
-                                        <label for="oraUscita">Orario di entrata:</label>
+                                        <label for="oraUscita"><strong>Orario di Entrata:</strong></label>
                                         <span id="entrataDipendente-{{ d.record_id }}">{{ d.entrata }}</span>
+                                        <label for="oraUscita">, <strong>Orario di Uscita:</strong></label>
                                       </div>
                                       <input type="time" class="form-control form-control-sm" id="orario-{{ d.record_id }}">
                                       <button onclick="inviaCorrezione('{{ d.record_id }}')" class="btn btn-success btn-sm">Salva</button>
