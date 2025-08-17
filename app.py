@@ -1062,6 +1062,8 @@ def AI_crea_blog_post(argomento, keyword, context_name, link):
     client = OpenAI(api_key=OPENAI_APIKEY)
 
     def AI_crea_immagine():
+       print("Preparazione AI in corso, 5 secondi di intervallo per darti tempo di disattivarla se non necessario..")
+       time.sleep(5)
        print("Creazione immagine AI in corso..")
        immagine_AI = client.images.generate(
        model="dall-e-3",
