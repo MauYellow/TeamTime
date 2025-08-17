@@ -8,6 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Snippet Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8800401819742820"
+        crossorigin="anonymous"></script>
     
     <style>
         :root {
@@ -177,7 +181,8 @@
 
         /* Dropdown */
         .dropdown {
-            position: relative
+            position: relative;
+            display: inline-block;
         }
 
         .dropdown>a::after {
@@ -188,7 +193,7 @@
 
         .drop {
             position: absolute;
-            top: 36px;
+            top: 100%;
             left: 0;
             background: #ff2c2c;
             color: var(--ink);
@@ -197,16 +202,18 @@
             border-radius: 12px;
             box-shadow: var(--shadow);
             display: none;
-            z-index: 20
+            z-index: 10;
+            padding: 10px;
         }
-
+        
         .drop a {
             display: block;
             padding: 10px 12px
         }
 
         .drop a:hover {
-            background: #f1f5f9
+           background: white;
+           color: #ff2c2c;
         }
 
         .dropdown:hover .drop {
@@ -370,35 +377,6 @@
 </head>
 
 <body>
-    <!-- TOPBAR -->
-    <div class="topbar">
-        <div class="container inner">
-            <nav class="topnav">
-                <a href="#">Su di Noi</a>
-                <a href="#">Redazione</a>
-                <a href="#">Contatti</a>
-                <a href="#">Pubblicità</a>
-                <a href="#">Cookie e Privacy</a>
-            </nav>
-            <div class="socials">
-                <a href="#" aria-label="Mail" target="_blank">
-                    <img src="https://img.icons8.com/?size=100&id=91988&format=png&color=000000" height="30" width="30"
-                        alt="Icona Mail">
-                </a>
-
-                <a href="#" aria-label="Instagram" target="_blank">
-                    <img src="https://img.icons8.com/?size=100&id=Xy10Jcu1L2Su&format=png&color=000000" height="30" width="30" alt="Icona Instagram">
-                </a>
-                
-                <a href="#" aria-label="YouTube" target="_blank">
-                    <img src="https://img.icons8.com/?size=100&id=19318&format=png&color=000000" height="30" width="30"
-                        alt="Icona YouTube">
-                </a>
-
-            </div>
-        </div>
-    </div>
-
     <!-- HEADER -->
     <header class="site">
         <div class="container branding">
@@ -414,12 +392,13 @@
                 <div class="dropdown">
                     <a href="#">Categorie</a>
                     <div class="drop">
-                        <a href="#">Software</a>
-                        <a href="#">Mobile App</a>
-                        <a href="#">News</a>
-                        <a href="#">Offerte</a>
+                        <a href="/blog?categoria=Software">Software</a>
+                        <a href="/blog?categoria=Mobile%20App">Mobile App</a>
+                        <a href="/blog?categoria=News">News</a>
+                        <a href="/blog?categoria=Tutte">Tutte</a>
                     </div>
                 </div>
+
                 <div class="dropdown">
                     <a href="#">Software Aziendali</a>
                     <a href="#">App Mobile</a>
@@ -429,8 +408,22 @@
                         <a href="#">Widgets</a>
                     </div>
                 </div>
-                <a href="#">Offerte</a>
-                <a class="cta" href="#">Prova Gratis</a>
+                <a class="cta" href="https://bit.ly/Canale_Offerte_Coupon_Hunter" target="_blank">Coupon & Offerte</a>
+                <div class="socials">
+                    <!-- Mail -->
+                    <a href="mailto:amministrazione@teamtimeapp.it" aria-label="Mail" target="_blank">
+                        <img src="https://img.icons8.com/?size=100&id=110231&format=png&color=000000" height="70" width="70"
+                            alt="Icona Mail">
+                    </a>
+                    
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/@TeamTimeAppRegistroPresenze" aria-label="YouTube" target="_blank">
+                        <img src="https://img.icons8.com/?size=100&id=115362&format=png&color=000000" height="70" width="70"
+                            alt="Icona YouTube">
+                    </a>
+
+                
+                </div>
             </div>
         </div>
     </header>
@@ -496,6 +489,11 @@
 
             <section class="side">
                 <h3>VOCE ALLE AZIENDE & PARTNER</h3>
+                <p class="meta" style="margin:0 0 10px">
+                    Scopri come apparire in questa sezione<a href="mailto:amministrazione@teamtimeapp.it?subject=Richiesta%20di%20collaborazione" style="color:#ff2c2c">cliccando
+                        qui.</a>
+
+                </p>
                 <div class="popular">
                     <a class="pop-item" href="#">
                         <img src="https://picsum.photos/seed/p1/200/140" alt="Popular 1">
@@ -538,12 +536,14 @@
             <section class="side">
                 <h3>CATEGORIE</h3>
                 <div class="tagcloud">
-                    <a href="#">Software</a>
-                    <a href="#">Mobile App</a>
-                    <a href="#">News</a>
-                    <a href="#">Offerte</a>
+                    <a href="/blog?categoria=Tutte">Tutte</a>
+                    <a href="/blog?categoria=Software">Software</a>
+                    <a href="/blog?categoria=Mobile%20App">Mobile App</a>
+                    <a href="/blog?categoria=News">News</a>
+                    <a href="/blog?categoria=Offerte">Offerte</a>
                 </div>
             </section>
+
 
         </aside>
 
@@ -551,8 +551,43 @@
     </main>
 
     <footer>
-        <div class="container">© 2025 RibbonPress · Tutti i diritti riservati · <a href="#">Privacy</a> · <a
-                href="#">Cookie</a></div>
+
+        <section style="background:#1f1f1f; color:#ccc; text-align:center; padding:30px 16px; font-size:14px">
+            <p>
+                Tutti i contenuti presenti su questo sito sono soggetti a licenza
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it" target="_blank" rel="noopener"
+                    style="color:#ff5353">Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)</a>
+                e, dove non specificato, le immagini e i loghi appartengono ai legittimi proprietari.
+            </p>
+            <p>
+                Qualora la pubblicazione di determinati contenuti violasse eventuali diritti d’autore,
+                vi invitiamo a contattarci
+                <a href="mailto:amministrazione@teamtimeapp.it" style="color:#ff5353">via email</a>. Saranno immediatamente rimossi.
+            </p>
+            <hr style="border:none;border-top:1px solid #444;width:60px;margin:20px auto">
+            <p>
+                Su questo sito sono presenti link di affiliazione: potremmo ricevere una commissione qualora vengano effettuati
+                acquisti tramite tali link, senza alcun costo aggiuntivo per l’utente.
+            </p>
+            <p>
+                In qualità di affiliato Amazon, TeamTime guadagna dagli acquisti idonei.
+            </p>
+        </section>
+
+
+        <div class="topbar">
+                <div class="container inner">
+                    <nav class="topnav">
+                        <a href="#">2025 TeamTime - App Registro Presenze · </a>
+                        <a href="#">Su di Noi</a>
+                        <a href="">Redazione</a>
+                        <a href="mailto:amministrazione@teamtimeapp.it">Contatti</a>
+                        <a href="mailto:amministrazione@teamtimeapp.it?subject=Richiesta%20di%20collaborazione">Pubblicità</a>
+                        <a href="#">Cookie e Privacy</a>
+                    </nav>
+            
+                </div>
+        </div>
     </footer>
 </body>
 

@@ -22,7 +22,8 @@ from openai import OpenAI
 import json
 import cloudinary
 import cloudinary.uploader
-from cloudinary.utils import cloudinary_url
+from cloudinary.utils import cloudinary_url #** non usato?
+import threading
 
 load_dotenv()
 
@@ -56,11 +57,16 @@ app.config['MAIL_PASSWORD'] = MAIL_PASSWORD
 
 mail = Mail(app)
 
+def invia_telegram_async(ip, user_agent, referer, page, bot): #messaggio telegram in threading per non appesantire il caricamento della pagina**
+    try:
+       telegram(f"{bot} - Page: {page}, Home: {ip}, User Agent: {user_agent}, sorgente: {referer}")
+    except Exception as e:
+       print(f"{e}")
+
 @app.route('/')
 def home():
     ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
-    path = request.path
     referer = request.headers.get('Referer', 'Diretto')
     telegram(f"Home: {ip}, User Agent: {user_agent}, sorgente: {referer}")
     return render_template('index.html')
@@ -961,8 +967,28 @@ from flask import render_template
 @app.route('/blog')
 @app.route('/blog/')
 def blog_index():
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    referer = request.headers.get('Referer', 'Diretto')
+    page = "📖 Blog Home"
+    if user_agent and "bot" in user_agent.lower():
+      bot = "🤖"
+    else:
+      bot = "🧔🏻"
+    threading.Thread(target=invia_telegram_async, args=(ip, user_agent, referer, page, bot)).start()
+       
     table = api.table(AIRTABLE_BASE_ID, "Blog")
-    records = table.all(formula="{Published} = 1", sort=["-Created"])
+    categoria = request.args.get("categoria", "Tutte")
+
+    if categoria == "Tutte":
+      formula = "{Published} = 1"
+    else:
+      formula = f"AND({{Published}} = 1, {{Categoria}} = '{categoria}')"
+
+    records = table.all(
+      formula=formula,
+      sort=["-Created"]
+    )
 
     def map_record(record):
         field = record.get("fields", {})
@@ -973,7 +999,7 @@ def blog_index():
             "image":   field.get("Immagine") or field.get("OgImage"),
             "category":field.get("Categoria") or "Senza Categoria",
             "author":  field.get("Autore") or "Redazione",
-            "date":    data_pubblicazione,
+            "date":    data_pubblicazione, #** qui si può togliere?
             "excerpt": field.get("Excerpt") or field.get("DescrizioneCorta") or "",
             "reads":   field.get("Letture") or 0,
         }
@@ -984,6 +1010,17 @@ def blog_index():
 @app.route('/blog/<slug>')
 @app.route('/blog/<slug>/')
 def blog_post(slug):
+
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    referer = request.headers.get('Referer', 'Diretto')
+    page = "📖" + f"{slug}"
+    if user_agent and "bot" in user_agent.lower():
+      bot = "🤖"
+    else:
+      bot = "🧔🏻"
+    threading.Thread(target=invia_telegram_async, args=(ip, user_agent, referer, page, bot)).start()
+
     table = api.table(AIRTABLE_BASE_ID, "Blog")
 
     safe_slug = (slug or "").replace("'", "\\'")
@@ -1015,7 +1052,9 @@ def blog_post(slug):
         "introduction": field.get("Introduzione")
     }
 
-    table.update(record.get("id"), {"Letture": field.get("Letture") + 1})
+    if bot == "🧔🏻":
+       table.update(record.get("id"), {"Letture": field.get("Letture") + 1})
+
     return render_template("blog/post.html", articolo=articolo)   
 
 def AI_crea_blog_post(argomento, keyword, context_name, link):
@@ -1041,8 +1080,9 @@ def AI_crea_blog_post(argomento, keyword, context_name, link):
          )
        
        try:
-          upload_result = cloudinary.uploader.upload(f"{immagine_AI.data[0].url}", public_id="TeamTimeSoftwareBlog")
-          print(upload_result["secure_url"])
+          print("Upload immagine su Cloudinary in corso..")
+          upload_result = cloudinary.uploader.upload(f"{immagine_AI.data[0].url}", public_id="TeamTime_App_Registro_Presenze_Dipendenti_SoftwareBlog" + str(random.randint(0, 999999)).zfill(6))
+          #print(upload_result["secure_url"])
           try:
             immagine_AI_URL = upload_result["secure_url"]
           except Exception as e:
@@ -1090,13 +1130,13 @@ Possibilità Intercambio per poter fare in modo che il dipendente possa registra
     Il JSON segue questo schema:
     - TitoloCorto : stile "Timbratura QR Code: Cos'è e Perché Conviene esempi di testo virali menzionando keyword,
     - DescrizioneCorta : simile a "Dal badge cartaceo ai QR dinamici: un confronto pratico con esempi reali per semplificare le procedure e ridurre gli errori. (menzionando le keyword in modo naturale),
-    - Slug : in linea con le keyword, divise da un trattino - e tutto in minuscolo senza spazi,
+    - Slug : in linea con le keyword, divise da un trattino - e tutto in minuscolo senza spazi, aggiungi anche un numero random da 0 a 100000 con zfill 6. Esempio: le-keywords-328382
     - Introduzione : Una breve introduzione dell'argomento, almeno 70 parole (non va nel TOC), questo è lo stile "Negli ultimi anni il ruolo degli specialisti HR è profondamente cambiato grazie alla digitalizzazione. Oggi la gestione delle risorse umane è più efficace, veloce e precisa grazie a strumenti digitali avanzati. Scegliere le giuste piattaforme fa la differenza tra un lavoro caotico e uno fluido, ben organizzato ed efficace. (a capo) Vediamo insieme quali sono gli strumenti digitali essenziali per chi opera nelle risorse umane, come sceglierli e perché integrarli nelle attività quotidiane."
     - Autore : Redazione, 
     - AutoreBio: Siamo un team di esperti in software aziendali, con anni di esperienza nel testare, valutare e consigliare le soluzioni più efficaci per imprese di ogni dimensione. Professionali nella ricerca e nella valutazione, ma sempre con un tocco di simpatia! Ogni articolo nasce dalla nostra passione per l’innovazione e dalla voglia di condividere consigli pratici, chiari e utili.
 Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino le aziende verso le scelte software più adatte, senza rinunciare a un sorriso lungo la strada.
     - Immagine : {image_url}
-    - Categoria : (Scegli tra Software, Mobile App o News in base al contesto)
+    - Categoria : (Scegli tra Software, Mobile App, Offerte o News in base al contesto)
     - Letture: 0,
     - Blocco1 : testo (senza la scritta Blocco1) almeno 100 parole, qui si affronta il perché della situazione, aggiungi all'inizio una frase del tipo "Come sai in questo blog ci interessiamo di tecnologia per le aziende" o un modo per presentare il blog e definirsi come esperti del settore. Aggiungi anche l'obiettivo del blog, in maniera naturale: analizzare e consigliare i migliori tool e strumenti digitali per ottimizzare o migliorare i processi aziendali
     - Blocco2: testo (senza la scritta Blocco2) almeno 100 parole, qui si affronta lo sviluppo della situazione
@@ -1159,7 +1199,6 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
     except Exception as e:
        print(f"Errore Creazione Airtable: {e}")
        return
-    
     
 #AI_crea_blog_post("App rilevazione presenze personale gratis","app registro presenze, app registro dipendenti", "TeamTime", "www.teamtimeapp.it (home), www.teamtimeapp.it/inizia-prova (prova gratuita 30 giorni)")
 #AI_crea_blog_post("una mobile app che aiuta gli chef di tutto il mondo a calcolare il food cost, per capire quanto costa ed il prezzo migliore di vendita","food cost italia, app food cost, quanto costa un piatto, app calcolare food cost", "Food Cost Italia è un'app sviluppata da App Eleveb, permette di inserire gli ingredienti con precisione e calcolare il food cost, suggerisce anche un prezzo di vendita", "www.teamtimeapp.it (link ufficiale), www.teamtimeapp.it/inizia-prova (link per scaricarla negli store apple e android)")
