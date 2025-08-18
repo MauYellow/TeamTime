@@ -6,7 +6,7 @@ from config import STRIPE_SECRET_KEY, STRIPE_PRICE_ID, STRIPE_WEBHOOK_SECRET, MA
 from pyairtable import Table, Api
 from pyairtable.formulas import match
 from dotenv import load_dotenv
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from collections import Counter, defaultdict
 from babel.dates import format_date
 import pandas as pd
@@ -24,6 +24,7 @@ import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url #** non usato?
 import threading
+import xml.etree.ElementTree as ET
 
 load_dotenv()
 
@@ -1049,13 +1050,67 @@ def blog_post(slug):
         "toc":     toc_items,
         "blocks":  [field.get("Blocco1") or "", field.get("Blocco2") or "", field.get("Blocco3") or ""],
         "keywords": field.get("Keyword") or "",
-        "introduction": field.get("Introduzione")
+        "introduction": field.get("Introduzione"),
+        "faq": field.get("DomandeRisposte") or ""
     }
 
     if bot == "🧔🏻":
        table.update(record.get("id"), {"Letture": field.get("Letture") + 1})
 
     return render_template("blog/post.html", articolo=articolo)   
+
+def aggiungi_slug_sitemap(slug, sitemap_path="static/sitemap.xml"):
+    print("Caricando la sitemap.xml..")
+    # Carica l'albero XML esistente
+    tree = ET.parse(sitemap_path)
+    root = tree.getroot()
+
+    namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
+    ET.register_namespace('', namespace)
+
+    # Costruisci il link completo
+    print("Inserendo il nuovo slug nella sitemap..")
+    slug_url = f"https://www.teamtimeapp.it/blog/{slug.lstrip('/')}"
+
+    # Verifica se lo slug è già presente nella sitemap
+    for url in root.findall("{%s}url" % namespace):
+        loc = url.find("{%s}loc" % namespace)
+        if loc is not None and loc.text == slug_url:
+            print("Slug già presente nella sitemap.")
+            return  # Non aggiunge nulla se è già presente
+
+    # Crea il nuovo tag <url>
+    new_url = ET.Element("url")
+
+    loc_tag = ET.SubElement(new_url, "loc")
+    loc_tag.text = slug_url
+
+    lastmod_tag = ET.SubElement(new_url, "lastmod")
+    lastmod_tag.text = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    ET.SubElement(new_url, "priority").text = "0.80"
+
+    root.append(new_url)
+    print("Aggiornando la sitemap.xml..")
+
+    # Funzione ricorsiva per indentare correttamente
+    def indent(elem, level=0):
+        i = "\n" + level * "  "
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "  "
+            for child in elem:
+                indent(child, level + 1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+        else:
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = i
+
+    indent(root)
+    tree.write(sitemap_path, encoding="utf-8", xml_declaration=True)
+
+
 
 def AI_crea_blog_post(argomento, keyword, context_name, link):
     print("Preparazione AI in corso..")
@@ -1142,13 +1197,22 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
     - Letture: 0,
     - Blocco1 : testo (senza la scritta Blocco1) almeno 100 parole, qui si affronta il perché della situazione, aggiungi all'inizio una frase del tipo "Come sai in questo blog ci interessiamo di tecnologia per le aziende" o un modo per presentare il blog e definirsi come esperti del settore. Aggiungi anche l'obiettivo del blog, in maniera naturale: analizzare e consigliare i migliori tool e strumenti digitali per ottimizzare o migliorare i processi aziendali
     - Blocco2: testo (senza la scritta Blocco2) almeno 100 parole, qui si affronta lo sviluppo della situazione
-    - Blocco3 : testo (senza la scritta Blocco3), qui inserirai la soluzione (se necessaria) altrimenti una conclusione edi link se presenti: {link} in HTML non markdown sottolineati e con colore blu, tipico formato dell'ipertestuale, simile a questo esempio: <a href='http://www.teamtimeapp.it' style='color:blue; text-decoration:underline;'>TESTO</a>
+    - Blocco3 : testo (senza la scritta Blocco3), qui inserirai la soluzione (se necessaria) altrimenti una conclusione edi link se presenti: {link} in HTML non markdown sottolineati e con colore blu, tipico formato dell'ipertestuale, simile a questo esempio: <a href='http://www.teamtimeapp.it' style='color:blue; text-decoration:underline; target="_blank"'>TESTO</a>
     - Keyword : {keyword},
     - MetaDescrizione : Qui metti una MetaDescrizione in linea per la SEO
     - Published: 1,
     - OgImage : la stessa di Immagine,
     - Excerpt : un excerpt consono,
-    - TOC: genera una stringa unica con 3 titoli separati da carattere newline `\n`. Non usare liste né markdown. Esempio: "Titolo 1\nTitolo 2\nTitolo 3"
+    - TOC: genera una stringa unica con 3 titoli separati da carattere newline `\n`. Non usare liste né markdown. Esempio: "Titolo 1\nTitolo 2\nTitolo 3". Importante, non ti dimenticare dei "\n" per andare a capo!
+    - DomandeRisposte: Basandoti sul testo che scriverai su Blocco1, Blocco2 e Blocco3, genera 5 domande generiche (evita l'over branding, le stesse che le persone possono chiedere a google, simili a quelle di Google snippet che aiutano la SEO) e risposte in questo formato: <section class="faq-section">
+  <h2>Domande Frequenti</h2>
+
+  <div class="faq">
+    <details>
+      <summary>Domanda 1?</summary>
+      <p>Risposta menzionando parzialmente la domanda</p>
+    </details>
+
     """
     )
 
@@ -1198,12 +1262,23 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
          blog_data["TOC"] = ""
        table.create(blog_data)
        print("Completato!")
+       #aggiungi_slug_sitemap(f"{blog_data.get("Slug")}") ** Da riattivare!
+
     except Exception as e:
        print(f"Errore Creazione Airtable: {e}")
        return
     
 #AI_crea_blog_post("App rilevazione presenze personale gratis","app registro presenze, app registro dipendenti", "TeamTime", "www.teamtimeapp.it (home), www.teamtimeapp.it/inizia-prova (prova gratuita 30 giorni)")
 #AI_crea_blog_post("una mobile app che aiuta gli chef di tutto il mondo a calcolare il food cost, per capire quanto costa ed il prezzo migliore di vendita","food cost italia, app food cost, quanto costa un piatto, app calcolare food cost", "Food Cost Italia è un'app sviluppata da App Eleveb, permette di inserire gli ingredienti con precisione e calcolare il food cost, suggerisce anche un prezzo di vendita", "www.teamtimeapp.it (link ufficiale), www.teamtimeapp.it/inizia-prova (link per scaricarla negli store apple e android)")
+#AI_crea_blog_post("una mobile app che aiuta le strutture ricettive, bar e ristoranti a trovare personale qualificato al bar, la stessa app aiuta bartender esperti, bar managers, mixologist o alle prime armi a trovare offerte di lavoro verificate, di livello sia in italia che all'estero (come dubai, ibiza, svizzera, ecc..), Risolve il problema delle offerte di lavoro e mette in contatto aziende e bartenders e bar managers.", "the bartender app" "offerte lavoro ibiza" "offerta lavoro bartender" "offerte lavoro bar manager", "app The Bartender è un'app sviluppata da App Eleveb, è un app per aziende e bartenders per mettersi in contatto", "www.teamtimeapp.it (link ufficiale), www.teamtimeapp.it/inizia-prova (link per scaricarla negli store apple e android)")
+#AI_crea_blog_post(argomento, keyword, context_name, link)
+
+
+
+@app.route('/blog/chi-siamo-contatti')
+@app.route('/blog/chi-siamo-contatti/')
+def chi_siamo_contatti():
+   return render_template('blog/chi-siamo-contatti.html')
 
 #AI_crea_blog_post("Chakra, come nasce, a che serve, come sbloccarlo? e altre inormazioni utili", "Yoga", "Yoga", "www.viaggiaconsimona.blogspot.com (home page)")
 
@@ -1260,7 +1335,47 @@ def telegram(message):
 # Avvia il thread per lo scheduling
 #threading.Thread(target=run_schedule, daemon=True).start()
 
+def weekly_blog_post():
+    print("Controllo post da pubblicare nel blog..")
+    table = api.table(AIRTABLE_BASE_ID, "BlogToDo")
+    formula = "{Pubblicato} = 'No'" 
+
+    records = table.all(formula=formula)
+
+    if records:
+        print("Post nel blog da pubblicare trovato..")
+        record_id = records[0]["id"]
+        fields = records[0]["fields"]
+
+        AI_crea_blog_post(
+            fields.get('Argomento'),
+            fields.get('Keywords'),
+            fields.get('Contesto'),
+            fields.get('Link')
+        )
+
+        table.update(record_id, {"Pubblicato": "Si"})
+        print(f"Articolo '{fields.get('Argomento')}' pubblicato e aggiornato.")
+    else:
+        print("Nessun record da pubblicare.")
+
+
+weekly_blog_post()
+
+def scheduler_loop():
+   schedule.every().day.at("16:44:30").do(weekly_blog_post)
+   schedule.every().day.at("16:45:30").do(weekly_blog_post)
+
+   while True:
+      schedule.run_pending()
+      time.sleep(60)
+
+def avvia_scheduler():
+    thread = threading.Thread(target=scheduler_loop, daemon=True)
+    thread.start()
+
 if __name__ == '__main__':
+    avvia_scheduler()
     app.run(debug=True)
 
 
