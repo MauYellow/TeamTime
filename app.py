@@ -1360,7 +1360,7 @@ def weekly_blog_post():
         print("Nessun record da pubblicare.")
 
 
-weekly_blog_post()
+weekly_blog_post() #**da togliere
 
 def scheduler_loop():
    schedule.every().day.at("16:44:30").do(weekly_blog_post)
