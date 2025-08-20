@@ -186,11 +186,13 @@
         }
 
         .menu .cta {
+            display: inline-flex;
+            align-items: center;
             margin-left: auto;
             background: #fff;
             color: #111827;
-            padding: 8px 12px;
-            border-radius: 999px;
+            padding: 10px 12px;
+            border-radius: 8px;
             font-weight: 600
         }
 
@@ -299,7 +301,7 @@
             background: var(--accent);
             color: #fff;
             padding: 6px 14px;
-            border-radius: 5px;
+            border-radius: 8px;
             font-weight: 600;
             font-size: 14px
         }
@@ -307,6 +309,24 @@
         .btn:hover {
             transform: translateY(-1px)
         }
+
+        .btncoupon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.2;
+    height: auto;
+}
+.btncoupon * {
+    margin: 0;
+    padding: 0;
+}
 
         /* Sidebar */
         .sidebar {
@@ -443,8 +463,6 @@
                     <img src="https://img.icons8.com/?size=100&id=108812&format=png&color=000000" height="70" width="70"
                         alt="Icona Linkedin">
                 </a>
-
-                <a class="btn" href="https://bit.ly/Canale_Offerte_Coupon_Hunter" target="_blank">Coupon & Offerte</a>
             </div>
         </div>
 
@@ -474,7 +492,7 @@
                     </div>
                 </div>
                 <div class="d-none d-md-block">
-                  <a class="cta" href="https://bit.ly/Canale_Offerte_Coupon_Hunter" target="_blank">Coupon & Offerte</a>
+                  
                     <div class="socials">
                     <!-- Mail -->
                       <a href="mailto:amministrazione@teamtimeapp.it" aria-label="Mail" target="_blank">
@@ -493,7 +511,11 @@
                         <img src="https://img.icons8.com/?size=100&id=108812&format=png&color=000000" height="70" width="70"
                             alt="Icona Linkedin">
                       </a>
+
+                      <a class="cta" href="https://bit.ly/Canale_Offerte_Coupon_Hunter" target="_blank">Coupon & Offerte Amazon</a>
                     </div>
+
+                    
                 </div>
 
                 
@@ -507,7 +529,7 @@
     <!-- MAIN LAYOUT -->
     <main class="container-fluid py-3">
         <div class="row gx-4 gy-4">
-            <section class="col-12 col-xl-2"></section>
+            <section class="d-none d-xl-block col-xl-2"></section>
             <!-- POSTS COLUMN (8/12) -->
             <section class="col-12 col-xl-6">
                 {% for articolo in articoli %}
@@ -624,7 +646,7 @@
 
         </aside>
 
-        <section class="col-12 col-xl-1"></section>
+        <section class="d-none d-xl-block col-xl-1"></section>
     </main>
 
     <footer>
