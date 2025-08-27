@@ -1118,15 +1118,34 @@ def AI_crea_blog_post(argomento, keyword, context_name, link):
 
     def AI_crea_immagine():
        print("Preparazione AI in corso, 5 secondi di intervallo per darti tempo di disattivarla se non necessario..")
-       time.sleep(5)
+       time.sleep(6)
+       print("Creazione prompt per realizzazione immagine AI..") 
+       
+       system_prompt = f"crea un prompt per dall-e in base a questo argomento: {argomento}, è un'immagine di un post blog, stile realistico semplice, no scritte né numeri nell'immagine"
+       message = [
+        {"role": "system", "content": system_prompt},
+        ]
+
+       print("Generazione risposta per dall-e..")
+       resp = client.chat.completions.create(
+        model="gpt-4o",
+        messages=message,
+        temperature=0.8,
+    )
+
+       reply = resp.choices[0].message.content
+       print(f"Prompt per dall-e ottenuto: {reply}")
+       
+       
+       
        print("Creazione immagine AI in corso..")
        immagine_AI = client.images.generate(
-       model="dall-e-3",
-       prompt=f"Realistico semplice, assolutamente nessuna scritta né numeri di nessun tipo solo immagini semplici, relativo a: {argomento}. Semplifica al massimo no scritte né numeri",
-       n=1,
-       size="1024x1024"
-       
-       )
+         model="dall-e-3",
+         prompt=f"{reply}",# #f"Realistico semplice, assolutamente nessuna scritta né numeri di nessun tipo solo immagini semplici, relativo a: {argomento}. Semplifica al massimo no scritte né numeri",
+         n=1,
+         size="1024x1024",
+         quality="standard"
+        )
 
        # CLODUINARY Configuration       
        cloudinary.config( 
@@ -1242,7 +1261,7 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
         print("Errore parsing JSON:", e)
         print("Risposta ricevuta:")
         print(reply)
-        return
+        raise Exception("Errore parsing JSON: " + str(e))
     
     table = api.table(AIRTABLE_BASE_ID, "Blog")
     try:
@@ -1266,12 +1285,12 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
 
     except Exception as e:
        print(f"Errore Creazione Airtable: {e}")
-       return
+       raise Exception("Errore Creazione Airtable: " + str(e))
     
 #AI_crea_blog_post("App rilevazione presenze personale gratis","app registro presenze, app registro dipendenti", "TeamTime", "www.teamtimeapp.it (home), www.teamtimeapp.it/inizia-prova (prova gratuita 30 giorni)")
 #AI_crea_blog_post("una mobile app che aiuta gli chef di tutto il mondo a calcolare il food cost, per capire quanto costa ed il prezzo migliore di vendita","food cost italia, app food cost, quanto costa un piatto, app calcolare food cost", "Food Cost Italia è un'app sviluppata da App Eleveb, permette di inserire gli ingredienti con precisione e calcolare il food cost, suggerisce anche un prezzo di vendita", "www.teamtimeapp.it (link ufficiale), www.teamtimeapp.it/inizia-prova (link per scaricarla negli store apple e android)")
 #AI_crea_blog_post("una mobile app che aiuta le strutture ricettive, bar e ristoranti a trovare personale qualificato al bar, la stessa app aiuta bartender esperti, bar managers, mixologist o alle prime armi a trovare offerte di lavoro verificate, di livello sia in italia che all'estero (come dubai, ibiza, svizzera, ecc..), Risolve il problema delle offerte di lavoro e mette in contatto aziende e bartenders e bar managers.", "the bartender app" "offerte lavoro ibiza" "offerta lavoro bartender" "offerte lavoro bar manager", "app The Bartender è un'app sviluppata da App Eleveb, è un app per aziende e bartenders per mettersi in contatto", "www.teamtimeapp.it (link ufficiale), www.teamtimeapp.it/inizia-prova (link per scaricarla negli store apple e android)")
-#AI_crea_blog_post(argomento, keyword, context_name, link)
+#AI_crea_blog_post(argomento, keyword, context_name, link)#
 
 
 
@@ -1338,7 +1357,7 @@ def telegram(message):
 def weekly_blog_post():
     print("Controllo post da pubblicare nel blog..")
     table = api.table(AIRTABLE_BASE_ID, "BlogToDo")
-    formula = "{Pubblicato} = 'No'" 
+    formula = "{Pubblicato} = 'Ready'" 
 
     records = table.all(formula=formula)
 
@@ -1347,15 +1366,20 @@ def weekly_blog_post():
         record_id = records[0]["id"]
         fields = records[0]["fields"]
 
-        AI_crea_blog_post(
+        try:
+          AI_crea_blog_post(
             fields.get('Argomento'),
             fields.get('Keywords'),
             fields.get('Contesto'),
             fields.get('Link')
         )
 
-        table.update(record_id, {"Pubblicato": "Si"})
-        print(f"Articolo '{fields.get('Argomento')}' pubblicato e aggiornato.")
+          table.update(record_id, {"Pubblicato": "Si"})
+          print(f"Articolo '{fields.get('Argomento')}' pubblicato e aggiornato.")
+
+        except Exception as errore:
+          table.update(record_id, {"Pubblicato": f"Errore: {errore}"})
+           
     else:
         print("Nessun record da pubblicare.")
 
