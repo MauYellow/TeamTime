@@ -1299,6 +1299,9 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
 def chi_siamo_contatti():
    return render_template('blog/chi-siamo-contatti.html')
 
+@app.route("/2cc8526a8ae94bd0b3a8ce4abf7f4fda.txt")
+def serve_indexnow_key():
+    return send_from_directory('.', '2cc8526a8ae94bd0b3a8ce4abf7f4fda.txt')
 #AI_crea_blog_post("Chakra, come nasce, a che serve, come sbloccarlo? e altre inormazioni utili", "Yoga", "Yoga", "www.viaggiaconsimona.blogspot.com (home page)")
 
 
