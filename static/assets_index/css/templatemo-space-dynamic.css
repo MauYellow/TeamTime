@@ -873,6 +873,7 @@ Banner Style
   margin-bottom: 15px;
 }
 
+.main-banner .left-content h1,
 .main-banner .left-content h2 {
   font-size: 50px;
   font-weight: 700;
@@ -880,11 +881,13 @@ Banner Style
   line-height: 72px;
 }
 
+.main-banner .left-content h1 em,
 .main-banner .left-content h2 em {
   color: #03a4ed;
   font-style: normal;
 }
 
+.main-banner .left-content h1 span,
 .main-banner .left-content h2 span {
   color: #fe3f40;
 }
