@@ -1204,24 +1204,24 @@ Possibilità Intercambio per poter fare in modo che il dipendente possa registra
     Stile umano, relativamente informale, sei un esperto di software e il tuo obiettivo è consigliare il meglio alle aziende. Dai del tu. Non deve sembrare una pubblicità, specialmente nel Blocco3 sii sincero e consiglia piuttosto che sembrare che stai vendendo. Inoltre tu sei un punto di vista esterno, qualsiasi cosa che ubblicizzi non è di tua proprietà, tu stai esprimendo un giudizio genuino.
     Il testo deve essere diviso per argomenti in blocco1, blocco2 e blocco3 (di cui poi gli indici e titoli vanno nel TOC). La somma di blocco1, blocco2 e blocco3 deve essere tra 600 e 800 parole. Il tutto SEO Friendly con le keyword ({keyword}) utilizzate in maniera naturale, non forzate.
     Il JSON segue questo schema:
-    - TitoloCorto : stile "Timbratura QR Code: Cos'è e Perché Conviene esempi di testo virali menzionando keyword,
-    - DescrizioneCorta : simile a "Dal badge cartaceo ai QR dinamici: un confronto pratico con esempi reali per semplificare le procedure e ridurre gli errori. (menzionando le keyword in modo naturale),
-    - Slug : in linea con le keyword, divise da un trattino - e tutto in minuscolo senza spazi, aggiungi anche un numero random da 0 a 100000 con zfill 6. Esempio: le-keywords-328382
-    - Introduzione : Una breve introduzione dell'argomento, almeno 70 parole (non va nel TOC), questo è lo stile "Negli ultimi anni il ruolo degli specialisti HR è profondamente cambiato grazie alla digitalizzazione. Oggi la gestione delle risorse umane è più efficace, veloce e precisa grazie a strumenti digitali avanzati. Scegliere le giuste piattaforme fa la differenza tra un lavoro caotico e uno fluido, ben organizzato ed efficace. (a capo) Vediamo insieme quali sono gli strumenti digitali essenziali per chi opera nelle risorse umane, come sceglierli e perché integrarli nelle attività quotidiane."
+    - TitoloCorto : Un testo virale, menzionando la prima tra queste keyword: '{keyword}'
+    - DescrizioneCorta : simile a "Dal badge cartaceo ai QR dinamici: un confronto pratico con esempi reali per semplificare le procedure e ridurre gli errori. (menzionando almeno una keyword: '{keyword}' in modo naturale),
+    - Slug : in linea con la prima keyword: '{keyword}, divise da un trattino - e tutto in minuscolo senza spazi, aggiungi anche un numero random da 0 a 100000 con zfill 6. Esempio: le-keywords-328382
+    - Introduzione : Una breve introduzione dell'argomento menzionando almeno una tra '{keyword}', almeno 70 parole (non va nel TOC), questo è lo stile "Negli ultimi anni il ruolo degli specialisti HR è profondamente cambiato grazie alla digitalizzazione. Oggi la gestione delle risorse umane è più efficace, veloce e precisa grazie a strumenti digitali avanzati. Scegliere le giuste piattaforme fa la differenza tra un lavoro caotico e uno fluido, ben organizzato ed efficace. (a capo) Vediamo insieme quali sono gli strumenti digitali essenziali per chi opera nelle risorse umane, come sceglierli e perché integrarli nelle attività quotidiane."
     - Autore : Redazione, 
     - AutoreBio: Siamo un team di esperti in software aziendali, con anni di esperienza nel testare, valutare e consigliare le soluzioni più efficaci per imprese di ogni dimensione. Professionali nella ricerca e nella valutazione, ma sempre con un tocco di simpatia! Ogni articolo nasce dalla nostra passione per l’innovazione e dalla voglia di condividere consigli pratici, chiari e utili.
 Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino le aziende verso le scelte software più adatte, senza rinunciare a un sorriso lungo la strada.
     - Immagine : {image_url}
     - Categoria : (Scegli tra Software, Mobile App, Offerte o News in base al contesto)
     - Letture: 0,
-    - Blocco1 : testo (senza la scritta Blocco1) almeno 100 parole, qui si affronta il perché della situazione, aggiungi all'inizio una frase del tipo "Come sai in questo blog ci interessiamo di tecnologia per le aziende" o un modo per presentare il blog e definirsi come esperti del settore. Aggiungi anche l'obiettivo del blog, in maniera naturale: analizzare e consigliare i migliori tool e strumenti digitali per ottimizzare o migliorare i processi aziendali
-    - Blocco2: testo (senza la scritta Blocco2) almeno 100 parole, qui si affronta lo sviluppo della situazione
+    - Blocco1 : testo (senza la scritta Blocco1) almeno 100 parole, qui si affronta il perché della situazione, aggiungi all'inizio una frase del tipo "Come sai in questo blog ci interessiamo di tecnologia per le aziende" o un modo per presentare il blog e definirsi come esperti del settore. Aggiungi anche l'obiettivo del blog, in maniera naturale: analizzare e consigliare i migliori tool e strumenti digitali per ottimizzare o migliorare i processi aziendali. Menziona in modo naturale almeno una di queste keyword: {keyword}.
+    - Blocco2: testo (senza la scritta Blocco2) almeno 100 parole, qui si affronta lo sviluppo della situazione, menziona almeno una keyword: '{keyword}'
     - Blocco3 : testo (senza la scritta Blocco3), qui inserirai la soluzione (se necessaria) altrimenti una conclusione edi link se presenti: {link} in HTML non markdown sottolineati e con colore blu, tipico formato dell'ipertestuale, simile a questo esempio: <a href='http://www.teamtimeapp.it' style='color:blue; text-decoration:underline; target="_blank"'>TESTO</a>
     - Keyword : {keyword},
-    - MetaDescrizione : Qui metti una MetaDescrizione in linea per la SEO
+    - MetaDescrizione : Qui metti una MetaDescrizione in linea per la SEO relativo a queste keyword in ordine di importanza: {keyword}
     - Published: 1,
     - OgImage : la stessa di Immagine,
-    - Excerpt : un excerpt consono,
+    - Excerpt : un excerpt consono, relativo alle keyword: {keyword}
     - TOC: genera una stringa unica con 3 titoli separati da carattere newline `\n`. Non usare liste né markdown. Esempio: "Titolo 1\nTitolo 2\nTitolo 3". Importante, non ti dimenticare dei "\n" per andare a capo!
     - DomandeRisposte: Basandoti sul testo che scriverai su Blocco1, Blocco2 e Blocco3, genera 5 domande generiche (evita l'over branding, le stesse che le persone possono chiedere a google, simili a quelle di Google snippet che aiutano la SEO) e risposte in questo formato: <section class="faq-section">
   <h2>Domande Frequenti</h2>
@@ -1277,11 +1277,11 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
          blog_data["TOC"] = "\n".join([line.strip() for line in toc.splitlines() if line.strip()])
 
        else:
-       # Se è altro o None: assegna stringa vuota per evitare errori
+       # Se è altro o None: assegna stringa vuota per evitare errori 
          blog_data["TOC"] = ""
        table.create(blog_data)
        print("Completato!")
-       #aggiungi_slug_sitemap(f"{blog_data.get("Slug")}") ** Da riattivare!
+       #aggiungi_slug_sitemap(f"{blog_data.get("Slug")}") ** Da riattivare!!
 
     except Exception as e:
        print(f"Errore Creazione Airtable: {e}")
