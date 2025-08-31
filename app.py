@@ -1178,25 +1178,24 @@ def AI_crea_blog_post(argomento, keyword, context_name, link):
     print("Analisi contesto..")
     if context_name == "TeamTime":
        context = """
-TeamTime è un app disponibile per Apple e Android negli store gratutitamente che semplifica la gestione entrate/uscite dei dipendenti.
+TeamTime è un un'app gestionale disponibile sia per Apple e Android negli store gratutitamente, sia tramite sito online, che semplifica la gestione entrate/uscite dei dipendenti.
 Ha anche una dashboard accessibile via pc dove si può vedere calendario e dettagli dello staff in entrata ed in uscita, unito a utili statistische come la media di ore mensili, settimanali, ore lavorate per ogni dipendente e molto altro.
-Obiettivo: conteggio automatico delle ore lavorate, eliminazione delle procedure manuali, risparmio di tempo e maggiore precisione.
-PRO: nessun badge fisico, tutto digitalizzato, si può vedere realtime le entrate e le uscite da mobile e da pc
+Obiettivo: conteggio automatico delle ore lavorate, eliminazione delle procedure manuali, risparmio di tempo e maggiore precisione, incluso una reportistica automatica sulle ore del personale per i commercialisti.
+PRO: nessun badge fisico, tutto digitalizzato, si può vedere realtime le entrate e le uscite da mobile e da pc, excel precisi, implementazione da un giorno all'altro, prova gratuita di 30 giorni
 Funzionamento:
 	1. Registrazione azienda e dipendenti → generazione QR code univoco.
-	2. Scansione del QR code all entrata e uscita.
-	3. Supervisione → visualizzazione orari, dispositivi e GPS (facoltativo) da app o PC autorizzato.
+	2. Scansione del QR code all entrata e uscita, con possibilità di attivare la geolocalizzazione
+	3. Supervisione → visualizzazione orari, dispositivi da app o PC autorizzato.
 	4. Risparmio → report mensili con totale ore e confronti tra mesi.
 	5. Report Automatici per il commercialista, l'app genera con un click dei report in base alle presenze registrate dai dipendenti
 Accesso protetto con username e password.
 Report sia aziendale che per singolo dipendente.
 Inizia gratis per 30 giorni poi ci sono i piani annuali start, teams e business. Disdici quando vuoi, nessuna penale.
 Possibilità di correggere gli orari qualora un dipendente si sia dimenticato di registrare l'uscita
-Possibilità GPS per registrare la posizione del dipendente
 Possibilità Intercambio per poter fare in modo che il dipendente possa registrarsi a più QR Code (per esempio nei cantieri)
 """
     else:
-       context ="Nessun contesto"
+       context = context_name
 
     print("Analisi prompt..")
     system_prompt = (f"""
@@ -1204,8 +1203,8 @@ Possibilità Intercambio per poter fare in modo che il dipendente possa registra
     Stile umano, relativamente informale, sei un esperto di software e il tuo obiettivo è consigliare il meglio alle aziende. Dai del tu. Non deve sembrare una pubblicità, specialmente nel Blocco3 sii sincero e consiglia piuttosto che sembrare che stai vendendo. Inoltre tu sei un punto di vista esterno, qualsiasi cosa che ubblicizzi non è di tua proprietà, tu stai esprimendo un giudizio genuino.
     Il testo deve essere diviso per argomenti in blocco1, blocco2 e blocco3 (di cui poi gli indici e titoli vanno nel TOC). La somma di blocco1, blocco2 e blocco3 deve essere tra 600 e 800 parole. Il tutto SEO Friendly con le keyword ({keyword}) utilizzate in maniera naturale, non forzate.
     Il JSON segue questo schema:
-    - TitoloCorto : Un testo virale, menzionando la prima tra queste keyword: '{keyword}'
-    - DescrizioneCorta : simile a "Dal badge cartaceo ai QR dinamici: un confronto pratico con esempi reali per semplificare le procedure e ridurre gli errori. (menzionando almeno una keyword: '{keyword}' in modo naturale),
+    - TitoloCorto : Un testo virale, menzionando inprenscidibilmente la prima tra queste keyword: '{keyword}'
+    - DescrizioneCorta : Crea una descrizione di circa 30 parole attinente all'argomento e menzionando almeno una keyword: '{keyword}' in modo naturale
     - Slug : in linea con la prima keyword: '{keyword}, divise da un trattino - e tutto in minuscolo senza spazi, aggiungi anche un numero random da 0 a 100000 con zfill 6. Esempio: le-keywords-328382
     - Introduzione : Una breve introduzione dell'argomento menzionando almeno una tra '{keyword}', almeno 70 parole (non va nel TOC), questo è lo stile "Negli ultimi anni il ruolo degli specialisti HR è profondamente cambiato grazie alla digitalizzazione. Oggi la gestione delle risorse umane è più efficace, veloce e precisa grazie a strumenti digitali avanzati. Scegliere le giuste piattaforme fa la differenza tra un lavoro caotico e uno fluido, ben organizzato ed efficace. (a capo) Vediamo insieme quali sono gli strumenti digitali essenziali per chi opera nelle risorse umane, come sceglierli e perché integrarli nelle attività quotidiane."
     - Autore : Redazione, 
@@ -1214,16 +1213,16 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
     - Immagine : {image_url}
     - Categoria : (Scegli tra Software, Mobile App, Offerte o News in base al contesto)
     - Letture: 0,
-    - Blocco1 : testo (senza la scritta Blocco1) almeno 100 parole, qui si affronta il perché della situazione, aggiungi all'inizio una frase del tipo "Come sai in questo blog ci interessiamo di tecnologia per le aziende" o un modo per presentare il blog e definirsi come esperti del settore. Aggiungi anche l'obiettivo del blog, in maniera naturale: analizzare e consigliare i migliori tool e strumenti digitali per ottimizzare o migliorare i processi aziendali. Menziona in modo naturale almeno una di queste keyword: {keyword}.
-    - Blocco2: testo (senza la scritta Blocco2) almeno 100 parole, qui si affronta lo sviluppo della situazione, menziona almeno una keyword: '{keyword}'
-    - Blocco3 : testo (senza la scritta Blocco3), qui inserirai la soluzione (se necessaria) altrimenti una conclusione edi link se presenti: {link} in HTML non markdown sottolineati e con colore blu, tipico formato dell'ipertestuale, simile a questo esempio: <a href='http://www.teamtimeapp.it' style='color:blue; text-decoration:underline; target="_blank"'>TESTO</a>
+    - Blocco1 : testo (senza la scritta Blocco1) almeno 150 parole, qui si affronta il perché della situazione, aggiungi all'inizio una frase del tipo "Come sai in questo blog ci interessiamo di tecnologia per le aziende" o un modo per presentare il blog e definirsi come esperti del settore. Aggiungi anche l'obiettivo del blog, in maniera naturale: analizzare e consigliare i migliori tool e strumenti digitali per ottimizzare o migliorare i processi aziendali. Menziona in modo naturale almeno una di queste keyword: {keyword} e utilizza <strong> per sottolineare un concetto chiave.
+    - Blocco2: testo (senza la scritta Blocco2) almeno 150 parole, qui si affronta lo sviluppo della situazione, menziona almeno una keyword: '{keyword}' e utilizza <strong> per sottolineare un concetto chiave
+    - Blocco3 : testo (senza la scritta Blocco3), qui inserirai la soluzione di almeno 200 parole, descrivi in maniera naturale il contesto (lo trovi nel contesto qui: '{context}') altrimenti una tua conclusione. Aggiungi i link se presenti: '{link}' in HTML non markdown sottolineati e con colore blu, tipico formato dell'ipertestuale, simile a questo esempio: <a href='http://www.teamtimeapp.it' style='color:blue; text-decoration:underline; target="_blank"'>TESTO</a>
     - Keyword : {keyword},
     - MetaDescrizione : Qui metti una MetaDescrizione in linea per la SEO relativo a queste keyword in ordine di importanza: {keyword}
     - Published: 1,
     - OgImage : la stessa di Immagine,
     - Excerpt : un excerpt consono, relativo alle keyword: {keyword}
     - TOC: genera una stringa unica con 3 titoli separati da carattere newline `\n`. Non usare liste né markdown. Esempio: "Titolo 1\nTitolo 2\nTitolo 3". Importante, non ti dimenticare dei "\n" per andare a capo!
-    - DomandeRisposte: Basandoti sul testo che scriverai su Blocco1, Blocco2 e Blocco3, genera 5 domande generiche (evita l'over branding, le stesse che le persone possono chiedere a google, simili a quelle di Google snippet che aiutano la SEO) e risposte in questo formato: <section class="faq-section">
+    - DomandeRisposte: Basandoti sul testo che scriverai su Blocco1, Blocco2 e Blocco3, genera 8 domande generiche (alcune prendile da questo testo purché SEO friendly :' {argomento}') (evita l'over branding, le stesse che le persone possono chiedere a google, simili a quelle di Google snippet che aiutano la SEO) e risposte in questo formato: <section class="faq-section">
   <h2>Domande Frequenti</h2>
 
   <div class="faq">
