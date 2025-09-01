@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Allow: /blog
-Sitemap: https://www.appregistropresenze.it/sitemap.xml
+Sitemap: https://www.teamtimeapp.it/sitemap.xml
