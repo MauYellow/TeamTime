@@ -1016,7 +1016,7 @@ def blog_post(slug):
     user_agent = request.headers.get('User-Agent')
     referer = request.headers.get('Referer', 'Diretto')
     page = "📖" + f"{slug}"
-    if user_agent and "bot" in user_agent.lower():
+    if user_agent and ("bot" in user_agent.lower() or "GoogleOther" in user_agent):
       bot = "🤖"
     else:
       bot = "🧔🏻"
