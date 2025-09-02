@@ -1217,7 +1217,7 @@ Il nostro obiettivo? Fornire contenuti di valore, scritti con cura, che guidino 
     - Blocco2: testo (senza la scritta Blocco2) almeno 150 parole, qui si affronta lo sviluppo della situazione, menziona almeno una keyword: '{keyword}' e utilizza <strong> per sottolineare un concetto chiave
     - Blocco3 : testo (senza la scritta Blocco3), qui inserirai la soluzione di almeno 200 parole, descrivi in maniera naturale il contesto (lo trovi nel contesto qui: '{context}') altrimenti una tua conclusione. Aggiungi i link se presenti: '{link}' in HTML non markdown sottolineati e con colore blu, tipico formato dell'ipertestuale, simile a questo esempio: <a href='http://www.teamtimeapp.it' target="_blank" style='color:blue; text-decoration:underline;'>TESTO</a>
     - Keyword : {keyword},
-    - MetaDescrizione : Qui metti una MetaDescrizione in linea per la SEO relativo a queste keyword in ordine di importanza: {keyword}
+    - MetaDescrizione : Qui metti una MetaDescrizione, max 150 caratteri, in linea per la SEO relativo a queste keyword in ordine di importanza: {keyword}
     - Published: 1,
     - OgImage : la stessa di Immagine,
     - Excerpt : un excerpt consono, relativo alle keyword: {keyword}
