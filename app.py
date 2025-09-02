@@ -1347,7 +1347,7 @@ def telegram(message):
     "text": message
 }
    try:
-        response = requests.post(url, data=payload)
+        response = requests.post(url, data=payload, timeout=5)
         response.raise_for_status()  # Solleva un'eccezione se lo status code è >= 400
    except requests.RequestException as e:
         print(f"Errore durante l'invio a Telegram: {e}")
