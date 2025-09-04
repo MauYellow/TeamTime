@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{{ articolo.title }} – TeamTime Blog</title>
+    <title>{{ articolo.title }}</title>
 
     <!-- FAVICON -->
     <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png" />
@@ -19,7 +19,7 @@
     <meta name="description" content="{{ articolo.meta_description }}">
     {% if articolo.keywords %}
     <meta name="keywords" content="{{ articolo.keywords }}">{% endif %}
-    <link rel="canonical" href="{{ url_for('blog_post', slug=articolo.slug, _external=True) }}">
+    <!-- <link rel="canonical" href="{{ url_for('blog_post', slug=articolo.slug, _external=True) }}"> * Non so se faccio bene a toglierlo, mi da erorri in seo ahref-->
 
     <!-- Open Graph -->
     {% set _cover_meta = (
@@ -523,7 +523,7 @@
         <div class="container branding">
             <a class="logo" href="/blog">
                 <img
-                    src="/static/img/img/TeamTime - App Registro Presenze Dipendenti Italiana Maurizio Polverini Registro Timbratura.png">
+                    src="/static/img/img/TeamTime - App Registro Presenze Dipendenti Italiana Maurizio Polverini Registro Timbratura.png" alt="Logo TeamTime App Registro Presenze Italiana">
             </a>
             <img src="/static/img/img/blog%20banner.png" alt="Banner del blog" width="728" height="90">
         </div>
