@@ -682,6 +682,26 @@ def inizia_prova():
             print("Nessun referral trovato")
     return render_template('/inizia-prova-gratuita.html', STRIPE_PUBLIC_KEY=STRIPE_PUBLIC_KEY)
 
+@app.route('/inizia-prova-test')
+def inizia_prova_test():
+    STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"Inizia-Prova: {ip}, User Agent: {user_agent}, sorgente: {path}")
+    ref = request.args.get('ref')  # cerca il ref nella query
+
+    if ref:
+        session['ref'] = ref  # salva in sessione
+        telegram(f"[REF] Nuovo click per: {ref}")
+    else:
+        ref = session.get('ref')  # recupera dalla sessione se non presente nella query
+        if ref:
+            telegram(f"[REF] Nuovo click (sessione) per: {ref}")
+        else:
+            print("Nessun referral trovato")
+    return render_template('/inizia-prova-gratuita-TEST.html', STRIPE_PUBLIC_KEY=STRIPE_PUBLIC_KEY)
+
 
 @app.route('/create-subscription', methods=['POST'])
 def create_subscription():
@@ -1386,7 +1406,7 @@ def weekly_blog_post():
         print("Nessun record da pubblicare.")
 
 
-weekly_blog_post() #**da togliere
+#weekly_blog_post() #**da togliere
 
 def scheduler_loop():
    schedule.every().day.at("16:44:30").do(weekly_blog_post)

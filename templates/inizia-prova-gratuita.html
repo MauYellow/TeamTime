@@ -15,7 +15,7 @@
 
         gtag('config', 'G-X6JWE2PCNB');
     </script>
-    
+
     <!-- SEO BASE -->
     <title>Inizia la Prova Gratuita di 30 Giorni | TeamTime – Registro Presenze Smart</title>
     <meta name="description"
@@ -26,7 +26,7 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.teamtimeapp.it/inizia-prova">
     <meta name="theme-color" content="#0ea5e9">
-    
+
     <!-- OPEN GRAPH -->
     <meta property="og:title" content="Inizia la Prova Gratuita di 30 Giorni | TeamTime – Registro Presenze Smart">
     <meta property="og:description"
@@ -37,7 +37,7 @@
     <meta property="og:locale" content="it_IT">
     <meta property="og:image" content="https://www.teamtimeapp.it/static/assets_index/images/og-preview.jpg">
     <meta property="og:image:alt" content="TeamTime - Prova Gratuita Registro Presenze Smart">
-    
+
     <!-- TWITTER CARD -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@TeamTimeApp">
@@ -93,19 +93,6 @@
             background-color: rgba(255, 255, 255, 0.95);
         }
 
-
-        .modal-content::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("/static/img/img/img.jpg");
-            background-size: cover;
-            background-position: center;
-            z-index: 1;
-        }
 
         /* Tutto il contenuto sopra l'immagine */
         .modal-body,
@@ -257,6 +244,18 @@
                 min-width: 350px !important;
             }
         }
+
+        .modal {
+            --bs-backdrop-opacity: 1;
+            /* non far “sbiadire” il backdrop */
+        }
+
+        .modal-backdrop {
+            background:
+                url("/static/img/img/img.jpg") center/cover no-repeat !important;
+            opacity: 1 !important;
+            /* assicurati che sia visibile al 100% */
+        }
     </style>
 </head>
 
@@ -273,29 +272,54 @@
                     <h5 class="modal-title mb-3" id="popupLabel"></h5>
 
                     <!-- STEP 1 -->
-                    <div id="boxStep1" class="p-4 p-md-5 w-100"
-                        style="background-color: rgba(255,255,255,0.93); border-radius: 10px; max-width: 430px; width: 100%; box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07); margin: 0 auto;">
-                        <h3 class="fw-bold mb-3">Mai più tempo perso.</h3>
-                        <p class="mb-4 text-secondary">Supervisiona, gestisci e monitora gli orari dei tuoi
-                            dipendenti in modo intelligente.</p>
-                        <ul class="list-unstyled text-dark">
-                            <li class="mb-2">✅ Monitoraggio entrate/uscite in tempo reale</li>
-                            <li class="mb-2">✅ Report Excel dettagliati per il commercialista</li>
-                            <li class="mb-2">✅ Gestionale interattivo e intuitivo</li>
-                            <li class="mb-4">✅ Vista Calendarizzata per una gestione smart</li>
-                        </ul>
-                        <div class="d-flex flex-column align-items-center gap-2 mb-3">
-                            <a href="/dashboard_demo"
-                                class="btn btn-outline-danger px-4 py-2 fw-semibold w-100 w-md-auto"
-                                style="min-width: 220px; border-radius: 5px;" target="_blank">Esplora DEMO</a>
-                            <button id="btnProva30" type="button"
-                                class="btn btn-danger px-4 py-2 fw-semibold w-100 w-md-auto"
-                                style="min-width: 220px; border-radius: 5px;">Prova Gratis 30 giorni</button>
+                    <div id="boxStep1" class="container-fluid px-0">
+                        <div class="row g-4 align-items-center">
+                            <!-- Colonna sinistra (box principale) -->
+                            <div class="col-12 col-md-6 d-flex justify-content-md-start justify-content-center">
+                                <div class="p-4 p-md-5"
+                                    style="background-color: rgba(255,255,255,0.93); border-radius: 10px; max-width: 430px; width: 100%; box-shadow: 0 2px 16px 0 rgba(0,0,0,0.07);">
+                                    <h3 class="fw-bold mb-3">Mai più tempo perso.</h3>
+                                    <p class="mb-4 text-secondary">Supervisiona, gestisci e monitora gli orari dei tuoi
+                                        dipendenti in modo intelligente.</p>
+                                    <ul class="list-unstyled text-dark">
+                                        <li class="mb-2">✅ Monitoraggio entrate/uscite in tempo reale</li>
+                                        <li class="mb-2">✅ Report Excel dettagliati per il commercialista</li>
+                                        <li class="mb-2">✅ Gestionale interattivo e intuitivo</li>
+                                        <li class="mb-4">✅ Vista Calendarizzata per una gestione smart</li>
+                                    </ul>
+                                    <div class="d-flex flex-column align-items-center gap-2 mb-3">
+                                        <a href="/dashboard_demo"
+                                            class="btn btn-outline-danger px-4 py-2 fw-semibold w-100 w-md-auto"
+                                            style="min-width: 220px; border-radius: 5px;" target="_blank">Esplora
+                                            DEMO</a>
+                                        <button id="btnProva30" type="button"
+                                            class="btn btn-danger px-4 py-2 fw-semibold w-100 w-md-auto"
+                                            style="min-width: 220px; border-radius: 5px;">Prova Gratis 30
+                                            giorni</button>
+                                    </div>
+                                    <p class="small text-muted text-center mb-0" style="font-size: 0.65rem;">
+                                        Annulla in qualsiasi momento, ti invieremo un promemoria prima della scadenza
+                                        del periodo di prova.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Colonna destra (vuota su desktop, box su mobile) -->
+                            <div class="col-12 col-md-6">
+                                <div class="hero-visual rounded-3 shadow-sm overflow-hidden">
+                                    <picture>
+                                        <!-- Desktop / tablet (>= md) -->
+                                        <source srcset="/static/img/img/step1-desktop.jpg" media="(min-width: 768px)">
+                                        <!-- Mobile (fallback) -->
+                                        <img src="/static/img/img/step1-mobile.jpg" alt="Anteprima TeamTime"
+                                            class="w-100 d-block">
+                                    </picture>
+                                </div>
+                            </div>
+
                         </div>
-                        <p class="small text-muted text-center mb-0" style="font-size: 0.65rem;">Annulla in
-                            qualsiasi momento, ti invieremo un promemoria prima della scadenza del periodo di
-                            prova.</p>
                     </div>
+
 
                     <!-- STEP 2 (inizialmente nascosto) -->
                     <div id="step2" style="display: none; background-color: rgba(255,255,255,0.93);"
