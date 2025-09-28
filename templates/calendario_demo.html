@@ -91,6 +91,39 @@
             .container-xxl {
                   height: 100%;
             }
+            
+            /* —— MOBILE FIX (≤576px) —————————————————————— */
+@media (max-width: 576px) {
+  /* Niente altezze fisse: lascia respirare la pagina */
+  .content-wrapper { height: auto !important; padding-top: .5rem !important; }
+  .container-xxl   { height: auto !important; }
+
+  /* Card introduttiva più compatta */
+  .card.h-100 { margin-bottom: .75rem; }
+
+  /* Calendario: compattiamo tutto */
+  .calendar-wrapper { padding: .5rem; border-radius: 12px; }
+  .calendar         { border-spacing: 4px; table-layout: auto; }
+  .calendar th      { padding: 6px 0; font-size: .85rem; }
+  .calendar td      { height: auto; min-height: 72px; padding: 6px; }
+
+  /* Eventi più piccoli */
+  .event { font-size: .78rem; padding: 4px 6px; margin-bottom: 4px; }
+
+  /* Evita “salti” al tap */
+  .calendar td:hover {
+    transform: none;
+    box-shadow: 0 0 8px rgba(0,0,0,0.04);
+  }
+}
+
+/* Se preferisci lo scroll orizzontale invece di stringere troppo:
+   attivalo e dai una larghezza minima alla tabella (facoltativo) */
+@media (max-width: 576px) {
+  .calendar-wrapper { overflow-x: auto; }
+  .calendar { min-width: 680px; } /* ~7 col x ~95-100px ciascuna */
+}
+
       </style>
 </head>
 
