@@ -553,6 +553,94 @@ def report():
 
     #records = table.all()
     records = table.all(sort=["-Created"])
+    print(f"Records Report: {records}")
+    
+    # Estrai tutti i mesi unici
+    mesi_disponibili = sorted(set(r['fields'].get("Mese Nome", "").lower() for r in records if "Mese Nome" in r['fields']))
+
+    if request.method == 'POST':
+        mese_selezionato = request.form.get("mese")
+        if not mese_selezionato:
+            return "Errore: mese non selezionato", 400
+
+        # Filtra i record per il mese selezionato
+        filtered = [r for r in records if r['fields'].get('Mese Nome', '').lower() == mese_selezionato.lower()]
+        #print(filtered)
+
+        forza_generazione = request.form.get("forza_generazione") == "1"
+        check_dipendenti_lavoro = any(r['fields'].get("Uscita", "").strip().lower() == "al lavoro" for r in filtered)
+        if check_dipendenti_lavoro and not forza_generazione:
+          return render_template("report.html", mesi_disponibili=mesi_disponibili, show_popup=True, mese_preselezionato=mese_selezionato, data=data)
+
+
+        # Organizza i dati: mappa → nome → giorno → ore
+        data_dict = {}
+        for r in filtered:
+            f = r['fields']
+            nome = f.get("Nome", "Sconosciuto")
+            giorno = f"{int(f.get('Giorno Corretto') or f.get('Giorni')):02d}" #giorno = f"{int(f.get('Giorno Corretto')):02d}" #** qui funziona solo con teamtime022 no giorno = str(f.get("Giorni")) 'Giorno Corretto', 
+            ore = f.get("Ore Lavorate", 0)
+            if isinstance(ore, dict):  # Gestione di {'specialValue': 'NaN'}
+                ore = 0
+            
+            if nome not in data_dict:
+              data_dict[nome] = {}
+            if giorno not in data_dict[nome]:
+              data_dict[nome][giorno] = 0
+            data_dict[nome][giorno] += round(ore, 2)
+
+
+        # Crea intestazione colonne: 1...31 + mese + anno
+        giorni_colonne = [f"{i:02d}" for i in range(1, 32)] #funziona sempre solo con  teamtime022 no, giorni_colonne = [str(i) for i in range(1, 32)]
+        header = giorni_colonne + ['Totale', 'Mese', 'Anno']
+
+        # Costruzione righe
+        rows = []
+        for nome, giorni in data_dict.items():
+            giornaliere = [giorni.get(day, 0) for day in giorni_colonne]
+            mese = mese_selezionato
+            anno = filtered[0]['fields'].get("Anno", "") if filtered else ""
+            rows.append([nome] + giornaliere + ["=SUM(B{0}:AF{0})".format(len(rows)+2), mese, anno])
+
+        # Crea DataFrame
+        df = pd.DataFrame(rows, columns=["Nome Cognome"] + header)
+
+        # Genera file Excel in memoria
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name="Report", index=False)
+            workbook  = writer.book
+            worksheet = writer.sheets["Report"]
+            worksheet.set_column(0, 0, 30)  # Colonna 0 = prima colonna, larghezza 30
+            last_row = len(df) + 2
+            worksheet.write(f"A{last_row + 2}", "Report generato automaticamente")
+            worksheet.write_url(f"A{last_row + 3}", "https://teamtimeapp.it", string="TeamTime App - Registro Presenze", cell_format=workbook.add_format({'font_color': 'blue', 'underline':  1}))
+        output.seek(0)
+        msg = Message(subject=f"[TeamTimeWeb Report] {data['Locale']}, {mese_selezionato}",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=["help.teamtime@gmail.com"],
+                  body=f"""Richiesto Report Excel Mensile:
+                  Locale: {data['Locale']}
+                  Mese: {mese_selezionato}""")
+        mail.send(msg)
+
+        return send_file(output, download_name=f"{data['Locale']}_{mese_selezionato}_{anno}_report.xlsx", as_attachment=True)
+
+    return render_template("report.html", mesi_disponibili=mesi_disponibili, data=data)
+
+def report_old(): #**14/10/25
+    data = session.get("data")
+    records = session.get("records") #**da togliere?
+
+    if not data:
+        return redirect(url_for('login'))
+    telegram(f"Report: {data['Locale']}")
+
+    TABLE_NAME = data['Locale']
+    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+
+    #records = table.all()
+    records = table.all(sort=["-Created"])
     
     # Estrai tutti i mesi unici
     mesi_disponibili = sorted(set(r['fields'].get("Mese Nome", "").lower() for r in records if "Mese Nome" in r['fields']))
