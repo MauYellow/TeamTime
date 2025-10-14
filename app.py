@@ -1020,6 +1020,76 @@ def genera_link_disdetta(customer_id):
     )
     return redirect(session.url)
 
+@app.route('/test_correggi_orari')
+def test_correggi_orari():
+   data = session.get("data")
+
+   TABLE_NAME = data['Locale']
+   table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+
+   records = table.all(sort=["-Created"])
+
+   dipendenti = []
+   dipendenti_a_lavoro = []
+   for r in records:
+        fields = r.get("fields", {})
+        nome = fields.get('Nome', 'Sconosciuto')
+        if nome not in dipendenti:
+           dipendenti.append(nome)
+        if fields.get("Uscita", "").strip().lower() == "al lavoro":
+            dipendenti_a_lavoro.append({
+                "nome": fields.get("Nome", "Sconosciuto"),
+                "entrata": fields.get("Entrata", "—"),
+                "created": r.get("createdTime", "—"),
+                "gps": fields.get("GPS", "—"),
+                "record_id": r.get("id")
+            })
+
+   return render_template('/test_correggi_orari.html', data=data, dipendenti_a_lavoro=dipendenti_a_lavoro, dipendenti=dipendenti)
+
+from flask import request, redirect, url_for
+
+
+@app.route('/crea_entrata', methods=['POST'])
+def crea_entrata():
+    data = session.get("data")
+    if not data:
+        return redirect(url_for('login'))
+
+    payload = request.get_json(force=True)
+    nome = (payload.get('nome') or '').strip()
+    ora  = (payload.get('ora') or '').strip()
+    giorno_str = payload.get('giorno')  # può essere None oppure "1".."31"
+
+    if not nome or not ora:
+        return "Parametri mancanti (nome/ora).", 400
+
+    # Valida ma NON convertire a int: Airtable vuole stringa
+    if giorno_str is not None:
+        giorno_str = str(giorno_str).strip()
+        if not (giorno_str.isdigit() and 1 <= int(giorno_str) <= 31):
+            return "Giorno non valido (1–31).", 400
+
+    table = api.table(AIRTABLE_BASE_ID, data['Locale'])
+
+    fields = {
+        "Nome": nome,
+        "Entrata": ora,
+        "Uscita": "Al Lavoro",
+        "Device": "Computer",
+        "GPS": "Computer",
+        "GPS Uscita": "Computer"
+    }
+    if giorno_str:
+        fields["Giorno Corretto"] = giorno_str  # <-- STRINGA
+
+    table.create(fields)
+
+    return (
+        f"Entrata creata per {nome} alle {ora} "
+        + (f"(Giorno Corretto: {giorno_str})." if giorno_str else "(oggi).")
+    )
+
 
 @app.route('/correggi_orari')
 def dipendenti_al_lavoro():
