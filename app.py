@@ -553,7 +553,7 @@ def report():
 
     #records = table.all()
     records = table.all(sort=["-Created"])
-    print(f"Records Report: {records}")
+    #print(f"Records Report: {records}")
     
     # Estrai tutti i mesi unici
     mesi_disponibili = sorted(set(r['fields'].get("Mese Nome", "").lower() for r in records if "Mese Nome" in r['fields']))
@@ -1020,14 +1020,16 @@ def genera_link_disdetta(customer_id):
     )
     return redirect(session.url)
 
-@app.route('/test_correggi_orari')
-def test_correggi_orari():
+@app.route('/correggi_orari') #**backup in backup_correggi_orari
+def dipendenti_al_lavoro():
    data = session.get("data")
+   telegram(f"Correggi Orari: {data['Locale']}")
 
    TABLE_NAME = data['Locale']
    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
 
    records = table.all(sort=["-Created"])
+   records_50 = records[:50]
 
    dipendenti = []
    dipendenti_a_lavoro = []
@@ -1045,16 +1047,35 @@ def test_correggi_orari():
                 "record_id": r.get("id")
             })
 
-   return render_template('/test_correggi_orari.html', data=data, dipendenti_a_lavoro=dipendenti_a_lavoro, dipendenti=dipendenti)
+   return render_template('/correggi_orari.html', data=data, dipendenti_a_lavoro=dipendenti_a_lavoro, dipendenti=dipendenti, records_50=records_50)
 
-from flask import request, redirect, url_for
+@app.route('/elimina_presenza', methods=['POST'])
+def elimina_presenza():
+    data = session.get("data")
+    if not data:
+        return redirect(url_for('login'))
+    telegram(f"Elimina Presenza: {data['Locale']}")
 
+    payload = request.get_json(silent=True) or {}
+    id_presenza = (payload.get('id_presenza') or '').strip()
+    if not id_presenza:
+        return "Id_Presenza non trovato", 400
 
+    table = api.table(AIRTABLE_BASE_ID, data['Locale'])
+    try:
+        table.delete(id_presenza)
+        return "Presenza eliminata", 200
+        # in alternativa: return ("", 204)
+    except Exception as e:
+        return f"Errore durante l'eliminazione: {e}", 500
+
+   
 @app.route('/crea_entrata', methods=['POST'])
 def crea_entrata():
     data = session.get("data")
     if not data:
         return redirect(url_for('login'))
+    telegram(f"Crea Entrata Web: {data['Locale']}")
 
     payload = request.get_json(force=True)
     nome = (payload.get('nome') or '').strip()
@@ -1091,8 +1112,8 @@ def crea_entrata():
     )
 
 
-@app.route('/correggi_orari')
-def dipendenti_al_lavoro():
+@app.route('/backup_correggi_orari') # **backup
+def backup_dipendenti_al_lavoro():
     data = session.get("data")
 
     if not data:
@@ -1141,7 +1162,6 @@ def correggi_uscita():
     except Exception as e:
         return f"Errore: {e}", 500
 
-from flask import render_template
 
 @app.route('/blog')
 @app.route('/blog/')
@@ -1287,8 +1307,6 @@ def aggiungi_slug_sitemap(slug, sitemap_path="static/sitemap.xml"):
 
     indent(root)
     tree.write(sitemap_path, encoding="utf-8", xml_declaration=True)
-
-
 
 def AI_crea_blog_post(argomento, keyword, context_name, link):
     print("Preparazione AI in corso..")
