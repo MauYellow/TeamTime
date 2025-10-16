@@ -1033,6 +1033,7 @@ def dipendenti_al_lavoro():
 
    dipendenti = []
    dipendenti_a_lavoro = []
+   print(f"Record Correggi Orari: {records}")
    for r in records:
         fields = r.get("fields", {})
         nome = fields.get('Nome', 'Sconosciuto')
@@ -1044,7 +1045,8 @@ def dipendenti_al_lavoro():
                 "entrata": fields.get("Entrata", "—"),
                 "created": r.get("createdTime", "—"),
                 "gps": fields.get("GPS", "—"),
-                "record_id": r.get("id")
+                "record_id": r.get("id"),
+                "giorno_corretto": fields.get("Giorno Corretto", "-")
             })
 
    return render_template('/correggi_orari.html', data=data, dipendenti_a_lavoro=dipendenti_a_lavoro, dipendenti=dipendenti, records_50=records_50)

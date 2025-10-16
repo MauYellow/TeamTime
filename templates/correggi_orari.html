@@ -298,6 +298,12 @@
                                       <th>Data (Anno, Mese, Giorno)</th>
                                       <th>Entrata</th>
                                       <th>GPS</th>
+                                      <th>
+                                        Giorno Corretto
+                                        <i class="bx bx-info-circle text-muted ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                                          title="Questo valore rappresenta una correzione dell’orario di entrata. Nei report, l’app utilizzerà questa data al posto di quella registrata dallo scan originale.">
+                                        </i>
+                                      </th>
                                       <th>Status</th>
                                       <th>Azione</th>
                                     </tr>
@@ -309,6 +315,7 @@
                                       <td>{{ d.created[:10] }}</td>
                                       <td>{{ d.entrata }}</td>
                                       <td>{{ d.gps }}</td>
+                                      <td>{{ d.giorno_corretto }}</td>
                                       <td><span class="badge bg-label-warning me-1">Al Lavoro</span></td>
                                       <td>
                                         <button class="btn btn-primary btn-sm"
