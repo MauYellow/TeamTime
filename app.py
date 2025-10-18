@@ -1033,7 +1033,6 @@ def dipendenti_al_lavoro():
 
    dipendenti = []
    dipendenti_a_lavoro = []
-   print(f"Record Correggi Orari: {records}")
    for r in records:
         fields = r.get("fields", {})
         nome = fields.get('Nome', 'Sconosciuto')
