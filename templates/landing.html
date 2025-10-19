@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>TeamTime – Prova Gratuita Registro Presenze Smart</title>
+
+    <meta name="description"
+        content="Scopri TeamTime: l'app premium per la gestione presenze. Timbrature con QR Code, report automatici e dashboard live. Inizia subito la prova gratuita.">
+    <meta name="keywords"
+        content="teamtime, registro presenze, app presenze, QR code, report, gestione dipendenti, prova gratuita">
+    <meta name="author" content="TeamTime">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+        }
+
+        .navbar-brand span {
+            color: #ff4757;
+        }
+
+        .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #ff4757 !important;
+        }
+
+        /* HERO */
+        .hero-section {
+            padding: 120px 20px 60px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+
+        .hero-section p {
+            color: #666;
+            margin: 15px auto 30px;
+            max-width: 600px;
+        }
+
+        .cta-btn {
+            background-color: #ff4757;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-btn:hover {
+            background-color: #e84118;
+            color: #fff;
+        }
+
+        /* VIDEO */
+        /* Video wrapper base */
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Solo desktop: riduci il video */
+@media (min-width: 992px) { /* desktop lg e superiori */
+    .video-wrapper {
+        max-width: 900px; /* riduce larghezza massima */
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+        /* FEATURES */
+        .features {
+            padding: 80px 20px;
+            background-color: #f8f9fa;
+        }
+
+        .feature-box {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: #ff4757;
+            margin-bottom: 20px;
+        }
+
+        /* BRANDS */
+        .brands-section {
+            background: #fff;
+            padding: 60px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .brands-title {
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+        }
+
+        .brands-slider {
+            display: flex;
+            gap: 60px;
+            animation: scroll 15s linear infinite;
+        }
+
+        .brands-slider .brand-item {
+            flex: 0 0 auto;
+            text-align: center;
+        }
+
+        .brand-item img {
+            width: 120px;
+            height: auto;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+
+        .brand-item img:hover {
+            opacity: 1;
+        }
+
+        .brand-name {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 8px;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* FAQ */
+        #faq .accordion-button {
+            font-weight: 600;
+        }
+
+        #faq .accordion-item {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #faq .accordion-item+.accordion-item {
+            margin-top: 10px;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #111;
+            color: #aaa;
+            text-align: center;
+            padding: 30px 10px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 767px) {
+            .hero-section {
+                padding: 100px 20px 40px;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .brands-slider {
+                gap: 40px;
+                animation-duration: 30s;
+            }
+
+            .features {
+                padding: 60px 15px;
+            }
+        }
+    .brands-section {
+    background: #fff;
+    padding: 60px 0;
+    overflow: hidden;
+}
+
+.brands-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+}
+
+.brands-slider {
+    display: flex;
+    gap: 60px;
+    animation: scroll 15s linear infinite;
+}
+
+.brand-item {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px; /* altezza uniforme per tutti */
+}
+
+.brand-item img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+}
+
+.brand-item img:hover {
+    opacity: 1;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-light fixed-top">
+        <div class="container d-flex justify-content-between">
+            <a class="navbar-brand fw-bold" href="/" style="font-size: 1.5rem;">
+                Team<span>Time</span>
+            </a>
+            <a href="https://www.teamtimeapp.it/inizia-prova?ref=001" class="cta-btn">Prova Gratis</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section mt-5 pt-5">
+        <div class="container">
+            <h1>Digitalizza il <span style="color:#4797ff;">Registro Presenze</span> & la Gestione del <span style="color:#ff4757;">Personale</span></h1>
+            <p class="lead">Il Dipendente Scannerizza il QR Code, l'app fa tutto il resto.
+                <br>
+                <br>
+                <img src="https://img.icons8.com/?size=100&id=9fp9k4lPT8us&format=png&color=000000" width="20px" height="20px"> Report Mensile Ore Lavorate per Dipendente.
+                <br>
+                <img src="https://img.icons8.com/?size=100&id=9fp9k4lPT8us&format=png&color=000000" width="20px" height="20px"> Calendario e Aggiornamenti Live.
+                <br>
+                <img src="https://img.icons8.com/?size=100&id=9fp9k4lPT8us&format=png&color=000000" width="20px" height="20px"> Gestionale e Statistiche.
+                <br>
+                <img src="https://img.icons8.com/?size=100&id=9fp9k4lPT8us&format=png&color=000000" width="20px" height="20px"> QR Code Geolocalizzato.
+                <br>
+                <br>
+                Provalo Gratis per 30 giorni, nessuna vincolo di acquisto, nessuna penale.</p>
+            <a href="https://www.teamtimeapp.it/inizia-prova" class="cta-btn">Inizia la Prova Gratuita</a>
+
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/lRCFeQi_EQ4" title="TeamTime Video" frameborder="0"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Sezione aziende che parlano di noi -->
+    <section class="brands-section">
+        <div class="container">
+            <h2 class="brands-title">Parlano (bene) di noi</h2>
+            <div class="brands-slider">
+                <!-- Prima copia dei brand -->
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Dz8FCn08/OIP-2.jpg" alt="TrustPilot">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/TPqh6RGW/0x0-1-removebg-preview.png" alt="Capterra">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Vv4jLq8h/get-app-removebg-preview.png" alt="GetApp">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/qqg7yyKD/download-removebg-preview.png" alt="Apptivize">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/15280CJg/g2-removebg-preview.png" alt="G2.com">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/htVtLSXY/0x0.png" alt="Software Advice">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/gJHhNVnJ/logo-tuttotek-standard.png" alt="TuttoTek.it">
+                </div>
+    
+                <!-- Seconda copia dei brand per effetto infinito -->
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Dz8FCn08/OIP-2.jpg" alt="TrustPilot">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/TPqh6RGW/0x0-1-removebg-preview.png" alt="Capterra">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Vv4jLq8h/get-app-removebg-preview.png" alt="GetApp">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/qqg7yyKD/download-removebg-preview.png" alt="Apptivize">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/15280CJg/g2-removebg-preview.png" alt="G2.com">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/htVtLSXY/0x0.png" alt="Software Advice">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/gJHhNVnJ/logo-tuttotek-standard.png" alt="TuttoTek.it">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Funzionalità Principali</h2>
+                <p class="text-muted">Tutto ciò di cui hai bisogno per gestire il personale in modo semplice e
+                    intelligente.</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-icon">
+                            <img src="https://img.icons8.com/?size=100&id=43135&format=png&color=000000">
+                        </div>
+                        <h5 class="fw-bold">Report Dettagliati</h5>
+                        <p>Genera automaticamente report Excel e PDF per il tuo commercialista o per analisi interne.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-icon">
+                            <img src="https://img.icons8.com/?size=100&id=zXSWCwWtxBKr&format=png&color=000000">
+                        </div>
+                        <h5 class="fw-bold">QR Code con GPS</h5>
+                        <p>I dipendenti timbrano l’ingresso e l’uscita semplicemente scannerizzando un QR Code
+                            aziendale geolocalizzato.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box text-center">
+                        <div class="feature-icon">
+                            <img src="https://img.icons8.com/?size=100&id=JPyTSZjKPz8X&format=png&color=000000">
+                        </div>
+                        <h5 class="fw-bold">Dashboard Live</h5>
+                        <p>Monitora presenze e attività in tempo reale, da desktop o mobile, ovunque tu sia.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="https://www.teamtimeapp.it/inizia-prova" class="cta-btn">Inizia la Prova Gratuita</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Domande Frequenti</h2>
+                <p class="text-muted">Tutto quello che ti serve per iniziare con TeamTime.</p>
+            </div>
+    
+            <div class="accordion shadow-sm" id="faqAccordion">
+    
+                <!-- Q1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq1-h">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1"
+                            aria-expanded="true" aria-controls="faq1">
+                            Come funziona la prova gratuita?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" aria-labelledby="faq1-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            La prova gratuita dura <strong>30 giorni</strong>. Ti invieremo una mail di promemoria 7 giorni
+                            prima della fine. Puoi disdirla quando vuoi, senza vincoli né penali.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq2-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                            Cosa vuol dire "QR Code con Geolocalizzazione"?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" aria-labelledby="faq2-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Attivando la funzione GPS sul QR Code, quando il dipendente scannerizza per Entrata/Uscita viene
+                            richiesta la posizione attuale. Così ti assicuri che la <strong>timbratura avvenga nel luogo corretto</strong>.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq3-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                            Come timbrano i dipendenti con TeamTime?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" aria-labelledby="faq3-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Ogni sede ha un <strong>QR Code</strong> dedicato: il dipendente scarica l'app gratuita, lo
+                            scansiona e registra <em>Entrata/Uscita</em>. Le timbrature compaiono subito nella
+                            <strong>Dashboard</strong>.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq4-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                            Posso esportare i dati in Excel o PDF?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" aria-labelledby="faq4-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sì. Puoi generare <strong>report Excel e PDF</strong> per il commercialista o per analisi
+                            interne con un click, inclusi totali ore mensili dei dipendenti.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q5 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq5-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
+                            Quali piani sono disponibili dopo la prova?
+                        </button>
+                    </h2>
+                    <div id="faq5" class="accordion-collapse collapse" aria-labelledby="faq5-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Offriamo piani <strong>START</strong>, <strong>TEAMS</strong> e <strong>BUSINESS</strong>. Puoi
+                            iniziare dalla prova e poi scegliere il più adatto.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q6 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq6-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">
+                            Posso gestire più sedi o punti vendita?
+                        </button>
+                    </h2>
+                    <div id="faq6" class="accordion-collapse collapse" aria-labelledby="faq6-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Puoi copiare il QR Code in tutte le tue sedi o usare la funzione "</trong>Interscambio</strong>" per permettere
+                            ai dipendenti di scannerizzare QR Code diversi.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q7 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq7-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq7" aria-expanded="false" aria-controls="faq7">
+                            Che tipo di supporto offrite?
+                        </button>
+                    </h2>
+                    <div id="faq7" class="accordion-collapse collapse" aria-labelledby="faq7-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            All'interno della Dashboard avrai <strong>assistenza dedicata via chat</strong> con un nostro operatore, anche nel piano gratuito.
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+    
+            <div class="text-center mt-4">
+                <a href="/inizia-prova" class="cta-btn">Prova Gratis per 30 giorni</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Statistiche Principali -->
+    <section class="features-stats py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Perché TeamTime?</h2>
+                <p class="text-muted">Numeri reali che parlano del nostro servizio</p>
+            </div>
+    
+            <div class="row text-center g-4">
+                <!-- Stat 1 -->
+                <div class="col-md-4">
+                    <div class="feature-box py-4">
+                        <div class="feature-icon" style="font-size: 2.5rem;">📊</div>
+                        <h5 class="fw-bold mt-3">+1000 Utenti Attivi</h5>
+                        <p class="text-muted mb-0">TeamTime è scelto da oltre mille professionisti ogni giorno.</p>
+                    </div>
+                </div>
+    
+                <!-- Stat 2 -->
+                <div class="col-md-4">
+                    <div class="feature-box py-4">
+                        <div class="feature-icon" style="font-size: 2.5rem;">⭐</div>
+                        <h5 class="fw-bold mt-3">4.6 Media Voto</h5>
+                        <p class="text-muted mb-0">I nostri utenti su TrustPilot ci valutano con una media eccellente.</p>
+                    </div>
+                </div>
+    
+                <!-- Stat 3 -->
+                <div class="col-md-4">
+                    <div class="feature-box py-4">
+                        <div class="feature-icon" style="font-size: 2.5rem;">⏱️</div>
+                        <h5 class="fw-bold mt-3">70% Tempo Risparmiato</h5>
+                        <p class="text-muted mb-0">Automatizzando la gestione presenze, il tuo team lavora più efficiente.
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="text-center mt-5">
+                <a href="https://www.teamtimeapp.it/inizia-prova" class="cta-btn">Inizia la Prova Gratuita</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Form Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Vuoi saperne di più?</h2>
+                <p class="text-muted">Ricevi via mail il link per esplorare la <strong>DEMO gratuita</strong> e vedere
+                    effettivamente come funziona.</p>
+            </div>
+    
+            <form id="demoForm" class="row g-3 justify-content-center" style="max-width: 800px; margin: 0 auto;">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Nome Azienda*" name="nome_locale" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" placeholder="Numero Dipendenti*" name="numero_dipendenti" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="email" class="form-control" placeholder="Email*" name="email" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="tel" class="form-control" placeholder="Telefono*" name="telefono" required>
+                </div>
+                <div class="col-12 text-center mt-3">
+                    <button type="submit" class="cta-btn">Ricevi il Link DEMO</button>
+                </div>
+            </form>
+            
+            <div id="formMessage" class="text-center mt-3" style="display:none;"></div>
+
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer>
+        <p>©2025 TeamTime – Registro Presenze Smart • Tutti i diritti riservati</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+
+    <script>
+        document.getElementById('demoForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // blocca il submit classico
+
+            const form = e.target;
+            const data = new FormData(form);
+
+            fetch('/landing_contact', {
+                method: 'POST',
+                body: data
+            })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById('formMessage').style.display = 'block';
+                        document.getElementById('formMessage').innerHTML = '<span style="color:green;font-weight:600;">Email inviata con successo! Controlla la tua casella (anche nello SPAM!).</span>';
+                        form.reset();
+                    } else {
+                        throw new Error('Errore invio email');
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('formMessage').style.display = 'block';
+                    document.getElementById('formMessage').innerHTML = '<span style="color:red;font-weight:600;">Si è verificato un errore, riprova.</span>';
+                });
+        });
+    </script>
+
+
+    <!-- FAQ Structured Data -->
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Quanto dura la prova gratuita? Serve la carta di credito?",
+        "acceptedAnswer": { "@type": "Answer", "text": "La prova gratuita dura 15 giorni e non richiede carta di credito. Puoi disdire in qualsiasi momento durante la prova." }
+      },
+      {
+        "@type": "Question",
+        "name": "Come timbrano i dipendenti con TeamTime?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Ogni sede ha un QR Code dedicato: il dipendente lo scansiona e registra Entrata/Uscita. Le timbrature compaiono in Dashboard live." }
+      },
+      {
+        "@type": "Question",
+        "name": "Devo installare un’app?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No: TeamTime funziona via web su desktop e mobile. Nessuna installazione obbligatoria." }
+      },
+      {
+        "@type": "Question",
+        "name": "Posso esportare i dati in Excel o PDF?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sì. Puoi generare report Excel e PDF per il commercialista o per analisi interne." }
+      },
+      {
+        "@type": "Question",
+        "name": "TeamTime è conforme al GDPR?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sì. Trattiamo i dati nel rispetto del GDPR e offriamo Data Processing Agreement su richiesta." }
+      },
+      {
+        "@type": "Question",
+        "name": "Quali piani sono disponibili dopo la prova?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sono disponibili i piani START, TEAMS e BUSINESS. Puoi iniziare dalla prova e poi scegliere il più adatto." }
+      },
+      {
+        "@type": "Question",
+        "name": "Posso gestire più sedi?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sì, puoi creare più sedi con relativi QR Code e filtrare report e dashboard per sede o dipendente." }
+      },
+      {
+        "@type": "Question",
+        "name": "Sono previste integrazioni?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Sì: Stripe per abbonamenti e integrazioni opzionali con Airtable e Telegram." }
+      },
+      {
+        "@type": "Question",
+        "name": "Come si attiva la prova gratuita?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Clicca su /inizia-prova, compila i dati essenziali e inizi subito." }
+      },
+      {
+        "@type": "Question",
+        "name": "Che tipo di supporto offrite?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Supporto in italiano via email; onboarding e assistenza prioritaria nei piani business." }
+      }
+    ]
+  }
+    </script>
+</body>
+
+</html>

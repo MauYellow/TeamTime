@@ -47,6 +47,7 @@ CLOUDINARY_URL = os.getenv("CLOUDINARY_URL")
 CLOUDINARY_APIKEY = os.getenv("CLOUDINARY_APIKEY")
 CLOUDINARY_APISECRET = os.getenv("CLOUDINARY_APISECRET")
 CLOUDINARY_CLOUDNAME = os.getenv("CLOUDINARY_CLOUDNAME")
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
 
 
 # Configura Flask-Mail
@@ -1163,6 +1164,93 @@ def correggi_uscita():
     except Exception as e:
         return f"Errore: {e}", 500
 
+@app.route('/landing')
+def landing():
+   return render_template('/landing.html')
+
+@app.route('/landing_contact', methods=['POST'])
+def landing_contact():
+    # Recupero dati dal form
+    nome_locale = request.form['nome_locale']
+    numero_dipendenti = request.form['numero_dipendenti']
+    email_cliente = request.form['email']
+    telefono = request.form['telefono']
+
+    # --- INVIO EMAIL AL TEAM INTERNO ---
+    msg_team = Message(
+        subject=f"Nuovo contatto DEMO TeamTime da {nome_locale}",
+        sender=app.config['MAIL_USERNAME'],
+        recipients=["help.teamtime@gmail.com"],
+        body=f"""Nuovo contatto ricevuto dal form landing page:
+
+Nome Locale: {nome_locale}
+Numero Dipendenti: {numero_dipendenti}
+Email: {email_cliente}
+Telefono: {telefono}"""
+    )
+    mail.send(msg_team)
+
+    # --- INVIO EMAIL AL CLIENTE ---
+    msg_cliente = Message(
+        subject="Il tuo link per esplorare la DEMO di TeamTime",
+        sender=app.config['MAIL_USERNAME'],
+        recipients=[email_cliente],
+        html=f"""
+        <p>Ciao {nome_locale},</p>
+        <br>
+        <p>Grazie per il tuo interesse in TeamTime!
+        <br>Come tua richiesta, ecco il colelgamento per esplorare la DEMO del gestionale di presenze dell'applicazione.
+        <br>
+        Rispondi pure a questa mail qualora avessi domande o bisogno di assistenza.
+        <br>
+        <p><a href="https://www.teamtimeapp.it/dashboard_demo" target="_blank">Esplora la DEMO</a></p>
+        <br>
+        <p>Buon lavoro,
+        <br>
+        Il team di TeamTime</p>
+        <img src="https://i.postimg.cc/TwBsJ5H6/Team-Time.png" width="150px" height="100">
+        """
+    )
+    mail.send(msg_cliente)
+
+    #BREVO
+    url = "https://api.brevo.com/v3/contacts"
+
+    payload = { "email": f"{email_cliente}" }
+    headers = {
+    "accept": "application/json",
+    "content-type": "application/json",
+    "api-key": f"{BREVO_API_KEY}"
+    }
+
+
+    try:
+       response = requests.post(url, json=payload, headers=headers)
+       if response.status_code in [200, 201]: 
+        response = response.json()
+        print(f"Brevo response: {response['id']}")
+        url = "https://api.brevo.com/v3/contacts/lists/2/contacts/add"
+        payload = { "emails": [email_cliente]}
+        try:
+            response = requests.post(url, json=payload, headers=headers)
+            if response.status_code in [200, 201]:
+              response = response.json()
+              print(f"{response}")
+              telegram(f"📧 Brevo aggiunta mail alla lista: {response}")
+            else:
+              response = response.json()
+              print(response)
+              telegram(f"📧❌ Errore Brevo nell'aggiungere mail alla lista: {response}")
+        except Exception as e:
+            print(f"📧❌ Errore Brevo addcontacttolist: {e}")
+       else:
+          response = response.json()
+          print(f"Errore Brevo per mail {email_cliente}: {response}")
+    except Exception as e:
+       telegram(f"📧❌ Errore Brevo: {e}")
+       print(f"📧❌ Errore Brevo: {e}")
+    # Reindirizza a pagina di conferma
+    return redirect(url_for('messaggio_inviato'))
 
 @app.route('/blog')
 @app.route('/blog/')
