@@ -597,7 +597,7 @@
                     <div class="feature-box py-4">
                         <div class="feature-icon" style="font-size: 2.5rem;">⏱️</div>
                         <h5 class="fw-bold mt-3">70% Tempo Risparmiato</h5>
-                        <p class="text-muted mb-0">Automatizzando la gestione presenze, il tuo team lavora più efficiente.
+                        <p class="text-muted mb-0">Automatizzando la gestione presenze, hai più tempo a disposizione.
                         </p>
                     </div>
                 </div>
@@ -634,12 +634,21 @@
                 <div class="col-12 text-center mt-3">
                     <button type="submit" class="cta-btn">Ricevi il Link DEMO</button>
                 </div>
+                <!-- Spinner (inizialmente nascosto) -->
+                <div id="loadingSpinner" style="display:none; text-align:center; margin-top:10px;">
+                    <div class="spinner-border text-primary" role="status" style="width:2rem;height:2rem;">
+                        <span class="visually-hidden">Caricamento...</span>
+                    </div>
+                    <p style="margin-top:5px; color:#000000;">Invio in corso...</p>
+                </div>
             </form>
             
             <div id="formMessage" class="text-center mt-3" style="display:none;"></div>
 
         </div>
     </section>
+    
+    
 
 
 
@@ -662,32 +671,48 @@
         });
     </script>
 
+    
+    
     <script>
         document.getElementById('demoForm').addEventListener('submit', function (e) {
             e.preventDefault(); // blocca il submit classico
 
             const form = e.target;
             const data = new FormData(form);
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const spinner = document.getElementById('loadingSpinner');
+            const msg = document.getElementById('formMessage');
+
+            // Mostra spinner e disabilita il bottone
+            spinner.style.display = 'block';
+            submitBtn.disabled = true;
+            msg.style.display = 'none';
 
             fetch('/landing_contact', {
                 method: 'POST',
                 body: data
             })
                 .then(response => {
+                    spinner.style.display = 'none';
+                    submitBtn.disabled = false;
+
                     if (response.ok) {
-                        document.getElementById('formMessage').style.display = 'block';
-                        document.getElementById('formMessage').innerHTML = '<span style="color:green;font-weight:600;">Email inviata con successo! Controlla la tua casella (anche nello SPAM!).</span>';
+                        msg.style.display = 'block';
+                        msg.innerHTML = '<span style="color:green;font-weight:600;">✅ Email inviata con successo! Controlla la tua casella (anche nello SPAM!).</span>';
                         form.reset();
                     } else {
                         throw new Error('Errore invio email');
                     }
                 })
                 .catch(err => {
-                    document.getElementById('formMessage').style.display = 'block';
-                    document.getElementById('formMessage').innerHTML = '<span style="color:red;font-weight:600;">Si è verificato un errore, riprova.</span>';
+                    spinner.style.display = 'none';
+                    submitBtn.disabled = false;
+                    msg.style.display = 'block';
+                    msg.innerHTML = '<span style="color:red;font-weight:600;">❌ Si è verificato un errore, riprova.</span>';
                 });
         });
     </script>
+
 
 
     <!-- FAQ Structured Data -->
