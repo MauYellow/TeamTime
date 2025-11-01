@@ -1166,7 +1166,15 @@ def correggi_uscita():
 
 @app.route('/landing')
 def landing():
-   return render_template('/landing.html')
+   ip = request.remote_addr
+   user_agent = request.headers.get('User-Agent')
+   referer = request.headers.get('Referer', 'Diretto')
+   ref = request.args.get('ref')  # cerca il ref nella query
+   if ref:
+        session['ref'] = ref  # salva in sessione
+   #print("OK")
+   telegram(f"🚀 Landing Page: {ip}, User Agent: {user_agent}, sorgente: {referer}, ref: {ref}")  
+   return render_template('/landing.html', ref=ref)
 
 @app.route('/landing_contact', methods=['POST'])
 def landing_contact():
@@ -1199,7 +1207,7 @@ Telefono: {telefono}"""
         <p>Ciao {nome_locale},</p>
         <br>
         <p>Grazie per il tuo interesse in TeamTime!
-        <br>Come tua richiesta, ecco il colelgamento per esplorare la DEMO del gestionale di presenze dell'applicazione.
+        <br>Come tua richiesta, ecco il collegamento per esplorare la DEMO del gestionale di presenze dell'applicazione.
         <br>
         Rispondi pure a questa mail qualora avessi domande o bisogno di assistenza.
         <br>
@@ -1634,6 +1642,7 @@ def telegram(message):
    try:
         response = requests.post(url, data=payload, timeout=5)
         response.raise_for_status()  # Solleva un'eccezione se lo status code è >= 400
+        print(f"Messaggio Telegram Status: {response.status_code}")
    except requests.RequestException as e:
         print(f"Errore durante l'invio a Telegram: {e}")
 
