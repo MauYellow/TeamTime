@@ -1260,9 +1260,17 @@ Telefono: {telefono}"""
     # Reindirizza a pagina di conferma
     return redirect(url_for('messaggio_inviato'))
 
+@app.route ('/programma-affiliato/')
 @app.route ('/programma-affiliato')
 def programma_affiliato():
-  return render_template('/programma-affiliato.html')
+   ip = request.remote_addr
+   user_agent = request.headers.get('User-Agent')
+   referer = request.headers.get('Referer', 'Diretto')
+   ref = request.args.get('ref')  # cerca il ref nella query
+   if ref:
+        session['ref'] = ref  # salva in sessione
+   telegram(f"Programma Affiliato: {ip}, User Agent: {user_agent}, sorgente: {referer}, ref: {ref}")  
+   return render_template('/programma-affiliato.html')
 
 @app.route('/blog')
 @app.route('/blog/')
