@@ -1260,6 +1260,10 @@ Telefono: {telefono}"""
     # Reindirizza a pagina di conferma
     return redirect(url_for('messaggio_inviato'))
 
+@app.route ('/programma-affiliato')
+def programma_affiliato():
+  return render_template('/programma-affiliato.html')
+
 @app.route('/blog')
 @app.route('/blog/')
 def blog_index():

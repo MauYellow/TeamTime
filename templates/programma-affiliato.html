@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>TeamTime – Programma Affiliato</title>
+
+    <meta name="description"
+        content="Unisciti al programma di affiliazione TeamTime: promuovi l’app per la gestione presenze e guadagna per ogni nuovo cliente. Ideale per influencer, blogger e professionisti che vogliono monetizzare con link referral.">
+    <meta name="keywords"
+        content="programma affiliazione, affiliazione TeamTime, referral TeamTime, guadagnare online, link affiliato, influencer marketing, guadagni automatici, programma referral aziende, promozione app, gestione presenze digitale">
+    <meta name="author" content="TeamTime">
+
+
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/static/img/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/static/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.95);
+        }
+
+        .navbar.scrolled {
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+        }
+
+        .navbar-brand span {
+            color: #ff4757;
+        }
+
+        .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #ff4757 !important;
+        }
+
+        /* HERO */
+        .hero-section {
+            padding: 120px 20px 60px;
+            background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+
+        .hero-section p {
+            color: #666;
+            margin: 15px auto 30px;
+            max-width: 600px;
+        }
+
+        .cta-btn {
+            background-color: #ff4757;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-btn:hover {
+            background-color: #e84118;
+            color: #fff;
+        }
+
+        /* VIDEO */
+        /* Video wrapper base */
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Solo desktop: riduci il video */
+@media (min-width: 992px) { /* desktop lg e superiori */
+    .video-wrapper {
+        max-width: 900px; /* riduce larghezza massima */
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+
+        /* FEATURES */
+        .features {
+            padding: 80px 20px;
+            background-color: #f8f9fa;
+        }
+
+        .feature-box {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: #ff4757;
+            margin-bottom: 20px;
+        }
+
+        /* BRANDS */
+        .brands-section {
+            background: #fff;
+            padding: 60px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .brands-title {
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+        }
+
+        .brands-slider {
+            display: flex;
+            gap: 60px;
+            animation: scroll 15s linear infinite;
+        }
+
+        .brands-slider .brand-item {
+            flex: 0 0 auto;
+            text-align: center;
+        }
+
+        .brand-item img {
+            width: 120px;
+            height: auto;
+            opacity: 0.85;
+            transition: opacity 0.3s;
+        }
+
+        .brand-item img:hover {
+            opacity: 1;
+        }
+
+        .brand-name {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 8px;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* FAQ */
+        #faq .accordion-button {
+            font-weight: 600;
+        }
+
+        #faq .accordion-item {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #faq .accordion-item+.accordion-item {
+            margin-top: 10px;
+        }
+
+        /* FOOTER */
+        footer {
+            background-color: #111;
+            color: #aaa;
+            text-align: center;
+            padding: 30px 10px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 767px) {
+            .hero-section {
+                padding: 100px 20px 40px;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .brands-slider {
+                gap: 40px;
+                animation-duration: 30s;
+            }
+
+            .features {
+                padding: 60px 15px;
+            }
+        }
+    .brands-section {
+    background: #fff;
+    padding: 60px 0;
+    overflow: hidden;
+}
+
+.brands-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+}
+
+.brands-slider {
+    display: flex;
+    gap: 60px;
+    animation: scroll 15s linear infinite;
+}
+
+.brand-item {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px; /* altezza uniforme per tutti */
+}
+
+.brand-item img {
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    opacity: 0.85;
+    transition: opacity 0.3s;
+}
+
+.brand-item img:hover {
+    opacity: 1;
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-light fixed-top">
+        <div class="container d-flex justify-content-between">
+            <a class="navbar-brand fw-bold" href="/" style="font-size: 1.5rem;">
+                Team<span>Time</span>
+            </a>
+            <a href="https://airtable.com/appOwBv51ihqoT7Cx/pagGQpWWpYF1JInxN" class="cta-btn">Iscriviti</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section mt-5 pt-5">
+    <div class="container">
+        <h1>Diventa <span style="color:#4797ff;">Affiliato TeamTime</span> &
+            <br>
+            <span style="color:#ff4757;">Inizia a Guadagnare Online</span>
+        </h1>
+    
+        <p class="lead">
+            Unisciti al <strong>programma di affiliazione TeamTime</strong> e trasforma la tua community in una fonte di
+            guadagno.
+            <br><br>
+            Ricevi subito il tuo <strong>link referral personalizzato</strong>, condividilo su social, blog o newsletter
+            e ottieni <strong>50€ per ogni nuovo cliente</strong> che completa i 30 giorni di prova e attiva l’abbonamento.
+        </p>
+    
+        <a href="https://airtable.com/appOwBv51ihqoT7Cx/pagGQpWWpYF1JInxN" class="cta-btn">
+            Iscriviti Ora e Ricevi il Tuo Link Referral
+        </a>
+    
+        <p class="text-muted mt-3" style="font-size: 0.9rem; font-style: italic;">
+            Ideale per influencer, blogger, agenzie di HR e creator digitali.
+        </p>
+    </div>
+
+
+    </section>
+
+
+
+    <!-- Sezione aziende che parlano di noi -->
+    <section class="brands-section">
+        <div class="container">
+            <h2 class="brands-title">Parlano (bene) di noi</h2>
+            <div class="brands-slider">
+                <!-- Prima copia dei brand -->
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Dz8FCn08/OIP-2.jpg" alt="TrustPilot">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/TPqh6RGW/0x0-1-removebg-preview.png" alt="Capterra">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Vv4jLq8h/get-app-removebg-preview.png" alt="GetApp">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/qqg7yyKD/download-removebg-preview.png" alt="Apptivize">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/15280CJg/g2-removebg-preview.png" alt="G2.com">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/htVtLSXY/0x0.png" alt="Software Advice">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/gJHhNVnJ/logo-tuttotek-standard.png" alt="TuttoTek.it">
+                </div>
+    
+                <!-- Seconda copia dei brand per effetto infinito -->
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Dz8FCn08/OIP-2.jpg" alt="TrustPilot">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/TPqh6RGW/0x0-1-removebg-preview.png" alt="Capterra">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/Vv4jLq8h/get-app-removebg-preview.png" alt="GetApp">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/qqg7yyKD/download-removebg-preview.png" alt="Apptivize">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/15280CJg/g2-removebg-preview.png" alt="G2.com">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/htVtLSXY/0x0.png" alt="Software Advice">
+                </div>
+                <div class="brand-item">
+                    <img src="https://i.postimg.cc/gJHhNVnJ/logo-tuttotek-standard.png" alt="TuttoTek.it">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Features Section -->
+    <section class="features py-5 bg-light">
+        <div class="container">
+            <h2 class="fw-bold text-center">Scopri il programma di affiliazione TeamTime</h2>
+            <div class="mb-5">
+                <p class="text-muted">
+                    <br>
+                    TeamTime è l’app 100% italiana per <strong>gestire le presenze in azienda</strong> in modo semplice e digitale.
+                    <br><br>
+                    Ogni azienda ha un QR code unico: il dipendente scansiona l’app all’entrata e all’uscita, e il sistema registra
+                    automaticamente le timbrature in un database consultabile da mobile o PC, con <strong>report accurati</strong> per ottimizzare i
+                    tempi.
+                    <br><br>
+                    Ottieni più info su come funziona l'app sulla <a href="https://www.teamtimeapp.it" target="_blank">pagina ufficiale</a>.
+                </p>
+            </div>
+
+    
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <div class="feature-box text-center p-4 bg-white shadow-sm rounded-4 h-100">
+                        <div class="feature-icon mb-3">
+                            <img src="https://img.icons8.com/?size=100&id=vPtMKjs4oj1H&format=png&color=000000"
+                                alt="QR Code con GPS" width="70">
+                        </div>
+                        <h5 class="fw-bold">Entra a far parte del team</h5>
+                        <p class="text-muted mb-0">
+                            Compila il form di registrazione e ricevi le istruzioni per entrare a far parte del Team.
+                        </p>
+                    </div>
+                </div>
+    
+                <div class="col-md-4">
+                    <div class="feature-box text-center p-4 bg-white shadow-sm rounded-4 h-100">
+                        <div class="feature-icon mb-3">
+                            <img src="https://img.icons8.com/?size=100&id=109462&format=png&color=000000"
+                                alt="Report Dettagliati" width="70">
+                        </div>
+                        <h5 class="fw-bold">Condividi con il tuo pubblico</h5>
+                        <p class="text-muted mb-0">
+                            Scegli quali attività proporre, ottieni il link di affiliazione e condividilo in pochi click con la tua audience.
+                        </p>
+                    </div>
+                </div>
+    
+                <div class="col-md-4">
+                    <div class="feature-box text-center p-4 bg-white shadow-sm rounded-4 h-100">
+                        <div class="feature-icon mb-3">
+                            <img src="https://img.icons8.com/?size=100&id=111611&format=png&color=000000"
+                                alt="Dashboard Live" width="70">
+                        </div>
+                        <h5 class="fw-bold">Inizia subito a guadagnare</h5>
+                        <p class="text-muted mb-0">
+                            Ricevi un bonus di 50€ quando il cliente termina il periodo di prova di 30 giorni ed effettua il primo pagamento. Il pagamento dopo il periodo di prova è automatico, se il cliente non lo disdice prima.
+                        </p>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="text-center mt-5">
+                <a href="https://airtable.com/appOwBv51ihqoT7Cx/pagGQpWWpYF1JInxN" class="cta-btn">Guadagna con le affiliazioni</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistiche Principali -->
+    <section class="features-stats py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">TeamTime è un buon acquisto per la tua audience?</h2>
+                <p class="text-muted">Numeri reali che parlano del nostro servizio</p>
+            </div>
+    
+            <div class="row text-center g-4">
+                <!-- Stat 1 -->
+                <div class="col-md-4">
+                    <div class="feature-box py-4">
+                        <div class="feature-icon" style="font-size: 2.5rem;">📊</div>
+                        <h5 class="fw-bold mt-3">+1000 Utenti Attivi</h5>
+                        <p class="text-muted mb-0">TeamTime è scelto da oltre mille professionisti ogni giorno.</p>
+                    </div>
+                </div>
+    
+                <!-- Stat 2 -->
+                <div class="col-md-4">
+                    <div class="feature-box py-4">
+                        <div class="feature-icon" style="font-size: 2.5rem;">⭐</div>
+                        <h5 class="fw-bold mt-3">4.6 Media Voto</h5>
+                        <p class="text-muted mb-0">I nostri utenti su TrustPilot ci valutano con una media eccellente.</p>
+                    </div>
+                </div>
+    
+                <!-- Stat 3 -->
+                <div class="col-md-4">
+                    <div class="feature-box py-4">
+                        <div class="feature-icon" style="font-size: 2.5rem;">⏱️</div>
+                        <h5 class="fw-bold mt-3">70% Tempo Risparmiato</h5>
+                        <p class="text-muted mb-0">Automatizzando la gestione presenze, hai più tempo a disposizione.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recensioni -->
+    <section class="features-stats py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Fidati di chi usa già TeamTime ogni giorno</h2>
+                <p class="text-muted">Recensioni verificate Trustpilot.it</p>
+            </div>
+    
+            <div class="row g-4 text-center">
+                <!-- Box 1 -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div
+                        class="feature-box p-3 shadow-sm bg-white rounded-4 h-100 d-flex align-items-center justify-content-center">
+                        <img src="{{ url_for('static', filename='img/trustpilot_reviews/francesca_review_teamtime.png') }}"
+                            alt="Recensione Trustpilot" class="img-fluid rounded-3" style="max-width: 100%; height: auto;">
+                    </div>
+                </div>
+    
+                <!-- Box 2 -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div
+                        class="feature-box p-3 shadow-sm bg-white rounded-4 h-100 d-flex align-items-center justify-content-center">
+                        <img src="{{ url_for('static', filename='img/trustpilot_reviews/recensione_review_teamtime_app_registro_presenze.png') }}"
+                            alt="Recensione Trustpilot" class="img-fluid rounded-3" style="max-width: 100%; height: auto;">
+                    </div>
+                </div>
+    
+                <!-- Box 3 -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div
+                        class="feature-box p-3 shadow-sm bg-white rounded-4 h-100 d-flex align-items-center justify-content-center">
+                        <img src="{{ url_for('static', filename='img/trustpilot_reviews/recensione_teamtime_jeff.png') }}"
+                            alt="Recensione Trustpilot" class="img-fluid rounded-3" style="max-width: 100%; height: auto;">
+                    </div>
+                </div>
+    
+                <!-- Box 4 -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div
+                        class="feature-box p-3 shadow-sm bg-white rounded-4 h-100 d-flex align-items-center justify-content-center">
+                        <img src="{{ url_for('static', filename='img/trustpilot_reviews/sapori_italiano_teamtime_app_registro_presenze_maurizio_polverini.png') }}"
+                            alt="Recensione Trustpilot" class="img-fluid rounded-3" style="max-width: 100%; height: auto;">
+                    </div>
+                </div>
+    
+                <!-- Box 5 -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div
+                        class="feature-box p-3 shadow-sm bg-white rounded-4 h-100 d-flex align-items-center justify-content-center">
+                        <img src="{{ url_for('static', filename='img/trustpilot_reviews/sapori_italiano_teamtime_app_registro_presenze_maurizio_polverini1.png') }}"
+                            alt="Recensione Trustpilot" class="img-fluid rounded-3" style="max-width: 100%; height: auto;">
+                    </div>
+                </div>
+    
+                <!-- Box 6 -->
+                <div class="col-12 col-sm-6 col-lg-4">
+                    <div
+                        class="feature-box p-3 shadow-sm bg-white rounded-4 h-100 d-flex align-items-center justify-content-center">
+                        <img src="{{ url_for('static', filename='img/trustpilot_reviews/Spazio_teamtime_registro_presenze_recensione.png') }}"
+                            alt="Recensione Trustpilot" class="img-fluid rounded-3" style="max-width: 100%; height: auto;">
+                    </div>
+                </div>
+            </div>
+    
+            <div class="text-center mt-4">
+                <a href="https://airtable.com/appOwBv51ihqoT7Cx/pagGQpWWpYF1JInxN" class="cta-btn">Iscriviti al Programma</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sezione: A chi è rivolto -->
+    <section class="features-target py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">A chi è rivolto il programma di affiliazione?</h2>
+                <p class="text-muted">
+                    Cerchiamo <strong>persone e professionisti che condividono i nostri valori</strong>:
+                    innovazione, efficienza e voglia di semplificare la gestione aziendale con strumenti digitali.
+                </p>
+            </div>
+    
+            <div class="row align-items-center g-4">
+                <div class="col-md-6">
+                    <ul class="list-unstyled fs-5">
+                        <li class="mb-2">✅ Influencer e content creator</li>
+                        <li class="mb-2">✅ Blogger e professionisti digitali</li>
+                        <li class="mb-2">✅ Consulenti HR e formatori aziendali</li>
+                        <li class="mb-2">✅ Agenzie di marketing o comunicazione</li>
+                        <li class="mb-2">✅ Rivenditori di software e servizi IT</li>
+                        <li class="mb-2">✅ Community manager o business coach</li>
+                    </ul>
+                </div>
+    
+                <div class="col-md-6 text-center">
+                    <img src="{{ url_for('static', filename='img/img/programma affiliato guadagna online teamtime registro presenze.jpg') }}"
+                        alt="Programma affiliato TeamTime - Guadagna online con il registro presenze" class="img-fluid rounded-4 shadow-sm">
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold">Domande Frequenti</h2>
+                <p class="text-muted">Tutto quello che ti serve sapere sul programma affiliati TeamTime.</p>
+            </div>
+    
+            <div class="accordion shadow-sm" id="faqAccordion">
+    
+                <!-- Q0 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq0-h">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq0"
+                            aria-expanded="true" aria-controls="faq0">
+                            Come ricevo il mio link referral?
+                        </button>
+                    </h2>
+                    <div id="faq0" class="accordion-collapse collapse show" aria-labelledby="faq0-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Dopo l'iscrizione riceverai subito una email con il tuo <strong>link referral
+                                personale</strong>, pronto per essere condiviso.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q1 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq1-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
+                            Posso ricevere aggiornamenti sui click in tempo reale?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" aria-labelledby="faq1-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sì, entrando nella <strong>Community Telegram ufficiale</strong> potrai monitorare i click sul
+                            tuo link referral in tempo reale.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q2 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq2-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                            Dove posso condividere il mio link referral?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" aria-labelledby="faq2-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Puoi pubblicare il link nei canali che preferisci: social, email, blog o qualsiasi piattaforma
+                            digitale.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q3 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq3-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                            Quando ricevo il pagamento?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" aria-labelledby="faq3-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Riceverai il pagamento entro <strong>3 giorni lavorativi</strong> dopo il completamento dei 30
+                            giorni di prova e il pagamento dell’utente.
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Q4 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="faq4-h">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
+                            Quando non ricevo il pagamento?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" aria-labelledby="faq4-h"
+                        data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            ❌ Non riceverai il pagamento se il cliente interrompe il periodo di prova, utilizza una carta
+                            non valida o se il tuo profilo affiliato viene disattivato.
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+    
+            <div class="text-center mt-4">
+                <a href="https://airtable.com/appOwBv51ihqoT7Cx/pagGQpWWpYF1JInxN" class="cta-btn">Iscriviti e Ricevi
+                    il Tuo Link Referral</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>©2025 TeamTime – Registro Presenze Smart • Tutti i diritti riservati - <a href="https://www.teamtimeapp.it">Home</a> - <a href="https://www.teamtimeapp.it/blog">Blog</a></p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
