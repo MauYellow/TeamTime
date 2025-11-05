@@ -129,6 +129,7 @@ def create_checkout_session():
         data = request.get_json()
         price_id = data.get('price_id')
         quantity = data.get('quantity', 1)
+        locale = data.get('locale')
         print(f"Price_id: {price_id}")
 
         session = stripe.checkout.Session.create(
@@ -140,6 +141,9 @@ def create_checkout_session():
             mode='payment',
             success_url=url_for('success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=url_for('checkout', _external=True),
+            metadata={           # 👈 qui la parte importante
+        "locale": locale
+    }
         )
 
         return jsonify({'url': session.url})  # 👈 restituiamo l’URL, non redirect
@@ -357,7 +361,8 @@ def stripe_webhook_test():
     if event['type'] == 'checkout.session.completed': #**questo è dal sito carrello?
         session = event['data']['object']
         customer_email = session.get('customer_email', '[nessuna email]')
-        print(f"✅ checkout.session.completed → Pagamento iniziale da: {customer_email}")
+        locale = session['metadata'].get('locale')
+        print(f"✅ checkout.session.completed → Pagamento da: {locale}, {customer_email}")
         #** Azioni: crea record Airtable, invia email, ecc.
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
@@ -1425,6 +1430,7 @@ def programma_affiliato():
    telegram(f"Programma Affiliato: {ip}, User Agent: {user_agent}, sorgente: {referer}, ref: {ref}")  
    return render_template('/programma-affiliato.html')
 
+@app.route('/chattaai')
 @app.route('/chattaAI')
 def chattaAI():
     data = session.get("data")
