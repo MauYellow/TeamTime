@@ -360,7 +360,7 @@ def stripe_webhook_test():
     
     if event['type'] == 'checkout.session.completed': #**questo è dal sito carrello?
         session = event['data']['object']
-        customer_email = session.get('customer_email', '[nessuna email]')
+        customer_email = session['customer_details'].get('email', '[nessuna email]')
         locale = session['metadata'].get('locale')
         print(f"✅ checkout.session.completed → Pagamento da: {locale}, {customer_email}")
         #** Azioni: crea record Airtable, invia email, ecc.
