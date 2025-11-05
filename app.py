@@ -38,6 +38,7 @@ STRIPE_PRICE_ID = STRIPE_PRICE_ID
 STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET
 STRIPE_WEBHOOK_SECRET_KOYEB = os.getenv("STRIPE_WEBHOOK_SECRET_KOYEB")
 STRIPE_TEST_SECRET_KEY = os.getenv("STRIPE_TEST_SECRET_KEY")
+STRIPE_TEST_WEBHOOKTEST = os.getenv("STRIPE_TEST_WEBHOOKTEST")
 AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 api = Api(AIRTABLE_TOKEN)
@@ -341,7 +342,7 @@ def stripe_webhook_test():
     
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_TEST_SECRET_KEY  #forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET (da tenere per test interni) - dovrò metterne una con koyeb
+            payload, sig_header, STRIPE_TEST_WEBHOOKTEST  #forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET (da tenere per test interni) - dovrò metterne una con koyeb
         )
     except stripe.error.SignatureVerificationError as e:
         print(f"Errore: {e}")
