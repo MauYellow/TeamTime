@@ -121,17 +121,27 @@ def checkout():
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
-    session = stripe.checkout.Session.create(
-        payment_method_types=['card'],
-        line_items=[{
-            'price': STRIPE_PRICE_ID,
-            'quantity': 1,
-        }],
-        mode='subscription',
-        success_url=url_for('success', _external=True),
-        cancel_url=url_for('checkout', _external=True),
-    )
-    return redirect(session.url, code=303)
+    try:
+        data = request.get_json()
+        price_id = data.get('price_id')
+        quantity = data.get('quantity', 1)
+
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price': price_id,
+                'quantity': quantity,
+            }],
+            mode='payment',
+            success_url=url_for('success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=url_for('checkout', _external=True),
+        )
+
+        return jsonify({'url': session.url})  # 👈 restituiamo l’URL, non redirect
+
+    except Exception as e:
+        return jsonify(error=str(e)), 400
+
 
 @app.route('/success')
 def success():
@@ -394,12 +404,14 @@ def login_failed():
 @app.route('/dashboard')
 def dashboard():
     data = session.get("data")
-    print(f"Data da Login: {data}")
+    
     
     oggi = datetime.now().strftime('%Y-%m-%d')
     mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
     if not data:
         return redirect(url_for('login'))
+    else:
+       print(f"Data da Login: {data}")
     
     telegram(f"Dashboard: {data['Locale']}")
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
@@ -416,7 +428,8 @@ def dashboard():
     table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
 
     records = table.all(sort=["-Created"])
-    #print(f"Records: {records}")
+    records_mese = table.all(formula="{mese nome} = 'ottobre'", sort=["-Created"]) #**da cancellare solo di prova
+    print(f"Records: {records_mese}")
     len_records = len(records)
     oggi_records = [r for r in records if r["fields"].get("Created") == oggi]
     mese_records = [r for r in records if r["fields"].get("Mese Nome") == mese_corrente]
@@ -1272,6 +1285,148 @@ def programma_affiliato():
    telegram(f"Programma Affiliato: {ip}, User Agent: {user_agent}, sorgente: {referer}, ref: {ref}")  
    return render_template('/programma-affiliato.html')
 
+@app.route('/chattaAI')
+def chattaAI():
+    data = session.get("data")
+    
+    if not data:
+        return redirect(url_for('login'))
+    else:
+       TABLE_NAME = "Locali Approvati"
+       table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+       data = table.first(formula=match({"Locale": data['Locale']}))
+       data = data['fields']
+       print(f"ChattaAI: {data}")
+       mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
+       ip = request.remote_addr
+       user_agent = request.headers.get('User-Agent')
+       referer = request.headers.get('Referer', 'Diretto')
+       #telegram(f"ChattaAI: {ip}, User Agent: {user_agent}, sorgente: {referer}") **da attivare
+
+       TABLE_NAME = data['Locale']
+       table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
+       records = table.all(sort=["-Created"])
+       mesi_disponibili = sorted(set(r['fields'].get("Mese Nome", "").lower() for r in records if "Mese Nome" in r['fields']))
+       records_mese = [
+            r for r in records
+            if r['fields'].get("Mese Nome", "").lower() == mese_corrente
+        ]
+       #print(f"Records_mese: {records_mese}")
+
+       return render_template('/chattaAI.html', data=data, mesi_disponibili=mesi_disponibili, mese_corrente=mese_corrente, records_mese=records_mese, records_json=json.dumps(records))
+
+@app.route('/api/chat_ai', methods=['POST'])
+def chat_ai():
+   data = request.get_json()
+   creditiAI = data.get("creditiAI", 0)
+   nome_qrcode = data.get("nome_qrcode", "")
+   creditiAI = max(creditiAI - 2, 0)
+   print(f"Nome QR Code: {nome_qrcode}")
+   print(f"Crediti AI: {creditiAI}")
+
+   table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+   records = table.all(formula=f"{{Locale}} = '{nome_qrcode}'")
+   if records:
+     record = records[0]  # prendi il primo trovato
+     record_id = record["id"]
+     try:
+        table.update(record_id, {"CreditiAI": creditiAI})
+        return jsonify({
+        "reply": "Ecco la risposta dell'AI (demo)",
+        "creditiAI": creditiAI
+    })
+     except Exception as e:
+        return jsonify({"error": "Errore durante l'elaborazione AI"}), 500
+
+   else:
+     return jsonify({"error": "Errore durante l'elaborazione AI"}), 500
+      
+
+   
+
+
+@app.route('/api/chat_ai', methods=['POST'])
+def chat_ai2(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
+    data = request.get_json()
+    message = data.get("message", "").strip()
+    context = data.get("context", [])
+    creditiAI = data.get("creditiAI", 0)
+    print(f"CreditiAI = {creditiAI}")
+    creditiAI = creditiAI - 2
+    print(f"CreditiAI dopo sottrazione = {creditiAI}")
+    lista_dati = []
+    for entry in context:
+       lista_dati.append(
+         entry['fields']['Nome'] + ", Data: " +
+         entry['fields']['Created'] + ", Entrata: " +
+         entry['fields']['Entrata'] + ", Uscita: " +
+         entry['fields']['Uscita'] + ", Ore Lavorate:" +
+         f"{entry['fields']['Ore Lavorate']}" + ", GPS: " +
+         entry['fields']['GPS']
+)
+    print(f"Lista_dati: {lista_dati}")
+    #print(f"Context: {context}")
+
+    if not message:
+        return jsonify({"error": "Messaggio mancante"}), 400
+
+    try:
+        client = OpenAI(api_key=OPENAI_APIKEY)
+        messages = [
+            {"role": "system", "content": """
+Sei un assistente AI aziendale progettato per analizzare i dati di presenza dei dipendenti.
+Analizza questo elenco JSON di record contenenti i campi:
+"Nome", "Created", "Entrata", "Uscita", "Ore Lavorate", "Mese Nome", "Anno", "Giorni", ecc.
+
+Segui queste istruzioni:
+
+Leggi tutti i record senza tralasciare nessuno.
+
+Considera solo i record con un valore numerico valido nel campo "Ore Lavorate".
+
+Permettimi di fare domande dinamiche come:
+
+“Totale ore di [NOME] nel mese di ottobre”
+
+“Totale ore lavorate di tutti i dipendenti il lunedì”
+
+“Media ore giornaliere di [NOME]”
+
+“Quale dipendente ha lavorato di più questa settimana?”
+
+“Quante volte [NOME] ha fatto doppi turni nello stesso giorno?”
+
+Quando rispondi:
+
+Fornisci il totale in ore e minuti, arrotondato a una cifra decimale.
+
+Specifica quanti record hai considerato.
+             
+Usa un testo plan, senza markdown
+
+Se possibile, mostra anche un breve riepilogo per giorno o per persona.
+             """},
+            {"role": "system", "content": f"CONTESTO:\n{lista_dati}"},
+            {"role": "user", "content": message},
+        ]
+
+        response = client.chat.completions.create(
+            model="gpt-5-mini",
+            messages=messages,
+            temperature=1,
+        )
+
+        reply = response.choices[0].message.content
+        return jsonify({"reply": reply})
+
+    except Exception as e:
+        print(f"Errore AI: {e}")
+        return jsonify({"error": "Errore durante l'elaborazione AI"}), 500
+
+
+
+
+
 @app.route('/blog')
 @app.route('/blog/')
 def blog_index():
@@ -1477,7 +1632,7 @@ def AI_crea_blog_post(argomento, keyword, context_name, link):
        
        return immagine_AI_URL
     
-    image_url = AI_crea_immagine() #immagine_AI_URL #"https://i.postimg.cc/mgPsrgX4/image-H-Pt-Zq-Ab-I5q-LFst-JEJL9.webp" #
+    image_url = AI_crea_immagine()
        
 
     print("Analisi contesto..")
