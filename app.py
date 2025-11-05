@@ -37,6 +37,7 @@ stripe.api_key = STRIPE_SECRET_KEY
 STRIPE_PRICE_ID = STRIPE_PRICE_ID
 STRIPE_WEBHOOK_SECRET = STRIPE_WEBHOOK_SECRET
 STRIPE_WEBHOOK_SECRET_KOYEB = os.getenv("STRIPE_WEBHOOK_SECRET_KOYEB")
+STRIPE_TEST_SECRET_KEY = os.getenv("STRIPE_TEST_SECRET_KEY")
 AIRTABLE_TOKEN = os.getenv("AIRTABLE_TOKEN")
 AIRTABLE_BASE_ID = os.getenv("AIRTABLE_BASE_ID")
 api = Api(AIRTABLE_TOKEN)
@@ -121,10 +122,13 @@ def checkout():
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
+    print("OK")
+    stripe.api_key = STRIPE_TEST_SECRET_KEY #TEST**
     try:
         data = request.get_json()
         price_id = data.get('price_id')
         quantity = data.get('quantity', 1)
+        print(f"Price_id: {price_id}")
 
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -310,6 +314,140 @@ Il Team di TeamTime"""
         telegram("Pagamento Fallito")
         try: 
           table.update(record["id"], {"Status": 'Disattivato'})
+          print(f"❌ Pagamento non riuscito per: {customer_id}")
+          msg = Message(subject=f"Pagamento Fallito - TeamTime",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=[f"{record['fields']['Mail']}", 'help.teamtime@gmail.com'],
+                  body=f"""Gentile cliente,
+
+ci risulta che il pagamento previsto al termine dei 30 giorni di prova dell’applicazione TeamTime – Registro Presenze non è andato a buon fine.
+Per questo motivo, il suo profilo è stato temporaneamente disattivato.
+
+La invitiamo a contattarci al più presto per ripristinare il servizio e mantenere attivi i suoi privilegi.
+Può rispondere direttamente a questa email per ricevere assistenza.
+
+Cordiali saluti,
+TeamTime Staff""")
+          mail.send(msg)
+        except Exception as e:
+          print(f"Errore durante il pagamento: {e}")
+
+    return jsonify({'status': 'success'}), 200
+
+@app.route('/webhooktest', methods=['POST'])
+def stripe_webhook_test():
+    payload = request.data
+    sig_header = request.headers.get('Stripe-Signature')
+    
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, STRIPE_TEST_SECRET_KEY  #forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET (da tenere per test interni) - dovrò metterne una con koyeb
+        )
+    except stripe.error.SignatureVerificationError as e:
+        print(f"Errore: {e}")
+        return jsonify({"error": str(e)}), 400
+    
+    table = 1 #**api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+    #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Qui non serve perché non ha il dato customer_id non avendo eventi
+    
+    
+    
+    if event['type'] == 'checkout.session.completed': #**questo è dal sito carrello?
+        session = event['data']['object']
+        customer_email = session.get('customer_email', '[nessuna email]')
+        print(f"✅ checkout.session.completed → Pagamento iniziale da: {customer_email}")
+        #** Azioni: crea record Airtable, invia email, ecc.
+
+    # Pagamento riuscito dopo prova gratuita (o rinnovo)
+    elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento/ non serve perché già la riceve dopo
+       invoice = event['data']['object']
+       customer_id = invoice['customer']
+       #record = table.first(formula=match({"Stripe Customer ID": customer_id})) non lo ha ancora, crea dopo il record in airtable!
+       print(f"🎉 Creato nuovo abbonamento gratuito per {customer_id}")
+       #telegram("Nuovo Abbonamento Gratuito Creato")
+       
+    elif event['type'] == 'invoice.payment_succeeded': # Questo evento si verifica circa un'ora dopo che il customer subscription created o updated. No, questo si crea anche subito al created, si crea un'ora dopo il pagamento
+        invoice = event['data']['object']
+        customer_id = invoice['customer']
+        billing_reason = invoice.get('billing_reason', 'unknown')
+        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Non lo ha ancora! **Da vedere bene
+        amount = invoice['amount_paid'] / 100  # converti da cent a €
+        if amount == 0:
+          print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}") #, locale: {record['fields']['Locale']}") non lo ha ancora!
+        else:
+          #record = table.first(formula=match({"Stripe Customer ID": customer_id}))
+          print(f"💰 Pagamento ricevuto da {customer_id}: {amount}€, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #Qui lo dovrebbe avere perché è il pagamento dopo la prova
+          #telegram("Nuovo Pagamento Ricevuto")
+          if record['fields']['Referral'] and record['fields']['Referral'] != "-":
+             #telegram(f"[REF] Periodo di prova terminato con successo. Riconosciuto reward per referral: {record['fields']['Referral']}")
+             print(f"Un if che non conosco")
+          try: 
+            #table.update(record["id"], {"Pagato": 'Si'})
+            print(f"Airtable: Aggiornato stato Pagato in 'Si' per: {customer_id}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}") #, ") 
+          except Exception as e:
+            print(f"Errore durante l'aggiornamento dello stato 'Pagato in Airtable per {customer_id}: {e}, billing_reason: {billing_reason}, locale: {record['fields']['Locale']}")
+
+    elif event['type'] == 'customer.subscription.updated': # Questi sono i casi in cui l'abbonamento cambia, tipo si rinnova o è disdetto o si attiva dopo il periodo di prova
+      subscription = event['data']['object']
+      customer_id = subscription['customer']
+      #record = table.first(formula=match({"Stripe Customer ID": customer_id}))
+      #previous_attributes = event['data'].get('previous_attributes', {})
+    
+    # Caso: Disdetta pianificata
+      if subscription.get('cancel_at_period_end') and subscription.get('canceled_at'): 
+        print(f"❌ Abbonamento disdetto per: {customer_id}, "
+      f"Motivo: {subscription['cancellation_details'].get('feedback', 'Nessuno')}, "
+      f"Feedback: {subscription['cancellation_details'].get('comment', 'Nessuno')}")
+        #telegram("Abbonamento disdetto")
+        #telegram(f"[REF] Abbonamento disdetto per referral: {record['fields']['Referral']}")
+        msg = Message(
+    subject="Abbonamento Annullato - TeamTime",
+    sender=app.config['MAIL_USERNAME'],
+    recipients=[record['fields']['Mail']],
+    body="""Gentile utente,
+
+abbiamo ricevuto la tua richiesta di annullamento dell’abbonamento a TeamTime – Registro Presenze.
+
+L'accesso verrà automaticamente disattivato.
+Per riattivarlo in qualsiasi momento, puoi cliccare qui: https://google.com
+
+Se hai bisogno di supporto o vuoi condividere un feedback sull’esperienza, ti invitiamo a rispondere direttamente a questa email.
+Saremo felici di aiutarti o di migliorare grazie ai tuoi suggerimenti!
+
+A presto,
+Il Team di TeamTime
+""",
+    html=f"""<p>Gentile utente,</p>
+<p>Abbiamo ricevuto la tua richiesta di annullamento dell’abbonamento a <strong>TeamTime – Registro Presenze</strong>.</p>
+<p>L'accesso verrà automaticamente disattivato.<br>
+Per riattivarlo in qualsiasi momento, puoi <a href="{record['fields']['Link Annullamento']}">cliccare qui</a>.</p>
+<p>Se hai bisogno di supporto o vuoi condividere un feedback sull’esperienza, ti invitiamo a rispondere direttamente a questa email.<br>
+Saremo felici di aiutarti o di migliorare grazie ai tuoi suggerimenti!</p>
+<p>A presto,<br>Il Team di TeamTime</p>"""
+)
+
+        mail.send(msg)
+
+        try: 
+          #table.update(record["id"], {"Status": 'Disattivato'})
+          print(f"❌ Abbonamento aggiornato su Airtable per: {customer_id}")
+        except Exception as e:
+          print(f"Errore durante disdetta abbonamento in Airtable {e}")
+
+
+      else:
+        print(f"🔁 Altra modifica all’abbonamento per: {customer_id}")
+
+    # ❌ Pagamento fallito
+    elif event['type'] == 'invoice.payment_failed':
+        invoice = event['data']['object']
+        customer_id = invoice['customer']
+        billing_reason = invoice.get('billing_reason', 'unknown')
+        record = table.first(formula=match({"Stripe Customer ID": customer_id}))
+        print(f"❌ invoice.payment_failed → Pagamento fallito per {customer_id}, billing_reason: {billing_reason}")
+        #telegram("Pagamento Fallito")
+        try: 
+          #table.update(record["id"], {"Status": 'Disattivato'})
           print(f"❌ Pagamento non riuscito per: {customer_id}")
           msg = Message(subject=f"Pagamento Fallito - TeamTime",
                   sender=app.config['MAIL_USERNAME'],
