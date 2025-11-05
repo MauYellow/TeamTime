@@ -174,6 +174,7 @@ def stripe_webhook():
         session = event['data']['object']
         customer_email = session.get('customer_email', '[nessuna email]')
         print(f"✅ checkout.session.completed → Pagamento iniziale da: {customer_email}")
+        print(f"Session: {session}")
         #** Azioni: crea record Airtable, invia email, ecc.
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
