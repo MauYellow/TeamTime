@@ -353,8 +353,8 @@ def stripe_webhook_test():
         print(f"Errore: {e}")
         return jsonify({"error": str(e)}), 400
     
-    table = 1 #**api.table(AIRTABLE_BASE_ID, "Locali Approvati")
-    #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Qui non serve perché non ha il dato customer_id non avendo eventi
+    table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+    #record = table.first(formula=match({"Stripe Customer ID": customer_id})) #Qui non serve perché non ha il dato customer_id non avendo eventi
     
     
     
@@ -363,7 +363,8 @@ def stripe_webhook_test():
         customer_email = session['customer_details'].get('email', '[nessuna email]')
         locale = session['metadata'].get('locale')
         print(f"✅ checkout.session.completed → Pagamento da: {locale}, {customer_email}")
-        #** Azioni: crea record Airtable, invia email, ecc.
+        record = table.first(formula=match({"Nome Locale": locale}))
+        print(f"Record: {record}") #** Azioni: crea record Airtable, invia email, ecc.
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
     elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento/ non serve perché già la riceve dopo
