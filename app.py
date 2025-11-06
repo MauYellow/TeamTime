@@ -363,7 +363,7 @@ def stripe_webhook_test():
         customer_email = session['customer_details'].get('email', '[nessuna email]')
         locale = session['metadata'].get('locale')
         print(f"✅ checkout.session.completed → Pagamento da: {locale}, {customer_email}")
-        record = table.first(formula=match({"Nome Locale": locale}))
+        record = table.first(formula=match({"Locale": locale}))
         print(f"Record: {record}") #** Azioni: crea record Airtable, invia email, ecc.
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
