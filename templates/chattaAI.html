@@ -345,46 +345,61 @@
 
               <!-- Colonna destra -->
               <div class="col-md-3 mb-4">
-                <div class="card h-100">
-                  <div class="card-header">
-                    <h5 class="card-title m-0">Benvenuto nella sezione AI</h5>
-                  </div>
-                  <div class="card-body d-flex align-items-start" style="height: 500px; flex-direction: column;">
-
-                    <!-- Form in linea in alto -->
+                <div class="card h-100 shadow-sm border-0">
+                  
+              
+                  <div class="card-body d-flex flex-column" style="height: 500px;">
+              
+                    <!-- 🔹 Selezione mese -->
                     <form id="form-mese" class="d-flex align-items-center gap-2 mb-3">
-                      <label for="mese-select" class="mb-0">Mesi disponibili:</label>
-                      <select id="mese-select" name="mese" class="form-select form-select-sm">
+                      <label for="mese-select" class="fw-semibold mb-0 text-secondary small">Mese:</label>
+                      <select id="mese-select" name="mese" class="form-select form-select-sm flex-grow-1">
                         {% for mese in mesi_disponibili %}
-                        <option value="{{ mese }}" {% if mese==mese_corrente %}selected{% endif %}>{{ mese.title() }}
-                        </option>
+                        <option value="{{ mese }}" {% if mese==mese_corrente %}selected{% endif %}>{{ mese.title() }}</option>
                         {% endfor %}
                       </select>
                     </form>
-
-                    <!-- Placeholder per eventuale contenuto futuro -->
-                    <div class="flex-grow-1 d-flex align-items-center justify-content-center text-muted">
-                      Crediti disponibili: <span id="crediti-ai">{{ data.CreditiAI }}</span>
-                      <img src="https://i.postimg.cc/X7V2jcFL/Progetto-senza-titolo-9-removebg-preview.png" height="50px" width="50px">
+              
+                    <!-- 🔹 Crediti disponibili -->
+                    <div
+                      class="p-3 mb-3 bg-light rounded d-flex flex-column align-items-center justify-content-center text-center shadow-sm">
+                      <p class="mb-1 fw-semibold text-muted">Crediti rimasti:</p>
+                      <div class="d-flex align-items-center gap-2">
+                        <span id="crediti-ai" class="fs-4 fw-bold text-dark">{{ data.CreditiAI }}</span>
+                        <img src="https://i.postimg.cc/X7V2jcFL/Progetto-senza-titolo-9-removebg-preview.png" height="32" width="32"
+                          alt="crediti">
+                      </div>
+                      <button id="buyCreditsBtn" type="button" class="btn btn-danger mt-3 w-100">
+                        Compra 100 Crediti AI
+                      </button>
                     </div>
-                    <button id="buyCreditsBtn" type="button"
-                      class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center"
-                      style="width: 42px; height: 42px;">
-                      Compra
-                      <i class="bx bx-send"></i>
-                    </button>
-
-                    <div class="flex-grow-1 d-flex align-items-center justify-content-center text-muted">
-                      Cosa posso chiedere?
+              
+                    <!-- 🔹 Sezione suggerimenti -->
+                    <div class="mt-auto">
+                      <h6 class="text-secondary fw-semibold mb-2 text-center">Cosa posso chiedere?</h6>
+                      <div class="d-flex flex-column gap-2">
+              
+                        <!-- Esempi / hint -->
+                        <div class="p-2 bg-light border rounded small text-muted">
+                          🧮 Totale Ore Dipendenti
+                        </div>
+                        <div class="p-2 bg-light border rounded small text-muted">
+                          💡 Suggerisci ottimizzazioni per i turni
+                        </div>
+                        <div class="p-2 bg-light border rounded small text-muted">
+                          🧠 Spiega il significato di un’anomalia negli orari
+                        </div>
+                        <div class="p-2 bg-light border rounded small text-muted">
+                          ✉️ Molto altro..
+                        </div>
+              
+                      </div>
                     </div>
-
+              
                   </div>
                 </div>
               </div>
 
-
-            </div>
-          </div>
           <!-- / Content -->
 
           <!-- Footer -->
