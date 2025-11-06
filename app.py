@@ -1453,7 +1453,7 @@ def chattaAI():
        ip = request.remote_addr
        user_agent = request.headers.get('User-Agent')
        referer = request.headers.get('Referer', 'Diretto')
-       #telegram(f"ChattaAI: {ip}, User Agent: {user_agent}, sorgente: {referer}") **da attivare
+       telegram(f"ChattaAI: {ip}, User Agent: {user_agent}, sorgente: {referer}")
 
        TABLE_NAME = data['Locale']
        table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
@@ -1467,8 +1467,8 @@ def chattaAI():
 
        return render_template('/chattaAI.html', data=data, mesi_disponibili=mesi_disponibili, mese_corrente=mese_corrente, records_mese=records_mese, records_json=json.dumps(records))
 
-@app.route('/api/chat_ai', methods=['POST'])
-def chat_ai():
+@app.route('/api/chat_ai_test', methods=['POST'])
+def chat_ai2(): #** da cancellare solo di test senza sprecare AI
    data = request.get_json()
    creditiAI = data.get("creditiAI", 0)
    nome_qrcode = data.get("nome_qrcode", "")
@@ -1498,14 +1498,13 @@ def chat_ai():
 
 
 @app.route('/api/chat_ai', methods=['POST'])
-def chat_ai2(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
+def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
     data = request.get_json()
     message = data.get("message", "").strip()
     context = data.get("context", [])
     creditiAI = data.get("creditiAI", 0)
-    print(f"CreditiAI = {creditiAI}")
-    creditiAI = creditiAI - 2
-    print(f"CreditiAI dopo sottrazione = {creditiAI}")
+    creditiAI = max(creditiAI - 2, 0)
+    print(f"CreditiAI aggiornati: {creditiAI}")
     lista_dati = []
     for entry in context:
        lista_dati.append(
@@ -1517,7 +1516,6 @@ def chat_ai2(): #questa è quella giusta!** l'altra è solo di prova per non uti
          entry['fields']['GPS']
 )
     print(f"Lista_dati: {lista_dati}")
-    #print(f"Context: {context}")
 
     if not message:
         return jsonify({"error": "Messaggio mancante"}), 400
