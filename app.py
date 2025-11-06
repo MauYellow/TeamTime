@@ -365,6 +365,7 @@ def stripe_webhook_test():
         print(f"✅ checkout.session.completed → Pagamento da: {locale}, {customer_email}")
         record = table.first(formula=match({"Locale": locale}))
         print(f"Record: {record}") #** Azioni: crea record Airtable, invia email, ecc.
+        table.update(record["id"], {"CreditiAI": '100'})
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
     elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento/ non serve perché già la riceve dopo
