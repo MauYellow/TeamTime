@@ -449,6 +449,26 @@
     </div>
   </div>
 
+  <!-- Modal personalizzato -->
+  <div class="modal fade" id="popupAlLavoro" tabindex="-1" aria-labelledby="popupLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-danger">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="popupLabel">Attenzione!</h5>
+        </div>
+        <div class="modal-body">
+          Hai terminato i <strong>crediti AI</strong> disponibili!
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Indietro</button>
+          <button id="buyCreditsBtnmodal" type="button" class="btn btn-danger">
+            Acquista 100 Crediti per 3,99€
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Script -->
   <script>
     function apriChat() {
@@ -533,97 +553,137 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // 🔹 Gestione invio messaggio
-    chatForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const message = chatInput.value.trim();
-      if (!message) return;
+  // 🔹 Gestione invio messaggio
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      // Rimuove il messaggio iniziale "💬 Inizia a chattare con l'assistente AI..."
-      const initialMsg = chatMessages.querySelector(".text-muted");
-      if (initialMsg) {
-        initialMsg.remove();
-      }
+    // 🔸 Prendi i crediti attuali
+    const crediti = parseInt(creditiAI.textContent);
+    if (crediti <= 0) {
+      // Mostra il modal Bootstrap
+      const modalEl = document.getElementById("popupAlLavoro");
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+      return; // ⛔ interrompe l'invio messaggio
+    }
 
-      // Mostra messaggio utente
-      appendMessage("user", message);
-      chatInput.value = "";
+    // 👇 Tuo codice originale
+    const message = chatInput.value.trim();
+    if (!message) return;
 
-      // Mostra messaggio spinner
-      const loadingMsg = document.createElement("div");
-      loadingMsg.classList.add("system");
-      loadingMsg.textContent = "🤖 L'Assistente AI pensa di più per risponderti meglio..";
-      chatMessages.appendChild(loadingMsg);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
+    // Rimuove messaggio iniziale
+    const initialMsg = chatMessages.querySelector(".text-muted");
+    if (initialMsg) {
+      initialMsg.remove();
+    }
 
-      // Invio dati al backend
-      const nome_qrcode = "{{ data['Locale'] }}";
+    appendMessage("user", message);
+    chatInput.value = "";
 
-      try {
-        const res = await fetch("/api/chat_ai", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message,
-            context,
-            creditiAI: parseInt(creditiAI.textContent),
-            nome_qrcode: nome_qrcode }),
-        });
+    const loadingMsg = document.createElement("div");
+    loadingMsg.classList.add("system");
+    loadingMsg.textContent = "🤖 L'Assistente AI pensa di più per risponderti meglio..";
+    chatMessages.appendChild(loadingMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 
-        const data = await res.json();
+    const nome_qrcode = "{{ data['Locale'] }}";
 
-        // Svuota il messaggio spinner
-        loadingMsg.textContent = "";
+    try {
+      const res = await fetch("/api/chat_ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message,
+          context,
+          creditiAI: crediti,
+          nome_qrcode: nome_qrcode
+        }),
+      });
 
-        // Mostra la risposta AI
-        if (data.reply) {
-          appendMessage("ai", data.reply);
+      const data = await res.json();
+      loadingMsg.textContent = "";
 
-          // 👇 Aggiorna i crediti disponibili
-          if (data.creditiAI !== undefined) {
-            creditiAI.textContent = data.creditiAI;
-          }
-
-        } else {
-          appendMessage("system", "❌ Errore AI: " + (data.error || "Nessuna risposta"));
+      if (data.reply) {
+        appendMessage("ai", data.reply);
+        if (data.creditiAI !== undefined) {
+          creditiAI.textContent = data.creditiAI;
         }
-
-
-      } catch (err) {
-        // Svuota il messaggio spinner anche in caso di errore
-        loadingMsg.textContent = "";
-        appendMessage("system", "❌ Errore di connessione al server AI.");
-        console.error(err);
+      } else {
+        appendMessage("system", "❌ Errore AI: " + (data.error || "Nessuna risposta"));
       }
-    });
+
+    } catch (err) {
+      loadingMsg.textContent = "";
+      appendMessage("system", "❌ Errore di connessione al server AI.");
+      console.error(err);
+    }
+  });
 
     // Pagamento CreditiAI
-    document.getElementById('buyCreditsBtn').addEventListener('click', async () => {
-        try {
-          const response = await fetch('/create-checkout-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              price_id: 'price_1SQDluEF8NjwgIEOmRPcL2md', 
-              quantity: 1,
-              locale: '{{ data['Locale'] }}' //** mettere come variabile
-            })
-          });
+    document.addEventListener("DOMContentLoaded", () => {
+        const buyBtn = document.getElementById("buyCreditsBtn");
 
-          const data = await response.json();
+        buyBtn.addEventListener("click", async (event) => {
+          event.preventDefault(); // blocca il link dal navigare altrove
 
-          if (data.url) {
-            window.location.href = data.url;  // reindirizza alla pagina Stripe Checkout
-          } else {
-            alert('Errore durante la creazione della sessione di pagamento.');
-            console.error(data);
-          }
-
-        } catch (err) {
-          console.error('Errore di rete o backend:', err);
-          alert('Errore durante la connessione al server.');
-        }
+          try {
+            const response = await fetch("/create-checkout-session", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                price_id: "price_1SQDluEF8NjwgIEOmRPcL2md",
+                quantity: 1,
+                locale: {{ data["Locale"] | tojson }} // 👈 variabile sicura
+        }),
       });
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url; // ✅ reindirizza a Stripe Checkout
+      } else {
+        alert("Errore durante la creazione della sessione di pagamento.");
+        console.error(data);
+      }
+    } catch (err) {
+        console.error("Errore di rete o backend:", err);
+        alert("Errore durante la connessione al server.");
+      }
+  });
+});
+
+      // Pagamento CreditiAI Modal
+      document.addEventListener("DOMContentLoaded", () => {
+        const buyBtn = document.getElementById("buyCreditsBtnmodal");
+
+        buyBtn.addEventListener("click", async (event) => {
+          event.preventDefault(); // blocca il link dal navigare altrove
+
+          try {
+            const response = await fetch("/create-checkout-session", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                price_id: "price_1SQDluEF8NjwgIEOmRPcL2md",
+                quantity: 1,
+                locale: {{ data["Locale"] | tojson }} // 👈 variabile sicura
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.url) {
+        window.location.href = data.url; // ✅ reindirizza a Stripe Checkout
+      } else {
+        alert("Errore durante la creazione della sessione di pagamento.");
+        console.error(data);
+      }
+    } catch (err) {
+        console.error("Errore di rete o backend:", err);
+        alert("Errore durante la connessione al server.");
+      }
+  });
+});
 
   </script>
 
@@ -667,60 +727,6 @@
 
 
 </body>
-
-
-
-
-<div class="modal fade" id="correggiModal" tabindex="-1" aria-labelledby="correggiModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <form id="correggiForm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Correggi Orario di Uscita per <span id="nomeDipendente"></span></h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" id="recordIdInput">
-          <label for="oraUscita">Orario di entrata:</label>
-          <span id="entrataDipendente"></span>
-        </div>
-
-        <div class="modal-body">
-          <input type="hidden" id="recordIdInput">
-          <label for="oraUscita">Orario di uscita:</label>
-          <input type="time" id="oraUscita" class="form-control" required>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Salva</button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
-  function apriCorrezione(recordId, entrata) {
-    document.getElementById(`picker-${recordId}`).style.display = 'table-row';
-    document.getElementById(`entrataDipendente-${recordId}`).textContent = entrata;
-  }
-
-  function inviaCorrezione(recordId) {
-    const orarioScelto = document.getElementById(`orario-${recordId}`).value;
-
-    fetch('/correggi_uscita', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ record_id: recordId, uscita: orarioScelto })
-    })
-      .then(response => response.text())
-      .then(msg => {
-        alert(msg);
-        document.getElementById(`picker-${recordId}`).style.display = 'none';
-        document.getElementById(`orario-${recordId}`).value = "";
-        window.location.reload();
-      });
-  }
-</script>
 
 
 </html>
