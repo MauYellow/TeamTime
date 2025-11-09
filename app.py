@@ -141,12 +141,12 @@ def create_checkout_session():
             mode='payment',
             success_url=url_for('success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=url_for('checkout', _external=True),
-            metadata={           # 👈 qui la parte importante
+            metadata={       
         "locale": locale
     }
         )
 
-        return jsonify({'url': session.url})  # 👈 restituiamo l’URL, non redirect
+        return jsonify({'url': session.url})
 
     except Exception as e:
         return jsonify(error=str(e)), 400
@@ -365,9 +365,27 @@ def stripe_webhook_test():
         print(f"✅ checkout.session.completed → Pagamento da: {locale}, {customer_email}")
         record = table.first(formula=match({"Locale": locale}))
         crediti_residui = record['fields']['CreditiAI']
-        print(f"Record: {record}") #** Azioni: crea record Airtable, invia email, ecc.
+        print(f"Record: {record}")
         try:
            table.update(record["id"], {"CreditiAI": 100 + crediti_residui})
+           try: 
+            msg = Message(subject=f"Pagamento Effettuato - TeamTime",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=[f"{customer_email}", 'help.teamtime@gmail.com'],
+                  body=f"""Gentile Cliente,
+
+La ringraziamo per aver acquistato con TeamTime – Registro Presenze.
+Siamo felici di averLa con noi e ci impegniamo a offrirLe un servizio efficiente e semplice da usare.
+
+Per qualsiasi domanda o necessità di supporto, può contattarci rispondendo direttamente a questa email: saremo lieti di assisterLa.
+
+Grazie ancora per la fiducia accordataci.
+
+Cordiali saluti,
+TeamTime Staff""")
+            mail.send(msg)
+           except Exception as e:
+            print(f"Errore durante l'invio della mail conferma pagamento: {e}")
         except Exception as e:
            print(f"Errore durante l'update del valore CreditiAI dentro Airtable: {e}")
 
@@ -1505,6 +1523,7 @@ def chat_ai3(): #questa è quella giusta!** l'altra è solo di prova per non uti
     nome_qrcode = data.get("nome_qrcode", "")
     creditiAI = data.get("creditiAI", 0)
     creditiAI = max(creditiAI - 2, 0)
+    telegram(f"💬ChatAI Domanda {nome_qrcode}: {message}")
     print(f"CreditiAI aggiornati: {creditiAI}")
 
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
@@ -1527,7 +1546,7 @@ def chat_ai3(): #questa è quella giusta!** l'altra è solo di prova per non uti
          f"{entry['fields']['Ore Lavorate']}" + ", GPS: " +
          entry['fields']['GPS']
 )
-    print(f"Lista_dati: {lista_dati}")
+    #print(f"Lista_dati: {lista_dati}")
 
     if not message:
         return jsonify({
@@ -1541,34 +1560,18 @@ def chat_ai3(): #questa è quella giusta!** l'altra è solo di prova per non uti
 Sei un assistente AI aziendale progettato per analizzare i dati di presenza dei dipendenti.
 Analizza questo elenco JSON di record contenenti i campi:
 "Nome", "Created", "Entrata", "Uscita", "Ore Lavorate", "Mese Nome", "Anno", "Giorni", ecc.
-
 Segui queste istruzioni:
-
 Leggi tutti i record senza tralasciare nessuno.
-
 Considera solo i record con un valore numerico valido nel campo "Ore Lavorate".
-
-Permettimi di fare domande dinamiche come:
-
-“Totale ore di [NOME] nel mese di ottobre”
-
-“Totale ore lavorate di tutti i dipendenti il lunedì”
-
-“Media ore giornaliere di [NOME]”
-
-“Quale dipendente ha lavorato di più questa settimana?”
-
-“Quante volte [NOME] ha fatto doppi turni nello stesso giorno?”
-
 Quando rispondi:
-
-Quando richiesto, fornisci il totale in ore e minuti, arrotondato a una cifra decimale.
-
+Fornisci le ore e minuti arrotondate a una cifra decimale.
 Specifica quanti record hai considerato.
              
 Usa un testo plan, senza markdown
              
 Scrivi ordinato, andando a capo quando necessario.
+             
+Se dici una data, trasformala nel formato GG-MM-AA sempre tra parentesi, esempio NOME(GG-MM-AA)
              
              """},
             {"role": "system", "content": f"CONTESTO:\n{lista_dati}"},

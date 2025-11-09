@@ -49,6 +49,9 @@
   <!--? Config: Mandatory theme config file containing global vars & default theme options -->
   <script src="/static/js/config.js"></script>
 
+  <audio id="notification-sound" src="/static/sounds/notify.mp3" preload="auto"></audio>
+
+
   <style>
     /* Chat bubbles */
     #chat-messages {
@@ -402,7 +405,7 @@
                           🧠 Spiega il significato di un’anomalia negli orari
                         </div>
                         <div class="p-2 bg-light border rounded small text-muted">
-                          ✉️ Molto altro..
+                          ✉️ Spesa stipendi e molto altro..
                         </div>
               
                       </div>
@@ -552,6 +555,7 @@
       meseSelezionato = this.value.toLowerCase();
       context = records.filter(r => r.fields["Mese Nome"]?.toLowerCase() === meseSelezionato);
       console.log("Context aggiornato:", context);
+      appendMessage("system", "Sto valutando il mese: " + this.value);
     });
 
     // 🔹 Riferimenti agli elementi della chat
@@ -609,7 +613,7 @@
 
     const loadingMsg = document.createElement("div");
     loadingMsg.classList.add("system");
-    loadingMsg.textContent = "🤖 L'Assistente AI pensa di più per risponderti meglio..";
+    loadingMsg.textContent = "🤖 L'Assistente AI pensa di più per risponderti meglio, riceverai un suono di notifica alla risposta..";
     chatMessages.appendChild(loadingMsg);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
@@ -632,6 +636,8 @@
 
       if (data.reply) {
         appendMessage("ai", data.reply);
+        const sound = document.getElementById("notification-sound");
+        sound.play();
         if (data.creditiAI !== undefined) {
           creditiAI.textContent = data.creditiAI;
         }
