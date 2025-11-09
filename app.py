@@ -1467,8 +1467,8 @@ def chattaAI():
 
        return render_template('/chattaAI.html', data=data, mesi_disponibili=mesi_disponibili, mese_corrente=mese_corrente, records_mese=records_mese, records_json=json.dumps(records))
 
-@app.route('/api/chat_ai_test', methods=['POST'])
-def chat_ai2(): #** da cancellare solo di test senza sprecare AI
+@app.route('/api/chat_ai', methods=['POST'])
+def chat_ai(): #** da cancellare solo di test senza sprecare AI
    data = request.get_json()
    creditiAI = data.get("creditiAI", 0)
    nome_qrcode = data.get("nome_qrcode", "")
@@ -1497,14 +1497,26 @@ def chat_ai2(): #** da cancellare solo di test senza sprecare AI
    
 
 
-@app.route('/api/chat_ai', methods=['POST'])
-def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
+@app.route('/api/chat_ai_prod', methods=['POST'])
+def chat_ai3(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
     data = request.get_json()
     message = data.get("message", "").strip()
     context = data.get("context", [])
+    nome_qrcode = data.get("nome_qrcode", "")
     creditiAI = data.get("creditiAI", 0)
     creditiAI = max(creditiAI - 2, 0)
     print(f"CreditiAI aggiornati: {creditiAI}")
+
+    table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+    records = table.all(formula=f"{{Locale}} = '{nome_qrcode}'")
+    if records:
+     record = records[0]  # prendi il primo trovato
+     record_id = record["id"]
+     try:
+        table.update(record_id, {"CreditiAI": creditiAI})
+     except Exception as e:
+        return jsonify({"error": "Errore durante l'elaborazione Airtable: {e}"}), 500
+     
     lista_dati = []
     for entry in context:
        lista_dati.append(
@@ -1518,7 +1530,9 @@ def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non util
     print(f"Lista_dati: {lista_dati}")
 
     if not message:
-        return jsonify({"error": "Messaggio mancante"}), 400
+        return jsonify({
+           "error": "Messaggio mancante",}), 400
+    
 
     try:
         client = OpenAI(api_key=OPENAI_APIKEY)
@@ -1548,13 +1562,14 @@ Permettimi di fare domande dinamiche come:
 
 Quando rispondi:
 
-Fornisci il totale in ore e minuti, arrotondato a una cifra decimale.
+Quando richiesto, fornisci il totale in ore e minuti, arrotondato a una cifra decimale.
 
 Specifica quanti record hai considerato.
              
 Usa un testo plan, senza markdown
-
-Se possibile, mostra anche un breve riepilogo per giorno o per persona.
+             
+Scrivi ordinato, andando a capo quando necessario.
+             
              """},
             {"role": "system", "content": f"CONTESTO:\n{lista_dati}"},
             {"role": "user", "content": message},
@@ -1567,11 +1582,14 @@ Se possibile, mostra anche un breve riepilogo per giorno o per persona.
         )
 
         reply = response.choices[0].message.content
-        return jsonify({"reply": reply})
+        return jsonify({
+           "reply": reply,
+           "creditiAI": creditiAI
+                        })
 
     except Exception as e:
         print(f"Errore AI: {e}")
-        return jsonify({"error": "Errore durante l'elaborazione AI"}), 500
+        return jsonify({"error": "Errore durante l'elaborazione AI: {e}"}), 500
 
 
 
