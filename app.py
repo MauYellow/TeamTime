@@ -123,7 +123,7 @@ def checkout():
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
-    stripe.api_key = STRIPE_TEST_SECRET_KEY #TEST**
+    stripe.api_key = STRIPE_SECRET_KEY #STRIPE_TEST_SECRET_KEY TEST**
     try:
         data = request.get_json()
         price_id = data.get('price_id')
