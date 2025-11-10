@@ -75,7 +75,7 @@
         </div>
         <ul class="menu-inner py-1">
           <!-- Dashboard -->
-          <li class="menu-item active">
+          <li class="menu-item">
             <a class="menu-link" href="{{ url_for('dashboard') }}">
               <i class="menu-icon tf-icons bx bx-home-circle">
               </i>
@@ -113,11 +113,19 @@
               </div>
             </a>
           </li>
-          <li class="menu-item">
+          <li class="menu-item active">
             <a class="menu-link" href="{{ url_for('dipendenti_al_lavoro') }}">
               <i class="menu-icon tf-icons bx bx-edit"></i>
               <div data-i18n="Support">
                 Correggi Orari
+              </div>
+            </a>
+          </li>
+          <li class="menu-item">
+            <a class="menu-link" href="{{ url_for('chattaAI') }}">
+              <img src="https://img.icons8.com/?size=100&id=unXm4ixWAr6H&format=png&color=000000" height="20px" width="20px">
+              <div data-i18n="Support">
+                Assistente AI
                 <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
               </div>
             </a>
@@ -264,16 +272,14 @@
                           <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-pills-justified-messages"
                             aria-controls="navs-pills-justified-messages" aria-selected="false">
-                            <i class="tf-icons bx bx-log-in"></i> Crea Entrata <span
-                              class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
+                            <i class="tf-icons bx bx-log-in"></i> Crea Entrata
                           </button>
                         </li>
                         <li class="nav-item">
                           <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
                             data-bs-target="#navs-pills-justified-elimina" aria-controls="navs-pills-justified-elimina"
                             aria-selected="false">
-                            <i class="tf-icons bx bx-trash"></i> Elimina Presenza <span
-                              class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
+                            <i class="tf-icons bx bx-trash"></i> Elimina Presenza
                           </button>
                         </li>
                       </ul>

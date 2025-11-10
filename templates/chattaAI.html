@@ -7,7 +7,7 @@
   <meta content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     name="viewport" />
   <title>
-    Dashboard - Analytics | TeamTime
+    Assistente AI | TeamTime
   </title>
   <meta content="" name="description" />
   <!-- FAVICON -->
@@ -133,7 +133,7 @@
         </div>
         <ul class="menu-inner py-1">
           <!-- Dashboard -->
-          <li class="menu-item active">
+          <li class="menu-item">
             <a class="menu-link" href="{{ url_for('dashboard') }}">
               <i class="menu-icon tf-icons bx bx-home-circle">
               </i>
@@ -176,11 +176,10 @@
               <i class="menu-icon tf-icons bx bx-edit"></i>
               <div data-i18n="Support">
                 Correggi Orari
-                <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Beta</span>
               </div>
             </a>
           </li>
-          <li class="menu-item">
+          <li class="menu-item active">
             <a class="menu-link" href="{{ url_for('chattaAI') }}">
               <img src="https://img.icons8.com/?size=100&id=unXm4ixWAr6H&format=png&color=000000" height="20px"
                 width="20px">
@@ -253,6 +252,7 @@
             </a>
           </div>
           <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            
 
             <ul class="navbar-nav flex-row align-items-center ms-auto">
               <!-- Place this tag where you want the button to render. -->
@@ -316,6 +316,8 @@
               <div class="col-md-9 mb-4">
                 <div class="card h-100 shadow-sm">
                   <div class="card-body d-flex flex-column" style="height: 500px;">
+                      
+
 
                     <!-- Area messaggi -->
                     <div id="chat-messages" class="flex-grow-1 overflow-auto mb-3 p-3"
