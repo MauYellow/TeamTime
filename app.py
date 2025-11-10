@@ -123,7 +123,6 @@ def checkout():
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
-    print("OK")
     stripe.api_key = STRIPE_TEST_SECRET_KEY #TEST**
     try:
         data = request.get_json()
@@ -170,16 +169,43 @@ def stripe_webhook():
         return jsonify({"error": str(e)}), 400
     
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
-    #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Qui non serve perché non ha il dato customer_id non avendo eventi
+    #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Qui non serve perché non ha il dato customer_id non avendo eventi 
     
-    
-    
-    if event['type'] == 'checkout.session.completed': #**questo è dal sito carrello?
+    if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
-        customer_email = session.get('customer_email', '[nessuna email]')
-        print(f"✅ checkout.session.completed → Pagamento iniziale da: {customer_email}")
-        print(f"Session: {session}")
-        #** Azioni: crea record Airtable, invia email, ecc.
+        customer_email = session['customer_details'].get('email', '[nessuna email]')
+        locale = session['metadata'].get('locale')
+        print(f"✅ checkout.session.completed → Pagamento da: {locale}, {customer_email}")
+        try:
+           telegram(f"✅ Crediti AI: checkout.session.completed → Pagamento da: {locale}, {customer_email}")
+        except Exception as e:
+           print(f"Errore nell'invio del messaggio Telegram dopo acquisto di Crediti AI")
+        record = table.first(formula=match({"Locale": locale}))
+        crediti_residui = record['fields']['CreditiAI']
+        #print(f"Record: {record}")
+        try:
+           table.update(record["id"], {"CreditiAI": 100 + crediti_residui})
+           try: 
+            msg = Message(subject=f"Pagamento Effettuato - TeamTime",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=[f"{customer_email}", 'help.teamtime@gmail.com'],
+                  body=f"""Gentile Cliente,
+
+La ringraziamo per aver acquistato con TeamTime – Registro Presenze.
+Siamo felici di averLa con noi e ci impegniamo a offrirLe un servizio efficiente e semplice da usare.
+
+Per qualsiasi domanda o necessità di supporto, può contattarci rispondendo direttamente a questa email: saremo lieti di assisterLa.
+
+Grazie ancora per la fiducia accordataci.
+
+Cordiali saluti,
+TeamTime Staff""")
+            mail.send(msg)
+           except Exception as e:
+            print(f"Errore durante l'invio della mail conferma pagamento: {e}")
+        except Exception as e:
+           print(f"Errore durante l'update del valore CreditiAI dentro Airtable: {e}")
+
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
     elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento/ non serve perché già la riceve dopo
@@ -193,7 +219,6 @@ def stripe_webhook():
         invoice = event['data']['object']
         customer_id = invoice['customer']
         billing_reason = invoice.get('billing_reason', 'unknown')
-        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Non lo ha ancora! **Da vedere bene
         amount = invoice['amount_paid'] / 100  # converti da cent a €
         if amount == 0:
           print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}") #, locale: {record['fields']['Locale']}") non lo ha ancora!
@@ -347,7 +372,7 @@ def stripe_webhook_test():
     
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, STRIPE_TEST_WEBHOOKTEST  #forse è da cancellare quell'altra STRIPE_WEBHOOK_SECRET (da tenere per test interni) - dovrò metterne una con koyeb
+            payload, sig_header, STRIPE_TEST_WEBHOOKTEST  #**webhook di test
         )
     except stripe.error.SignatureVerificationError as e:
         print(f"Errore: {e}")
@@ -358,7 +383,7 @@ def stripe_webhook_test():
     
     
     
-    if event['type'] == 'checkout.session.completed': #**questo è dal sito carrello?
+    if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         customer_email = session['customer_details'].get('email', '[nessuna email]')
         locale = session['metadata'].get('locale')
@@ -390,7 +415,7 @@ TeamTime Staff""")
            print(f"Errore durante l'update del valore CreditiAI dentro Airtable: {e}")
 
     # Pagamento riuscito dopo prova gratuita (o rinnovo)
-    elif event['type'] == "customer.subscription.created": #** qui bisogna sviluppare! invio mail di creazione profilo abbonamento/ non serve perché già la riceve dopo
+    elif event['type'] == "customer.subscription.created":
        invoice = event['data']['object']
        customer_id = invoice['customer']
        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) non lo ha ancora, crea dopo il record in airtable!
@@ -401,7 +426,6 @@ TeamTime Staff""")
         invoice = event['data']['object']
         customer_id = invoice['customer']
         billing_reason = invoice.get('billing_reason', 'unknown')
-        #record = table.first(formula=match({"Stripe Customer ID": customer_id})) Non lo ha ancora! **Da vedere bene
         amount = invoice['amount_paid'] / 100  # converti da cent a €
         if amount == 0:
           print(f"Prova Gratuita Attivata da {customer_id}: {amount}€, billing_reason: {billing_reason}") #, locale: {record['fields']['Locale']}") non lo ha ancora!
@@ -597,8 +621,6 @@ def dashboard():
     table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
 
     records = table.all(sort=["-Created"])
-    records_mese = table.all(formula="{mese nome} = 'ottobre'", sort=["-Created"]) #**da cancellare solo di prova
-    print(f"Records: {records_mese}")
     len_records = len(records)
     oggi_records = [r for r in records if r["fields"].get("Created") == oggi]
     mese_records = [r for r in records if r["fields"].get("Mese Nome") == mese_corrente]
@@ -1203,7 +1225,7 @@ def genera_link_disdetta(customer_id):
     )
     return redirect(session.url)
 
-@app.route('/correggi_orari') #**backup in backup_correggi_orari
+@app.route('/correggi_orari')
 def dipendenti_al_lavoro():
    data = session.get("data")
    telegram(f"Correggi Orari: {data['Locale']}")
@@ -1294,34 +1316,6 @@ def crea_entrata():
         f"Entrata creata per {nome} alle {ora} "
         + (f"(Giorno Corretto: {giorno_str})." if giorno_str else "(oggi).")
     )
-
-
-@app.route('/backup_correggi_orari') # **backup
-def backup_dipendenti_al_lavoro():
-    data = session.get("data")
-
-    if not data:
-        return redirect(url_for('login'))
-    telegram(f"Correggi Orari: {data['Locale']}")
-    
-    TABLE_NAME = data['Locale']
-    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
-
-    records = table.all(sort=["-Created"])
-
-    dipendenti_a_lavoro = []
-    for r in records:
-        fields = r.get("fields", {})
-        if fields.get("Uscita", "").strip().lower() == "al lavoro":
-            dipendenti_a_lavoro.append({
-                "nome": fields.get("Nome", "Sconosciuto"),
-                "entrata": fields.get("Entrata", "—"),
-                "created": r.get("createdTime", "—"),
-                "gps": fields.get("GPS", "—"),
-                "record_id": r.get("id")
-            })
-
-    return render_template("correggi_orari.html", dipendenti_a_lavoro=dipendenti_a_lavoro, data=data)
 
 
 @app.route('/correggi_uscita', methods=['POST'])
@@ -1481,12 +1475,11 @@ def chattaAI():
             r for r in records
             if r['fields'].get("Mese Nome", "").lower() == mese_corrente
         ]
-       #print(f"Records_mese: {records_mese}")
 
        return render_template('/chattaAI.html', data=data, mesi_disponibili=mesi_disponibili, mese_corrente=mese_corrente, records_mese=records_mese, records_json=json.dumps(records))
 
-@app.route('/api/chat_ai', methods=['POST'])
-def chat_ai(): #** da cancellare solo di test senza sprecare AI
+@app.route('/api/chat_ai_test', methods=['POST'])
+def chat_ai_test(): #** da cancellare solo di test senza sprecare AI
    data = request.get_json()
    creditiAI = data.get("creditiAI", 0)
    nome_qrcode = data.get("nome_qrcode", "")
@@ -1515,8 +1508,8 @@ def chat_ai(): #** da cancellare solo di test senza sprecare AI
    
 
 
-@app.route('/api/chat_ai_prod', methods=['POST'])
-def chat_ai3(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
+@app.route('/api/chat_ai', methods=['POST'])
+def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
     data = request.get_json()
     message = data.get("message", "").strip()
     context = data.get("context", [])
