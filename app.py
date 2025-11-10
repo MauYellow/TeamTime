@@ -598,7 +598,6 @@ def login_failed():
 def dashboard():
     data = session.get("data")
     
-    
     oggi = datetime.now().strftime('%Y-%m-%d')
     mese_corrente = format_date(datetime.now(), format="LLLL", locale='it').lower()
     if not data:
