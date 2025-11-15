@@ -1637,7 +1637,7 @@ def update_calendario():
         os.makedirs(static_dir, exist_ok=True)
 
         tmpfile_path = os.path.join(static_dir, "tmpfile_calendario.json")
-        URL_TMPFILE = f"http://localhost:5000/static/temp/tmpfile_calendario.json"  # da cambiare in produzione
+        URL_TMPFILE = f"https://unknown-goldfish-app-eleven-9c27431c.koyeb.app/static/temp/tmpfile_calendario.json"  # da cambiare in produzione
 
         try:
             with open(tmpfile_path, "w", encoding="utf-8") as f:
