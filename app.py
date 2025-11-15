@@ -19,7 +19,7 @@ import requests
 import random, string
 import schedule
 from openai import OpenAI
-import json
+import json, tempfile
 import cloudinary
 import cloudinary.uploader
 from cloudinary.utils import cloudinary_url #** non usato?
@@ -1503,10 +1503,6 @@ def chat_ai_test(): #** da cancellare solo di test senza sprecare AI
    else:
      return jsonify({"error": "Errore durante l'elaborazione AI"}), 500
       
-
-   
-
-
 @app.route('/api/chat_ai', methods=['POST'])
 def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non utilizzare soldi
     data = request.get_json()
@@ -1586,9 +1582,81 @@ Se dici una data, trasformala nel formato GG-MM-AA sempre tra parentesi, esempio
         print(f"Errore AI: {e}")
         return jsonify({"error": "Errore durante l'elaborazione AI: {e}"}), 500
 
+@app.route('/timeline')
+def timeline():
+    data = session.get("data")
+    if not data:
+        return redirect(url_for('login'))
+    else:
+       print(f"Data da Login: {data}")
+    
+    table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")  # seleziona la tabella
+    record = table.first(formula=match({"Locale": "teamtime031"}))
+
+    if not record:
+        return f"Nessun record trovato per il locale"
+
+    # Prendi il JSON dei turni
+    calendario_json = record['fields'].get("CalendarioJSON")
+    #print("CalendarioJSON da Airtable:", calendario_json[0]['url'])
+
+    response = requests.get(calendario_json[0]['url'])
+    response.raise_for_status()  # genera errore se status!=200
+
+    # trasforma in JSON Python
+    calendario_json = response.json()
 
 
+    return render_template('test_timeline.html', data=data, calendario_json=calendario_json)
 
+@app.route("/update_calendario", methods=["POST"])
+def update_calendario():
+    data = session.get("data")
+    if not data:
+        return redirect(url_for('login'))
+    
+    print(f"Data da Login: {data}")
+
+    # Recupera JSON dal body
+    payload = request.get_json()
+    calendario = payload.get("calendario")
+    if not calendario:
+        return jsonify({"error": "Nessun JSON ricevuto"}), 400
+
+    try:
+        # Seleziona tabella e record del locale corrente
+        table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+        record = table.first(formula=match({"Locale": data["Locale"]}))
+        if not record:
+            return jsonify({"error": "Locale non trovato"}), 404
+
+        record_id = record["id"]
+
+        # Salviamo in una cartella "static" del progetto
+        static_dir = os.path.join(os.path.dirname(__file__), "static/temp")
+        os.makedirs(static_dir, exist_ok=True)
+
+        tmpfile_path = os.path.join(static_dir, "tmpfile_calendario.json")
+        URL_TMPFILE = f"http://localhost:5000/static/temp/tmpfile_calendario.json"  # da cambiare in produzione
+
+        try:
+            with open(tmpfile_path, "w", encoding="utf-8") as f:
+                json.dump(calendario, f, ensure_ascii=False, indent=2)
+            print(f"File calendario salvato localmente: {tmpfile_path}")
+        except Exception as e:
+            print(f"Errore nel salvataggio del file calendario in locale: {e}")
+            return jsonify({"error": f"Errore salvataggio locale: {str(e)}"}), 500
+
+        # Se vuoi aggiornare anche Airtable, puoi decommentare questa riga:
+        try:
+           table.update(record_id, {"CalendarioJSON": [{"url": URL_TMPFILE}]})
+        except Exception as e:
+           print(f"Errore nell'invio su Airtable del file JSON in locale: {e}")
+
+        return jsonify({"message": "Calendario salvato localmente ✅", "url": URL_TMPFILE})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/blog')
 @app.route('/blog/')
