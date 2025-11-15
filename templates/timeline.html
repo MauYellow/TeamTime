@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html class="light-style layout-menu-fixed" data-assets-path="/static/" data-template="vertical-menu-template-free"
+    data-theme="theme-default" dir="ltr" lang="it">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+        name="viewport" />
+    <title>Turni | TeamTime</title>
+    <meta name="description" content="Assegnazione turni dipendenti - TeamTime" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/img/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/svg+xml" href="/static/img/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/static/img/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/img/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="/static/vendor/fonts/boxicons.css" rel="stylesheet" />
+
+    <!-- Core CSS (stesso tema della dashboard) -->
+    <link class="template-customizer-core-css" href="/static/vendor/css/core.css" rel="stylesheet" />
+    <link class="template-customizer-theme-css" href="/static/vendor/css/theme-default.css" rel="stylesheet" />
+    <link href="/static/css/demo.css" rel="stylesheet" />
+
+    <!-- Vendors CSS -->
+    <link href="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" />
+
+    <!-- Helpers & Config -->
+    <script src="/static/vendor/js/helpers.js"></script>
+    <script src="/static/js/config.js"></script>
+
+    <style>
+        /* Ritocchi per integrarsi col tema */
+        .turni-toolbar {
+            gap: .5rem;
+        }
+
+        .shift-chip {
+            cursor: grab;
+            user-select: none;
+        }
+
+        .shift-chip:active {
+            cursor: grabbing;
+        }
+
+        .drop-cell {
+            background: #f9f9fb;
+            border: 1px dashed rgba(105, 108, 255, .25);
+            transition: background .2s, box-shadow .2s;
+        }
+
+        .drop-cell.drag-over {
+            background: rgba(105, 108, 255, .06);
+            box-shadow: inset 0 0 0 2px rgba(105, 108, 255, .25);
+        }
+
+        .shift-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            padding: .35rem .6rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+
+        .shift-badge .bx {
+            font-size: 1rem;
+        }
+
+        .table-turni thead th {
+            background: #f5f5f9;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .table-turni td,
+        .table-turni th {
+            vertical-align: middle;
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: .35rem;
+        }
+        
+        .table-turni th:first-child,
+        .table-turni td:first-child {
+           position: sticky;
+           left: 0;
+           z-index: 2;
+           background: #fff; /* colore di sfondo per sovrapporsi correttamente */
+}
+
+        .table-turni th:first-child {
+           z-index: 3; /* header sopra le celle */
+}
+        .current-day {
+           background-color: #d0e9ff !important;
+}
+        .fixed-shifts-card {
+    position: sticky;
+    top: 0; /* distanza dal top della pagina / del container scrollabile */
+    z-index: 10;
+    background: #fff; /* necessario per sovrapporre correttamente */
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+
+
+    </style>
+</head>
+
+<body>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Sidebar/Menu (uguale alla tua dashboard) -->
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="/" class="app-brand-link">
+                        <span class="app-brand-logo demo"><img
+                                src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}"
+                                alt="TeamTime" height="32"></span>
+                        <span class="app-brand-text demo menu-text fw-bolder ms-2">TeamTime</span>
+                    </a>
+                    <a href="javascript:void(0);"
+                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"><i
+                            class="bx bx-chevron-left bx-sm align-middle"></i></a>
+                </div>
+                <div class="menu-inner-shadow"></div>
+                <ul class="menu-inner py-1">
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('dashboard') }}"><i
+                                class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div>Dashboard</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('calendario') }}"><i
+                                class="menu-icon tf-icons bx bx-calendar"></i>
+                            <div>Calendario</div>
+                        </a>
+                    </li>
+                    <li class="menu-item active">
+                        <a class="menu-link" href="{{ url_for('timeline') }}"><i
+                                class="menu-icon tf-icons bx bx-grid-alt"></i>
+                            <div>Turni</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('staff') }}"><i
+                                class="menu-icon tf-icons bx bx-group"></i>
+                            <div>Staff</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('dipendenti_al_lavoro') }}"><i
+                                class="menu-icon tf-icons bx bx-edit"></i>
+                            <div>Correggi Orari</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a class="menu-link" href="{{ url_for('chattaAI') }}"><img
+                                src="https://img.icons8.com/?size=100&id=unXm4ixWAr6H&format=png&color=000000"
+                                height="20" width="20">
+                            <div>Assistente AI <span class="badge bg-warning text-dark ms-2"
+                                    style="font-size:.6rem;">Beta</span></div>
+                        </a>
+                    </li>
+                    <li class="menu-item"><a class="menu-link" href="{{ url_for('logout') }}"><i
+                                class="menu-icon tf-icons bx bx-log-out"></i>
+                            <div>Log Out</div>
+                        </a></li>
+                </ul>
+            </aside>
+
+            <!-- Layout page -->
+            <div class="layout-page">
+                <!-- Navbar -->
+                <nav id="layout-navbar"
+                    class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme">
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                        <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)"><i
+                                class="bx bx-menu bx-sm"></i></a>
+                    </div>
+                    <div class="navbar-nav-right d-flex align-items-center w-100" id="navbar-collapse">
+                        <div class="d-none d-md-flex align-items-center text-muted small">Gestisci e assegna i turni
+                            settimanali</div>
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <li class="nav-item"><a href="https://beacons.ai/teamtime" target="_blank"
+                                    class="btn btn-outline-primary d-none d-md-inline-block"><i
+                                        class="bx bx-download me-1"></i>Scarica App Mobile</a></li>
+                            <li class="nav-item dropdown-user dropdown ms-2">
+                                <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
+                                    <div class="avatar avatar-online"><img class="w-px-40 h-auto rounded-circle"
+                                            src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png"
+                                            alt="" /></div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="#">
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0 me-3">
+                                                    <div class="avatar avatar-online"><img
+                                                            class="w-px-40 h-auto rounded-circle"
+                                                            src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png"
+                                                            alt="" /></div>
+                                                </div>
+                                                <div class="flex-grow-1"><span class="fw-semibold d-block">TEST**</span><small class="text-muted">Admin</small></div>
+                                            </div>
+                                        </a></li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+                                    <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i
+                                                class="bx bx-power-off me-2"></i><span class="align-middle">Log
+                                                Out</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <!-- Content -->
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+
+
+
+                        <!-- Chips Mesi salvati -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <div class="mb-2 fw-semibold">I tuoi file salvati</div>
+                                <div id="chips-container" class="d-flex flex-wrap gap-2">
+                                    <!-- chips generate via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tabella React dentro una card -->
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div id="react-table" class="table-responsive"></div>
+                            </div>
+                        </div>
+
+                        <!-- Header & Toolbar -->
+                        <div class="card mb-4">
+                            <div
+                                class="card-body d-flex flex-wrap align-items-center justify-content-between turni-toolbar">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <button id="btn-save-json" class="btn btn-primary"><i
+                                            class='bx bx-save me-1'></i>Scarica JSON</button>
+                                    <button id="btn-save-airtable" class="btn btn-primary"><i class='bx bx-save me-1'></i>Salva</button>
+                                    
+                                            <label for="input-json" class="btn btn-outline-primary mb-0">
+                                                <i class='bx bx-upload me-1'></i>Carica JSON
+                                            </label>
+                                            <input id="input-json" type="file" accept="application/json" hidden>
+                                    <button id="btn-clear" class="btn btn-outline-secondary"><i
+                                            class='bx bx-eraser me-1'></i>Pulisci</button>
+                                        
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div
+                            class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                            <div class="mb-2 mb-md-0">©
+                                <script>document.write(new Date().getFullYear());</script>, Designed with ❤️ by <a
+                                    class="footer-link fw-bolder" href="https://www.app-eleven.it"
+                                    target="_blank">AppEleven</a>
+                            </div>
+                            <div><a class="footer-link me-4" href="https://themeselection.com/license/"
+                                    target="_blank">License</a><a class="footer-link me-4"
+                                    href="{{ url_for('home') }}#contact" target="_blank">Support</a></div>
+                        </div>
+                    </footer>
+                    <div class="content-backdrop fade"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+
+    <!-- Core JS -->
+    <script src="/static/vendor/libs/jquery/jquery.js"></script>
+    <script src="/static/vendor/libs/popper/popper.js"></script>
+    <script src="/static/vendor/js/bootstrap.js"></script>
+    <script src="/static/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/static/vendor/js/menu.js"></script>
+    <script src="/static/js/main.js"></script>
+
+    <!-- React + Babel (solo in questa pagina) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
+    <script>
+        // Inietta JSON come stringa sicura
+        const CALENDARIO_JSON = JSON.parse('{{ calendario_json | tojson | safe }}');
+    </script>
+
+    {% raw %}
+    <script type="text/babel">
+
+        // Helper functions
+        function classNames(...xs) { return xs.filter(Boolean).join(' ') }
+
+        function getShiftClass(shift) {
+            if (shift === 'Libero') return 'badge bg-label-success';
+            if (shift === '10.00-18.00') return 'badge bg-label-primary';
+            if (shift === '14.00-22.00') return 'badge bg-label-danger';
+            if (shift === '16.00-00.00') return 'badge bg-label-warning';
+            return 'badge bg-label-primary';
+        }
+
+        function getMonthDays(year, month) {
+            const days = [];
+            const date = new Date(year, month, 1);
+            while (date.getMonth() === month) {
+                const dayNumber = date.getDate();
+                const weekday = date.toLocaleDateString('it-IT', { weekday: 'long' });
+                days.push(`${dayNumber} (${weekday})`);
+                date.setDate(dayNumber + 1);
+            }
+            return days;
+        }
+
+        // Default demo data
+        const DEFAULT_SHIFTS = ["10.00-18.00", "14.00-22.00", "16.00-00.00", "Libero", "Aggiungi"];
+        const DEMO_EMPLOYEES = [
+            { id: 1, name: "Mario Rossi", shifts: {} },
+            { id: 2, name: "Luca Bianchi", shifts: {} },
+            { id: 3, name: "Giulia Verdi", shifts: {} },
+            { id: 4, name: "Gianni Sperti", shifts: {} },
+            { id: 5, name: "Luca Foldini", shifts: {} },
+            { id: 6, name: "Marta Zuccari", shifts: {} },
+        ];
+
+        // ShiftChips component
+        function ShiftChips({ shifts, setShifts }) {
+            const [showModal, setShowModal] = React.useState(false);
+            const [newShiftName, setNewShiftName] = React.useState("");
+            const [newShiftColor, setNewShiftColor] = React.useState("Blu");
+
+            const normalShifts = shifts.filter(s => s !== "Aggiungi");
+            const hasAddShift = shifts.includes("Aggiungi");
+
+            const colorMap = { "Blu": "primary", "Giallo": "warning", "Rosso": "danger", "Verde": "success", "Azzurro": "info", "Grigio": "secondary" };
+            const colorNames = Object.keys(colorMap);
+
+            const handleSaveShift = () => {
+                if (!newShiftName.trim()) return alert("Inserisci un nome per il turno!");
+                setShifts(prev => {
+                    const filtered = prev.filter(s => {
+                        const [name] = s.includes("|") ? s.split("|") : [s];
+                        return name !== newShiftName && s !== "Aggiungi";
+                    });
+                    return [...filtered, `${newShiftName}|${newShiftColor}`, "Aggiungi"];
+                });
+                setNewShiftName("");
+                setNewShiftColor("Blu");
+                setShowModal(false);
+            };
+
+            const getShiftColor = (shift) => {
+                if (shift === "Libero") return "Verde";
+                if (shift === "10.00-18.00") return "Blu";
+                if (shift === "14.00-22.00") return "Rosso";
+                if (shift === "16.00-00.00") return "Giallo";
+                return "Blu";
+            };
+
+            return (
+                <div className="d-flex align-items-center justify-content-between mb-2">
+                    <div className="d-flex flex-wrap gap-2">
+                        {normalShifts.map(s => {
+                            const [name, color] = s.includes("|") ? s.split("|") : [s, getShiftColor(s)];
+                            return (
+                                <span
+                                    key={name}
+                                    className={classNames('shift-chip', 'shift-badge', `badge bg-label-${colorMap[color] || colorMap["Blu"]}`)}
+                                    draggable
+                                    onDragStart={e => e.dataTransfer.setData('shift', name)}
+                                    title="Trascina sulla tabella"
+                                >
+                                    <i className='bx bx-move'></i>{name}
+                                </span>
+                            );
+                        })}
+                    </div>
+
+                    {hasAddShift && (
+                        <button className="btn btn-primary" onClick={() => setShowModal(true)}>Aggiungi</button>
+                    )}
+
+                    {showModal && (
+                        <div className="modal fade show d-block" tabIndex="-1" aria-hidden={!showModal}>
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content border-primary">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title text-primary">Nuovo turno personalizzato</h5>
+                                        <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <div className="mb-3">
+                                            <label className="form-label">Nome turno</label>
+                                            <input type="text" className="form-control" value={newShiftName} onChange={e => setNewShiftName(e.target.value)} />
+                                        </div>
+                                        <div className="mb-3">
+                                            <label className="form-label">Colore</label>
+                                            <select className="form-select" value={newShiftColor} onChange={e => setNewShiftColor(e.target.value)}>
+                                                {colorNames.map(c => <option key={c} value={c}>{c}</option>)}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annulla</button>
+                                        <button type="button" className="btn btn-primary" onClick={handleSaveShift}>Salva</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ShiftTable component
+        function ShiftTable({ employees, setEmployees, dragOver, setDragOver, shifts, month, year }) {
+                const today = new Date();
+                const days = React.useMemo(() => getMonthDays(year, month), [year, month]);
+
+                // assegna turno a un dipendente
+                const assign = (employeeId, dayNumber, value) => {
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
+                setEmployees(prev =>
+                    prev.map(e =>
+                        e.id === employeeId
+                            ? { ...e, shifts: { ...(e.shifts || {}), [dateKey]: value } }
+                            : e
+                    )
+                );
+            };
+
+
+
+                const cycleShift = (current) => {
+                    const idx = shifts.indexOf(current);
+                    return idx === -1 ? shifts[0] : shifts[(idx + 1) % shifts.length];
+                };
+
+                const handleDrop = (empId, day, ev) => {
+                    ev.preventDefault(); setDragOver({});
+                    const shift = ev.dataTransfer.getData('shift');
+                    if (!shift) return;
+                    assign(empId, day, shift);
+                };
+
+                React.useEffect(() => {
+                    const el = document.getElementById("current-day-cell");
+                    if (el) {
+                        el.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                            inline: "center"
+                        });
+                    }
+                }, [days, employees]);
+
+
+            return (
+                <table className="table table-hover table-striped mb-0 table-turni">
+                    <thead>
+                        <tr>
+                            <th style={{ minWidth: 220 }}>Dipendente</th>
+                            {days.map(d => {
+                                const dayNumber = parseInt(d, 10);
+                                const isTodayHeader = dayNumber === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                                return <th key={d} className={classNames('text-center', isTodayHeader && 'current-day')} style={{ minWidth: 110 }}>{d}</th>;
+                            })}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {employees.map(emp => (
+                            <tr key={emp.id}>
+                                <td className="fw-semibold">{emp.name}</td>
+                                {days.map(day => {
+                                    const dayNumber = parseInt(day, 10);
+                                    const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
+                                    const v = (emp.shifts || {})[dateKey] || '—';
+                                    const isOff = v === 'Libero';
+                                    const isTodayCell = dayNumber === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                                    const nextShift = cycleShift((emp.shifts || {})[dateKey]);
+                                    return (
+                                        <td
+                                            key={day}
+                                            id={isTodayCell ? "current-day-cell" : undefined}
+                                            className={classNames('text-center', 'drop-cell', dragOver[emp.id + parseInt(day, 10)] && 'drag-over', isTodayCell && 'current-day')}
+                                            onDragOver={e => {
+                                                e.preventDefault();
+                                                setDragOver({ [emp.id + parseInt(day, 10)]: true });
+                                            }}
+                                            onDragLeave={() => setDragOver({})}
+                                            onDrop={e => handleDrop(emp.id, parseInt(day, 10), e)}
+                                            onClick={() => assign(emp.id, dayNumber, nextShift)}
+                                            title="Trascina un turno oppure clicca per cambiare"
+                                            style={{ height: 48, whiteSpace: 'nowrap' }}
+                                        >
+                                            {v !== '—' ? (
+                                                <span className={classNames('shift-badge', getShiftClass(v))}>
+                                                    <i className={isOff ? 'bx bx-sleepy' : 'bx bx-time-five'}></i>
+                                                    {v}
+                                                </span>
+                                            ) : '—'}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            );
+        }
+
+        // Main App component
+        function ShiftApp() {
+                const [employees, setEmployees] = React.useState(CALENDARIO_JSON.employees || []);
+                const [shifts, setShifts] = React.useState(CALENDARIO_JSON.shifts || ["10.00-18.00", "14.00-22.00", "16.00-00.00", "Libero", "Aggiungi"]);
+                const [dragOver, setDragOver] = React.useState({});
+
+                const now = new Date();
+                const [month, setMonth] = React.useState(now.getMonth());
+                const [year, setYear] = React.useState(now.getFullYear());
+
+                // Popola i dropdown
+                const months = [
+                    "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+                    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+                ];
+                const years = Array.from({ length: 10 }, (_, i) => now.getFullYear() - 5 + i); // 5 anni indietro, 4 avanti
+
+                React.useEffect(() => {
+                    const monthSelect = document.getElementById("month-select");
+                    const yearSelect = document.getElementById("year-select");
+                    if (monthSelect) {
+                        monthSelect.innerHTML = months.map((m, idx) => `<option value="${idx}" ${idx === month ? 'selected' : ''}>${m}</option>`).join('');
+                        monthSelect.onchange = (e) => setMonth(parseInt(e.target.value));
+                    }
+                    if (yearSelect) {
+                        yearSelect.innerHTML = years.map(y => `<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`).join('');
+                        yearSelect.onchange = (e) => setYear(parseInt(e.target.value));
+                    }
+                }, [month, year]);
+
+                // gestione save / clear / upload JSON (lasciare invariato)
+                React.useEffect(() => {
+                    const btnSave = document.getElementById('btn-save-json');
+                    const btnClear = document.getElementById('btn-clear');
+                    if (btnSave) btnSave.onclick = () => {
+                        const blob = new Blob([JSON.stringify({ employees }, null, 2)], { type: 'application/json' });
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+                        a.download = "turni.json";
+                        a.click();
+                        URL.revokeObjectURL(a.href);
+
+                    };
+                    if (btnClear) btnClear.onclick = () => {
+                        if (confirm('Sicuro di voler pulire tutte le assegnazioni?')) {
+                            setEmployees(prev => prev.map(e => ({ ...e, shifts: {} })));
+                        }
+                    };
+
+                    const inputJson = document.getElementById('input-json');
+                    if (inputJson) inputJson.onchange = (e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onload = ev => {
+                            try {
+                                const data = JSON.parse(ev.target.result);
+                                if (data.employees) {
+                                    setEmployees(data.employees);
+                                    alert("Dati caricati ✅");
+                                } else alert("Formato JSON non valido ❌");
+                            } catch {
+                                alert("Errore lettura file ❌");
+                            }
+                        };
+                        reader.readAsText(file);
+                        e.target.value = '';
+                    };
+                }, [employees, setEmployees]);
+
+                return (
+                <div>
+                    <div className="card fixed-shifts-card">
+                        <div className="card-body">
+                            <div className="mb-2 fw-semibold">Trascina un turno</div>
+                            <ShiftChips shifts={shifts} setShifts={setShifts} />
+                        </div>
+                    </div>
+                    <div className="card mb-4">
+                        <div className="card-body d-flex align-items-center gap-3">
+                            <select id="month-select" className="form-select" style={{ maxWidth: 200 }}></select>
+                            <select id="year-select" className="form-select" style={{ maxWidth: 120 }}></select>
+                        </div>
+                    </div>
+                    <div style={{ overflowX: 'auto' }}>
+                        <ShiftTable
+                            employees={employees}
+                            setEmployees={setEmployees}
+                            dragOver={dragOver}
+                            setDragOver={setDragOver}
+                            shifts={shifts}
+                            month={month}
+                            year={year}
+                        />
+                    </div>
+                </div>
+            );
+        }
+        // Salva su Airtable
+        const btnSaveAirtable = document.getElementById("btn-save-airtable");
+
+            btnSaveAirtable.addEventListener("click", () => {
+                fetch("/update_calendario", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ calendario: CALENDARIO_JSON })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message);
+                        } else if (data.error) {
+                            alert("Errore: " + data.error);
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert("Errore di connessione");
+                    });
+            });
+
+        // Render
+        const root = ReactDOM.createRoot(document.getElementById('react-table'));
+        root.render(<ShiftApp />);
+
+    </script>
+    {% endraw %}
+
+
+</body>
+
+</html>

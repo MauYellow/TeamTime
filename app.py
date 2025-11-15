@@ -1607,7 +1607,7 @@ def timeline():
     calendario_json = response.json()
 
 
-    return render_template('test_timeline.html', data=data, calendario_json=calendario_json)
+    return render_template('timeline.html', data=data, calendario_json=calendario_json)
 
 @app.route("/update_calendario", methods=["POST"])
 def update_calendario():
