@@ -1628,7 +1628,7 @@ def timeline():
        
     #print("CalendarioJSON da Airtable:", calendario_json[0]['url']) 
 
-    return render_template('test_timeline2.html', data=data, calendario_json=calendario_json)
+    return render_template('timeline.html', data=data, calendario_json=calendario_json)
 
 @app.route("/update_calendario", methods=["POST"])
 def update_calendario():
@@ -1658,7 +1658,7 @@ def update_calendario():
         os.makedirs(static_dir, exist_ok=True)
 
         tmpfile_path = os.path.join(static_dir, "tmpfile_calendario.json")
-        URL_TMPFILE = f"https://unknown-goldfish-app-eleven-9c27431c.koyeb.app/static/temp/tmpfile_calendario.json"  # da cambiare in produzione
+        URL_TMPFILE = f"https://unknown-goldfish-app-eleven-9c27431c.koyeb.app/static/temp/tmpfile_calendario.json"  # da cambiare in produzione**
 
         try:
             with open(tmpfile_path, "w", encoding="utf-8") as f:
@@ -1670,7 +1670,7 @@ def update_calendario():
 
         try:
            print("Salvataggio su Airtable in corso..")
-           #table.update(record_id, {"CalendarioJSON": [{"url": URL_TMPFILE}]})**
+           table.update(record_id, {"CalendarioJSON": [{"url": URL_TMPFILE}]}) #**
         except Exception as e:
            print(f"Errore nell'invio su Airtable del file JSON in locale: {e}")
 

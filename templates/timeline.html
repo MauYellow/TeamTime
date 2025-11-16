@@ -94,36 +94,37 @@
             display: inline-block;
             margin-right: .35rem;
         }
-        
+
         .table-turni th:first-child,
         .table-turni td:first-child {
-           position: sticky;
-           left: 0;
-           z-index: 2;
-           background: #fff; /* colore di sfondo per sovrapporsi correttamente */
-}
+            position: sticky;
+            left: 0;
+            z-index: 2;
+            background: #fff;
+            /* colore di sfondo per sovrapporsi correttamente */
+        }
 
         .table-turni th:first-child {
-           z-index: 3; /* header sopra le celle */
-}
+            z-index: 3;
+            /* header sopra le celle */
+        }
+
         .current-day {
-           background-color: #d0e9ff !important;
-}
+            background-color: #d0e9ff !important;
+        }
+
         .fixed-shifts-card {
-    position: sticky;
-    top: 0; /* distanza dal top della pagina / del container scrollabile */
-    z-index: 10;
-    background: #fff; /* necessario per sovrapporre correttamente */
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid #dee2e6;
-}
-
-
-
-
-
+            position: sticky;
+            top: 0;
+            /* distanza dal top della pagina / del container scrollabile */
+            z-index: 10;
+            background: #fff;
+            /* necessario per sovrapporre correttamente */
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
     </style>
 </head>
 
@@ -221,7 +222,9 @@
                                                             src="https://img.icons8.com/external-emojis-because-i-love-you-royyan-wijaya/32/external-avatar-hana-emojis-general-ii-emojis-because-i-love-you-royyan-wijaya-42.png"
                                                             alt="" /></div>
                                                 </div>
-                                                <div class="flex-grow-1"><span class="fw-semibold d-block">TEST**</span><small class="text-muted">Admin</small></div>
+                                                <div class="flex-grow-1"><span
+                                                        class="fw-semibold d-block">TEST**</span><small
+                                                        class="text-muted">Admin</small></div>
                                             </div>
                                         </a></li>
                                     <li>
@@ -241,48 +244,96 @@
                     <div class="container-xxl flex-grow-1 container-p-y">
 
                         <div class="card mb-4">
-                            <div class="card-body d-flex flex-wrap align-items-center justify-content-between turni-toolbar">
-                        
+                            <div
+                                class="card-body d-flex flex-wrap align-items-center justify-content-between turni-toolbar">
                                 <!-- Selettori mese/anno -->
-                                <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
-                                    <select id="month-select" class="form-select" style="max-width: 200px"></select>
-                                    <select id="year-select" class="form-select" style="max-width: 120px"></select>
+                                <div class="d-flex align-items-center gap-2 flex-nowrap">
+                                    <select id="month-select" class="form-select"
+                                        style="max-width: 200px; min-width: 150px;"></select>
+                                    <select id="year-select" class="form-select"
+                                        style="max-width: 120px; min-width: 80px;"></select>
                                 </div>
-                                
+
                                 <!-- Pulsanti -->
-                                <div class="d-flex flex-wrap gap-2">
-                                    <button id="btn-save-json" class="btn btn-secondary"><i class='bx bx-save me-1'></i>Scarica JSON</button>
-                        
-                                    <label for="input-json" class="btn btn-outline-primary mb-0">
-                                        <i class='bx bx-upload me-1'></i>Carica JSON
-                                    </label>
-                                    <input id="input-json" type="file" accept="application/json" hidden>
-                        
-                                    <button id="btn-clear" class="btn btn-outline-secondary"><i class='bx bx-eraser me-1'></i>Pulisci</button>
-                        
-                                    <button id="btn-save-airtable" class="btn btn-primary"><i class='bx bx-save me-1'></i>Salva</button>
+                                <div class="d-flex flex-wrap gap-2 ms-3">
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                            id="dropdown-json" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bx bxs-file-pdf"></i>Esporta
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdown-json">
+                                            <li>
+                                                <button class="dropdown-item" id="btnExportPDF">
+                                                    <i class="bx bxs-file-pdf"></i>Esporta PDF b/n
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item" id="btn-esporta-pdf-colori">
+                                                    <i class="bx bxs-file-pdf" style="color: red;"></i>Esporta PDF a
+                                                    colori
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item" id="btn-save-json">
+                                                    <i class="bx bx-export me-1"></i>Esporta JSON
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <label for="input-json" class="dropdown-item mb-0"
+                                                    style="cursor: pointer;">
+                                                    <i class="bx bx-upload me-1"></i>Carica JSON
+                                                </label>
+                                                <input id="input-json" type="file" accept="application/json" hidden />
+                                            </li>
+
+                                        </ul>
+                                    </div>
+
+                                    <!-- Modale per inserimento Date per PDF -->
+                                    <div id="modalPDF" class="modal fade" tabindex="-1" aria-hidden="true"
+                                        style="display:none;">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content border-primary">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-primary">Esporta PDF Turni</h5>
+                                                    <button type="button" class="btn-close" id="btnCloseModal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Data Inizio</label>
+                                                        <input type="date" id="pdfStartDate" class="form-control">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Data Fine</label>
+                                                        <input type="date" id="pdfEndDate" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        id="btnCancelModal">Annulla</button>
+                                                    <button type="button" class="btn btn-primary"
+                                                        id="btnSavePDF">Esporta PDF</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button id="btn-clear" class="btn btn-outline-primary">
+                                        <i class="bx bx-eraser me-1"></i>Pulisci
+                                    </button>
+
+                                    <button id="btn-save-airtable" class="btn btn-primary">
+                                        <i class="bx bx-save me-1"></i>Salva
+                                    </button>
                                 </div>
-                        
-                                
-                        
                             </div>
                         </div>
-                        <!-- Prova filled tabs -->
-                        <div class="row">
-                            <div class="nav-align-top mb-4">
-                                <!-- Tabella React dentro una card -->
-                                <div class="card">
-                                    <div class="card-body p-0">
-                                        <div id="react-table" class="table-responsive"></div>
-                                    </div>
-                                </div>
-                            </div>                                
 
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div id="react-table" class="table-responsive"></div>
+                            </div>
                         </div>
-
-                        <!-- Header & Toolbar -->
-                        
-
                     </div>
                     <footer class="content-footer footer bg-footer-theme">
                         <div
@@ -320,20 +371,76 @@
 
     <script>
         const calendario_initial = {{ calendario_json | tojson | safe }};
-        const backendData = {{ data | tojson }};
+        const backendData = {{ data | tojson | safe }};
+    </script>
+
+    <script>
+        const btnExportPDF = document.getElementById("btnExportPDF");
+        const modalPDF = document.getElementById("modalPDF");
+        const btnCloseModal = document.getElementById("btnCloseModal");
+        const btnCancelModal = document.getElementById("btnCancelModal");
+        const btnSavePDF = document.getElementById("btnSavePDF");
+
+        // Apri modal
+        btnExportPDF.onclick = () => {
+            modalPDF.style.display = "block";
+            modalPDF.classList.add("show");
+        };
+
+        // Chiudi modal
+        const closeModal = () => {
+            modalPDF.style.display = "none";
+            modalPDF.classList.remove("show");
+        };
+
+        btnCloseModal.onclick = closeModal;
+        btnCancelModal.onclick = closeModal;
+
+        // Esporta PDF
+        btnSavePDF.onclick = () => {
+            const start = document.getElementById("pdfStartDate").value;
+            const end = document.getElementById("pdfEndDate").value;
+
+            if (!start || !end) {
+                alert("Seleziona entrambe le date");
+                return;
+            }
+
+            fetch("/turni_pdf", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    calendario: {
+                        employees, // assicurati che questa variabile sia definita globalmente
+                        shifts,    // idem
+                        date_start: start,
+                        date_end: end
+                    }
+                })
+            })
+                .then(res => res.blob())
+                .then(blob => {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "turni.pdf";
+                    a.click();
+                    closeModal();
+                });
+        };
     </script>
 
 
     {% raw %}
     <script type="text/babel">
         // Helper function globale
-            function getShiftColor(shift) {
-                if (shift === "Libero") return "Verde";
-                if (shift === "10.00-18.00") return "Blu";
-                if (shift === "14.00-22.00") return "Rosso";
-                if (shift === "16.00-00.00") return "Giallo";
-                return "Blu"; // fallback
-            }
+        function getShiftColor(shift) {
+            if (shift === "Libero") return "Verde";
+            if (shift === "10.00-18.00") return "Blu";
+            if (shift === "14.00-22.00") return "Rosso";
+            if (shift === "16.00-00.00") return "Giallo";
+            return "Blu"; // fallback
+        }
 
 
         // Helper functions
@@ -374,117 +481,121 @@
 
         // ShiftChips component
         function ShiftChips({ shifts, setShifts }) {
-                const [showModal, setShowModal] = React.useState(false);
-                const [newShiftName, setNewShiftName] = React.useState("");
-                const [newShiftColor, setNewShiftColor] = React.useState("Blu");
+            const [showModal, setShowModal] = React.useState(false);
+            const [newShiftName, setNewShiftName] = React.useState("");
+            const [newShiftColor, setNewShiftColor] = React.useState("Blu");
 
-                const colorMap = { "Blu": "primary", "Giallo": "warning", "Rosso": "danger", "Verde": "success", "Azzurro": "info", "Grigio": "secondary" };
-                const colorNames = Object.keys(colorMap);
+            const colorMap = { "Blu": "primary", "Giallo": "warning", "Rosso": "danger", "Verde": "success", "Azzurro": "info", "Grigio": "secondary" };
+            const colorNames = Object.keys(colorMap);
 
-                const handleDeleteShift = (name) => {
-                    setShifts(prev =>
-                        prev.filter(s => {
-                            if (s === "Aggiungi") return true; // non eliminare mai Aggiungi
-                            const sName = typeof s === "string" ? s : s.name;
-                            return sName !== name;
-                        })
-                    );
-                };
+            const handleDeleteShift = (name) => {
+                setShifts(prev =>
+                    prev.filter(s => {
+                        if (s === "Aggiungi") return true; // non eliminare mai Aggiungi
+                        const sName = typeof s === "string" ? s : s.name;
+                        return sName !== name;
+                    })
+                );
+            };
 
-                const handleSaveShift = () => {
-                    if (!newShiftName.trim()) return alert("Inserisci un nome per il turno!");
+            const handleSaveShift = () => {
+                if (!newShiftName.trim()) return alert("Inserisci un nome per il turno!");
 
-                    setShifts(prev => [
-                        ...prev.filter(s => typeof s !== "object" || s.name !== newShiftName), // elimina eventuali duplicati
-                        { name: newShiftName, color: newShiftColor },
-                        "Aggiungi"
-                    ]);
+                setShifts(prev => [
+                    ...prev.filter(s => typeof s !== "object" || s.name !== newShiftName), // elimina eventuali duplicati
+                    { name: newShiftName, color: newShiftColor },
+                    "Aggiungi"
+                ]);
 
-                    setNewShiftName("");
-                    setNewShiftColor("Blu");
-                    setShowModal(false);
-                };
+                setNewShiftName("");
+                setNewShiftColor("Blu");
+                setShowModal(false);
+            };
 
-                // mappa tutti i chip, includendo “Aggiungi” come ultimo
-                const displayShifts = [...shifts.filter(s => s !== "Aggiungi"), "Aggiungi"];
+            // mappa tutti i chip, includendo “Aggiungi” come ultimo
+            const displayShifts = [...shifts.filter(s => s !== "Aggiungi"), "Aggiungi"];
 
-                return (
-                    <div className="d-flex flex-wrap gap-2">
-                        {displayShifts.map(s => {
-                            if (s === "Aggiungi") {
-                                return (
-                                    <span
-                                        key="aggiungi"
-                                        className={classNames('shift-chip', 'shift-badge', 'badge bg-label-primary')}
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => setShowModal(true)}
-                                        title="Crea nuovo turno"
-                                    >
-                                        + Aggiungi
-                                    </span>
-                                );
-                            }
-
-                            const name = typeof s === "string" ? s : s.name;
-                            const color = typeof s === "string" ? getShiftColor(s) : s.color;
-
+            return (
+                <div className="d-flex flex-wrap gap-2">
+                    {displayShifts.map(s => {
+                        if (s === "Aggiungi") {
                             return (
                                 <span
-                                    key={name}
-                                    className={classNames('shift-chip', 'shift-badge', `badge bg-label-${colorMap[color] || colorMap["Blu"]}`)}
-                                    draggable
-                                    onDragStart={e => e.dataTransfer.setData('shift', name)}
-                                    title="Trascina sulla tabella"
+                                    key="aggiungi"
+                                    className={classNames('shift-chip', 'shift-badge', 'badge bg-label-success')}
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => setShowModal(true)}
+                                    title="Crea nuovo turno"
                                 >
                                     <i
-                                        className="bx bx-trash"
+                                        className="bx bx-plus"
                                         style={{ cursor: "pointer" }}
-                                        onClick={() => handleDeleteShift(name)}
-                                    ></i>
-                                    {name}
+                                        title="Aggiungi dipendente"
+
+                                    ></i>Aggiungi
                                 </span>
                             );
-                        })}
+                        }
 
-                        {showModal && (
-                            <div className="modal fade show d-block" tabIndex="-1" aria-hidden={!showModal}>
-                                <div className="modal-dialog modal-dialog-centered">
-                                    <div className="modal-content border-primary">
-                                        <div className="modal-header">
-                                            <h5 className="modal-title text-primary">Nuovo turno personalizzato</h5>
-                                            <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                        const name = typeof s === "string" ? s : s.name;
+                        const color = typeof s === "string" ? getShiftColor(s) : s.color;
+
+                        return (
+                            <span
+                                key={name}
+                                className={classNames('shift-chip', 'shift-badge', `badge bg-label-${colorMap[color] || colorMap["Blu"]}`)}
+                                draggable
+                                onDragStart={e => e.dataTransfer.setData('shift', name)}
+                                title="Trascina sulla tabella"
+                            >
+                                <i
+                                    className="bx bx-trash"
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => handleDeleteShift(name)}
+                                ></i>
+                                {name}
+                            </span>
+                        );
+                    })}
+
+                    {showModal && (
+                        <div className="modal fade show d-block" tabIndex="-1" aria-hidden={!showModal}>
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content border-primary">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title text-primary">Nuovo turno personalizzato</h5>
+                                        <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <div className="mb-3">
+                                            <label className="form-label">Nome turno</label>
+                                            <input type="text" className="form-control" value={newShiftName} onChange={e => setNewShiftName(e.target.value)} />
                                         </div>
-                                        <div className="modal-body">
-                                            <div className="mb-3">
-                                                <label className="form-label">Nome turno</label>
-                                                <input type="text" className="form-control" value={newShiftName} onChange={e => setNewShiftName(e.target.value)} />
-                                            </div>
-                                            <div className="mb-3">
-                                                <label className="form-label">Colore</label>
-                                                <select className="form-select" value={newShiftColor} onChange={e => setNewShiftColor(e.target.value)}>
-                                                    {colorNames.map(c => <option key={c} value={c}>{c}</option>)}
-                                                </select>
-                                            </div>
+                                        <div className="mb-3">
+                                            <label className="form-label">Colore</label>
+                                            <select className="form-select" value={newShiftColor} onChange={e => setNewShiftColor(e.target.value)}>
+                                                {colorNames.map(c => <option key={c} value={c}>{c}</option>)}
+                                            </select>
                                         </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annulla</button>
-                                            <button type="button" className="btn btn-primary" onClick={handleSaveShift}>Salva</button>
-                                        </div>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annulla</button>
+                                        <button type="button" className="btn btn-primary" onClick={handleSaveShift}>Salva</button>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
-                );
-            }
+                        </div>
+                    )}
+                </div>
+            );
+        }
 
         // ShiftTable component
         function ShiftTable({ employees, setEmployees, dragOver, setDragOver, shifts, month, year }) {
-                const today = new Date();
-                const days = React.useMemo(() => getMonthDays(year, month), [year, month]);
+            const today = new Date();
+            const days = React.useMemo(() => getMonthDays(year, month), [year, month]);
 
-                // assegna turno a un dipendente
-                // assegna turno a un dipendente (value è il nome del turno o un oggetto)
+            // assegna turno a un dipendente (value è il nome del turno o un oggetto)
             const assign = (employeeId, dayNumber, value) => {
                 const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
 
@@ -514,11 +625,11 @@
                     )
                 );
             };
-        
 
 
 
-                const cycleShift = (current) => {
+
+            const cycleShift = (current) => {
                 // current può essere oggetto o stringa; normalizziamo al nome
                 const currentName = current && typeof current === 'object' ? current.name : current;
                 // lista dei nomi (escludi "Aggiungi")
@@ -529,7 +640,7 @@
             };
 
 
-                const handleDrop = (empId, day, ev) => {
+            const handleDrop = (empId, day, ev) => {
                 ev.preventDefault(); setDragOver({});
                 const shiftName = ev.dataTransfer.getData('shift');
                 if (!shiftName) return;
@@ -537,7 +648,7 @@
             };
 
 
-                React.useEffect(() => {
+            React.useEffect(() => {
                 const el = document.getElementById("current-day-cell");
                 if (el) {
                     el.scrollIntoView({
@@ -565,7 +676,12 @@
                     <tbody>
                         {employees.map(emp => (
                             <tr key={emp.id}>
-                                <td className="fw-semibold">{emp.name}</td>
+                                {/* Colonna Dipendente con icona "-" */}
+                                <td className="fw-semibold">
+                                    {emp.name}
+                                </td>
+
+                                {/* Colonne dei giorni */}
                                 {days.map(day => {
                                     const dayNumber = parseInt(day, 10);
                                     const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
@@ -575,11 +691,17 @@
                                     const isOff = vName === 'Libero';
                                     const isTodayCell = dayNumber === today.getDate() && month === today.getMonth() && year === today.getFullYear();
                                     const nextShift = cycleShift((emp.shifts || {})[dateKey]);
+
                                     return (
                                         <td
                                             key={day}
                                             id={isTodayCell ? "current-day-cell" : undefined}
-                                            className={classNames('text-center', 'drop-cell', dragOver[emp.id + parseInt(day, 10)] && 'drag-over', isTodayCell && 'current-day')}
+                                            className={classNames(
+                                                'text-center',
+                                                'drop-cell',
+                                                dragOver[emp.id + parseInt(day, 10)] && 'drag-over',
+                                                isTodayCell && 'current-day'
+                                            )}
                                             onDragOver={e => {
                                                 e.preventDefault();
                                                 setDragOver({ [emp.id + parseInt(day, 10)]: true });
@@ -588,32 +710,32 @@
                                             onDrop={e => handleDrop(emp.id, parseInt(day, 10), e)}
                                             onClick={() => assign(emp.id, dayNumber, nextShift)}
                                             title="Trascina un turno oppure clicca per cambiare"
-                                            style={{ height: 48, whiteSpace: 'nowrap' }}
+                                            style={{ height: 48, whiteSpace: 'nowrap', cursor: 'pointer' }}
                                         >
                                             {vName ? (
                                                 <span className={classNames(
                                                     'shift-badge',
                                                     `badge bg-label-${colorMap[vColor] || colorMap["Blu"]}`
                                                 )}>
-
                                                     <i className={isOff ? 'bx bx-sleepy' : 'bx bx-time-five'}></i>
                                                     {vName}
                                                 </span>
-                                            ) : '—'}
+                                            ) : '+'}
                                         </td>
                                     );
                                 })}
                             </tr>
                         ))}
                     </tbody>
+
                 </table>
             );
         }
 
         // Main App component
-        function ShiftApp({ initialData, backendData }) {
-              
-                const [shifts, setShifts] = React.useState(initialData.shifts || [
+        function ShiftApp({ initialData }) {
+
+            const [shifts, setShifts] = React.useState(initialData.shifts || [
                 { name: "10.00-18.00", color: "Blu" },
                 { name: "14.00-22.00", color: "Rosso" },
                 { name: "16.00-00.00", color: "Giallo" },
@@ -625,51 +747,56 @@
             const [employees, setEmployees] = React.useState(initialData.employees || DEMO_EMPLOYEES);
             const maxId = initialData.employees?.reduce((max, e) => Math.max(max, e.id), 0) || 0;
             const [nextEmployeeId, setNextEmployeeId] = React.useState(initialData.nextEmployeeId || maxId + 1);
-            const [activeTab, setActiveTab] = React.useState("turni");
 
+            React.useEffect(() => {
+                if (!initialData) return;
 
-                React.useEffect(() => {
-                        if (!initialData) return;
+                if (initialData.employees)
+                    setEmployees(initialData.employees);
 
-                        if (initialData.employees)
-                            setEmployees(initialData.employees);
+                if (initialData.shifts)
+                    setShifts(initialData.shifts);
 
-                        if (initialData.shifts)
-                            setShifts(initialData.shifts);
+            }, [initialData]);
 
-                    }, [initialData]);
+            const [dragOver, setDragOver] = React.useState({});
 
-                const [dragOver, setDragOver] = React.useState({});
+            const now = new Date();
+            const [month, setMonth] = React.useState(now.getMonth());
+            const [year, setYear] = React.useState(now.getFullYear());
 
-                const now = new Date();
-                const [month, setMonth] = React.useState(now.getMonth());
-                const [year, setYear] = React.useState(now.getFullYear());
+            // Popola i dropdown
+            const months = [
+                "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+                "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+            ];
+            const years = Array.from({ length: 10 }, (_, i) => now.getFullYear() - 5 + i); // 5 anni indietro, 4 avanti
 
-                // Popola i dropdown
-                const months = [
-                    "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
-                    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
-                ];
-                const years = Array.from({ length: 10 }, (_, i) => now.getFullYear() - 5 + i); // 5 anni indietro, 4 avanti
+            React.useEffect(() => {
+                const monthSelect = document.getElementById("month-select");
+                const yearSelect = document.getElementById("year-select");
+                if (monthSelect) {
+                    monthSelect.innerHTML = months.map((m, idx) => `<option value="${idx}" ${idx === month ? 'selected' : ''}>${m}</option>`).join('');
+                    monthSelect.onchange = (e) => setMonth(parseInt(e.target.value));
+                }
+                if (yearSelect) {
+                    yearSelect.innerHTML = years.map(y => `<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`).join('');
+                    yearSelect.onchange = (e) => setYear(parseInt(e.target.value));
+                }
+            }, [month, year]);
 
-                React.useEffect(() => {
-                    const monthSelect = document.getElementById("month-select");
-                    const yearSelect = document.getElementById("year-select");
-                    if (monthSelect) {
-                        monthSelect.innerHTML = months.map((m, idx) => `<option value="${idx}" ${idx === month ? 'selected' : ''}>${m}</option>`).join('');
-                        monthSelect.onchange = (e) => setMonth(parseInt(e.target.value));
-                    }
-                    if (yearSelect) {
-                        yearSelect.innerHTML = years.map(y => `<option value="${y}" ${y === year ? 'selected' : ''}>${y}</option>`).join('');
-                        yearSelect.onchange = (e) => setYear(parseInt(e.target.value));
-                    }
-                }, [month, year]);
-
-                // gestione save / clear / upload JSON (lasciare invariato)
-                React.useEffect(() => {
+            // gestione save / clear / upload JSON (lasciare invariato)
+            React.useEffect(() => {
                 const btnSave = document.getElementById('btn-save-json');
+                const btnExportPDFColori = document.getElementById('btn-esporta-pdf-colori');
                 const btnClear = document.getElementById('btn-clear');
                 const btnSaveAirtable = document.getElementById("btn-save-airtable");
+                const btnExportPDF = document.getElementById("btnExportPDF");
+                const modalPDF = document.getElementById("modalPDF");
+                const btnCloseModal = document.getElementById("btnCloseModal");
+                const btnCancelModal = document.getElementById("btnCancelModal");
+                const btnSavePDF = document.getElementById("btnSavePDF");
+
 
                 if (btnSave)
                     btnSave.onclick = () => {
@@ -683,6 +810,95 @@
                         a.click();
                         URL.revokeObjectURL(a.href);
                     };
+
+                if (btnExportPDF)
+                    btnExportPDF.onclick = () => {
+                        modalPDF.style.display = "block";
+                        modalPDF.classList.add("show");
+                    };
+
+                // Chiudi modal
+                const closeModal = () => {
+                    modalPDF.style.display = "none";
+                    modalPDF.classList.remove("show");
+                };
+
+                btnCloseModal.onclick = closeModal;
+                btnCancelModal.onclick = closeModal;
+
+                // Esporta PDF
+                btnSavePDF.onclick = () => {
+                    const start = document.getElementById("pdfStartDate").value;
+                    const end = document.getElementById("pdfEndDate").value;
+
+                    if (!start || !end) {
+                        alert("Seleziona entrambe le date");
+                        return;
+                    }
+
+                    fetch("/turni_pdf", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            calendario: {
+                                employees, // assicurati che questa variabile sia definita globalmente
+                                shifts,    // idem
+                                date_start: start,
+                                date_end: end
+                            }
+                        })
+                    })
+                        .then(res => res.blob())
+                        .then(blob => {
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement("a");
+                            a.href = url;
+                            a.download = `turni_${start}_${end}.pdf`;
+                            a.click();
+                            closeModal();
+                        });
+                };
+
+                if (btnExportPDFColori)
+                    btnExportPDFColori.onclick = () => {
+                        // Mostra il modal stesso del PDF
+                        modalPDF.style.display = "block";
+                        modalPDF.classList.add("show");
+
+                        // Salvataggio dei dati dal modal
+                        btnSavePDF.onclick = () => {
+                            const start = document.getElementById("pdfStartDate").value;
+                            const end = document.getElementById("pdfEndDate").value;
+
+                            if (!start || !end) {
+                                alert("Seleziona entrambe le date");
+                                return;
+                            }
+
+                            fetch("/turni_pdf_colori", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    calendario: {
+                                        employees,
+                                        shifts,
+                                        date_start: start,
+                                        date_end: end
+                                    }
+                                })
+                            })
+                                .then(res => res.blob())
+                                .then(blob => {
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement("a");
+                                    a.href = url;
+                                    a.download = `turni_${start}_${end}_colorati.pdf`;
+                                    a.click();
+                                    closeModal(); // chiude il modal
+                                });
+                        };
+                    };
+
 
                 if (btnSaveAirtable)
                     btnSaveAirtable.onclick = () => {
@@ -713,200 +929,146 @@
 
             }, [employees, shifts]);  // 👈 IMPORTANTE
 
-        return (
+            return (
                 <div>
-
-                    {/* Tabs React */}
-                    <ul className="nav nav-tabs nav-fill" role="tablist">
-                    <li className="nav-item">
-                        <button
-                            type="button"
-                            className={`nav-link ${activeTab === 'turni' ? 'active' : ''}`}
-                            role="tab"
-                            onClick={() => setActiveTab('turni')}
-                        >
-                            <i className="tf-icons bx bx-grid-alt"></i> Turni
-                        </button>
-                    </li>
-
-                    <li className="nav-item">
-                        <button
-                            type="button"
-                            className={`nav-link ${activeTab === 'dipendenti' ? 'active' : ''}`}
-                            role="tab"
-                            onClick={() => setActiveTab('dipendenti')}
-                        >
-                            <i className="tf-icons bx bx-home"></i> Dipendenti
-                        </button>
-                    </li>
-                </ul>
-
-
-                    {/* TAB: TURNI */}
-                    {activeTab === "turni" && (
-                        <>
-                            <div className="card fixed-shifts-card">
-                                <div className="card-body">
-                                    <div className="mb-2 fw-semibold">Trascina un turno</div>
-                                    <ShiftChips shifts={shifts} setShifts={setShifts} />
-                                </div>
-                            </div>
-
-                            <div style={{ overflowX: 'auto' }}>
-                                <ShiftTable
-                                    employees={employees}
-                                    setEmployees={setEmployees}
-                                    dragOver={dragOver}
-                                    setDragOver={setDragOver}
-                                    shifts={shifts}
-                                    month={month}
-                                    year={year}
-                                />
-                            </div>
-                        </>
-                    )}
-
-                    {/* TAB: DIPENDENTI */}
-                    {activeTab === "dipendenti" && (
-                    <div className="card p-3 mt-3">
-                        {/* HEADER: nome + pulsante aggiungi sulla stessa riga */}
-                        <div className="d-flex align-items-center justify-content-between mb-3">
-                            <h5 className="fw-bold mb-0">Gestione dipendenti</h5>
-                            <button
-                                className="btn btn-primary"
-                                onClick={() => document.getElementById('add-employee-modal')?.classList.add('show')}
-                            >
-                                Aggiungi
-                            </button>
-                        </div>
-
-                        {/* TABELLA DIPENDENTI */}
-                        <div className="table-responsive text-nowrap">
-                            <table className="table table-hover align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th className="text-end">Azione</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    {employees.length > 0 ? (
-                                        employees.map(emp => (
-                                            <tr key={emp.id}>
-                                                <td>{emp.name}</td>
-
-                                                <td className="text-end">
-                                                    <button
-                                                        className="btn btn-danger btn-sm"
-                                                        onClick={() =>
-                                                            setEmployees(prev =>
-                                                                prev.filter(e => e.id !== emp.id)
-                                                            )
-                                                        }
-                                                    >
-                                                        Elimina
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan="2" className="text-center text-muted">
-                                                Nessun dipendente presente.
-                                            </td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
+                    <div className="card fixed-shifts-card">
+                        <div className="card-body">
+                            <div className="mb-2 fw-semibold">Trascina un turno o clicca sulla tabella, ricordati di salvare prima di uscire</div>
+                            <ShiftChips shifts={shifts} setShifts={setShifts} />
                         </div>
                     </div>
-                )}
 
 
+                    <div style={{ overflowX: 'auto' }}>
+                        <ShiftTable
+                            employees={employees}
+                            setEmployees={setEmployees}
+                            dragOver={dragOver}
+                            setDragOver={setDragOver}
+                            shifts={shifts}
+                            month={month}
+                            year={year}
+                        />
+                    </div>
+                    <EmployeeChips
+                        employees={employees}
+                        setEmployees={setEmployees}
+                        nextEmployeeId={nextEmployeeId}
+                        setNextEmployeeId={setNextEmployeeId}
+                    />
                 </div>
             );
         }
 
-         function EmployeeChips({ employees, setEmployees, nextEmployeeId, setNextEmployeeId, backendData }) {
-                const [showModal, setShowModal] = React.useState(false);
-                const [newEmployeeName, setNewEmployeeName] = React.useState("");
-                const maxEmployees = parseInt(backendData?.['Max Dipendenti'], 10) || 10;
+        function EmployeeChips({ employees, setEmployees, nextEmployeeId, setNextEmployeeId }) {
+            const [showModal, setShowModal] = React.useState(false);
+            const [newEmployeeName, setNewEmployeeName] = React.useState("");
 
-                const handleSaveEmployee = () => {
-                    if (!newEmployeeName.trim()) return alert("Inserisci un nome valido!");
-                    if (employees.length >= maxEmployees)
-                        return alert(`Puoi avere massimo ${maxEmployees} dipendenti!`);
 
-                    const newEmployee = {
-                        id: nextEmployeeId,
-                        name: newEmployeeName,
-                        shifts: {}
-                    };
+            const handleSaveEmployee = () => {
+                if (!newEmployeeName.trim()) return alert("Inserisci un nome valido!");
+                const maxEmployees = parseInt(backendData?.['Max Dipendenti'], 10) || 10; // fallback a 10
 
-                    setEmployees(prev => [...prev, newEmployee]);
-                    setNextEmployeeId(prev => prev + 1);
-                    setNewEmployeeName("");
-                    setShowModal(false);
+                if (employees.length >= maxEmployees)
+                    return alert(`Secondo il tuo piano scelto puoi gestire un massimo di ${maxEmployees} dipendenti, contatta l'assistenza per aumentare il limite!`);
+
+                const newEmployee = {
+                    id: nextEmployeeId,
+                    name: newEmployeeName,
+                    shifts: {}
                 };
 
-                const handleDeleteEmployee = (id) => {
-                    if (!confirm("Vuoi davvero eliminare questo dipendente?")) return;
-                    setEmployees(prev => prev.filter(e => e.id !== id));
-                };
+                setEmployees(prev => [...prev, newEmployee]);
+                setNextEmployeeId(prev => prev + 1);
+                setNewEmployeeName("");
+                setShowModal(false);
+            };
 
-                return (
-                    <div className="d-flex flex-wrap gap-2 align-items-center mb-3">
-                        {employees.map(emp => (
-                            <span key={emp.id} className="shift-badge badge bg-label-primary d-flex align-items-center gap-1">
-                                {emp.name}
+            const handleDeleteEmployee = (id) => {
+                if (!confirm("Vuoi davvero eliminare questo dipendente?")) return;
+                setEmployees(prev => prev.filter(e => e.id !== id));
+            };
+
+            return (
+                <div className="d-flex flex-wrap gap-2 align-items-center mb-3">
+                    <div className="card fixed-shifts-card">
+                        <div className="card-body">
+                            <div className="mb-2 fw-semibold">Lista dipendenti</div>
+                            {employees.map(emp => (
+                                <span
+                                    key={emp.id}
+                                    className="shift-badge badge bg-label-primary d-inline-flex align-items-center gap-1"
+                                    style={{ whiteSpace: "nowrap" }}
+                                >
+
+                                    <i
+                                        className="bx bx-trash"
+                                        style={{ cursor: "pointer" }}
+                                        title="Elimina dipendente"
+                                        onClick={() => handleDeleteEmployee(emp.id)}
+                                    ></i>
+                                    {emp.name}
+                                </span>
+                            ))}
+
+                            <span
+                                className={classNames('shift-chip', 'shift-badge', 'badge', 'bg-label-success')}
+                                style={{ cursor: "pointer" }}
+                                onClick={() => setShowModal(true)}
+                                title="Crea nuovo turno"
+                            >
                                 <i
-                                    className="bx bx-trash"
+                                    className="bx bx-plus"
                                     style={{ cursor: "pointer" }}
-                                    title="Elimina dipendente"
-                                    onClick={() => handleDeleteEmployee(emp.id)}
-                                ></i>
+                                    title="Aggiungi dipendente"
+
+                                ></i>Aggiungi
                             </span>
-                        ))}
 
-                        <button className="btn btn-primary" onClick={() => setShowModal(true)}>Aggiungi</button>
 
-                        {showModal && (
-                            <div className="modal fade show d-block" tabIndex="-1" aria-hidden={!showModal}>
-                                <div className="modal-dialog modal-dialog-centered">
-                                    <div className="modal-content border-primary">
-                                        <div className="modal-header">
-                                            <h5 className="modal-title text-primary">Nuovo dipendente</h5>
-                                            <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+
+                        </div>
+                    </div>
+
+
+
+
+
+                    {showModal && (
+                        <div className="modal fade show d-block" tabIndex="-1" aria-hidden={!showModal}>
+                            <div className="modal-dialog modal-dialog-centered">
+                                <div className="modal-content border-primary">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title text-primary">Nuovo dipendente</h5>
+                                        <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <div className="mb-3">
+                                            <label className="form-label">Nome dipendente</label>
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                value={newEmployeeName}
+                                                onChange={e => setNewEmployeeName(e.target.value)}
+                                            />
                                         </div>
-                                        <div className="modal-body">
-                                            <div className="mb-3">
-                                                <label className="form-label">Nome dipendente</label>
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    value={newEmployeeName}
-                                                    onChange={e => setNewEmployeeName(e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annulla</button>
-                                            <button type="button" className="btn btn-primary" onClick={handleSaveEmployee}>Salva</button>
-                                        </div>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annulla</button>
+                                        <button type="button" className="btn btn-primary" onClick={handleSaveEmployee}>Salva</button>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
-                );
-            }
-        
+                        </div>
+                    )}
+                </div>
+            );
+        }
 
 
         // Render
         const root = ReactDOM.createRoot(document.getElementById('react-table'));
-            root.render(<ShiftApp initialData={calendario_initial} backendData={backendData} />);
+        root.render(<ShiftApp initialData={calendario_initial} />);
 
     </script>
     {% endraw %}
