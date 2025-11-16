@@ -324,6 +324,9 @@
 
                                 <!-- Pulsanti -->
                                 <div class="d-flex flex-wrap gap-2 ms-3">
+                                    <button id="btn-clear" class="btn btn-outline-primary">
+                                        <i class="bx bx-eraser me-1"></i>Pulisci
+                                    </button>
                                     <div class="dropdown">
                                         <button class="btn btn-outline-primary dropdown-toggle" type="button"
                                             id="dropdown-json" data-bs-toggle="dropdown" aria-expanded="false">
@@ -346,17 +349,10 @@
                                                     <i class="bx bx-export me-1"></i>Esporta JSON
                                                 </button>
                                             </li>
-                                            <li>
-                                                <label for="input-json" class="dropdown-item mb-0"
-                                                    style="cursor: pointer;">
-                                                    <i class="bx bx-upload me-1"></i>Carica JSON
-                                                </label>
-                                                <input id="input-json" type="file" accept="application/json" hidden />
-                                            </li>
-
                                         </ul>
                                     </div>
 
+                                    
                                     <!-- Modale per inserimento Date per PDF -->
                                     <div id="modalPDF" class="modal fade" tabindex="-1" aria-hidden="true"
                                         style="display:none;">
@@ -384,12 +380,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    <button id="btn-clear" class="btn btn-outline-primary">
-                                        <i class="bx bx-eraser me-1"></i>Pulisci
-                                    </button>
-
+                                    </div>                                    
                                     <button id="btn-save-airtable" class="btn btn-primary">
                                         <i class="bx bx-save me-1"></i>Salva
                                     </button>
@@ -632,6 +623,9 @@
             const colorNames = Object.keys(colorMap);
 
             const handleDeleteShift = (name) => {
+                const confirmDelete = window.confirm(`Vuoi davvero eliminare il turno "${name}"?`);
+                if (!confirmDelete) return;
+
                 setShifts(prev =>
                     prev.filter(s => {
                         if (s === "Aggiungi") return true; // non eliminare mai Aggiungi
@@ -640,6 +634,7 @@
                     })
                 );
             };
+
 
             const handleSaveShift = () => {
                 if (!newShiftName.trim()) return alert("Inserisci un nome per il turno!");
