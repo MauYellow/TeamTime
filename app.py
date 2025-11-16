@@ -1697,9 +1697,14 @@ def turni_pdf():
 
     # ---- 2) Filtra date se start/end sono presenti ----
     if date_start and date_end:
-        ds = datetime.fromisoformat(date_start)
-        de = datetime.fromisoformat(date_end)
-        all_dates = [d for d in all_dates if ds <= datetime.fromisoformat(d) <= de]
+      ds = datetime.fromisoformat(date_start)
+      de = datetime.fromisoformat(date_end)
+      all_dates = [(ds + timedelta(days=i)).date().isoformat() for i in range((de - ds).days + 1)]
+    else:
+    # fallback: tutte le date presenti nei turni
+      all_dates = set()
+      for emp in employees: all_dates.update(emp.get("shifts", {}).keys())
+      all_dates = sorted(all_dates)
 
     # ---- 3) Inizio PDF ----
     buffer = io.BytesIO()
@@ -1803,9 +1808,14 @@ def turni_pdf_colori():
 
     # ---- 2) Filtra date se start/end sono presenti ----
     if date_start and date_end:
-        ds = datetime.fromisoformat(date_start)
-        de = datetime.fromisoformat(date_end)
-        all_dates = [d for d in all_dates if ds <= datetime.fromisoformat(d) <= de]
+      ds = datetime.fromisoformat(date_start)
+      de = datetime.fromisoformat(date_end)
+      all_dates = [(ds + timedelta(days=i)).date().isoformat() for i in range((de - ds).days + 1)]
+    else:
+    # fallback: tutte le date presenti nei turni
+      all_dates = set()
+      for emp in employees: all_dates.update(emp.get("shifts", {}).keys())
+      all_dates = sorted(all_dates)
 
     # ---- 3) Inizio PDF ----
     buffer = io.BytesIO()
