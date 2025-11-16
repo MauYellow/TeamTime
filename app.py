@@ -12,9 +12,12 @@ from babel.dates import format_date
 import pandas as pd
 import io
 import time
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, PageBreak
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
 import requests
 import random, string
 import schedule
@@ -25,6 +28,7 @@ import cloudinary.uploader
 from cloudinary.utils import cloudinary_url #** non usato?
 import threading
 import xml.etree.ElementTree as ET
+from babel.dates import format_date
 
 load_dotenv()
 
@@ -1591,23 +1595,40 @@ def timeline():
        print(f"Data da Login: {data}")
     
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")  # seleziona la tabella
-    record = table.first(formula=match({"Locale": "teamtime031"}))
+    record = table.first(formula=match({"Locale": data["Locale"]}))
 
     if not record:
         return f"Nessun record trovato per il locale"
 
     # Prendi il JSON dei turni
     calendario_json = record['fields'].get("CalendarioJSON")
-    #print("CalendarioJSON da Airtable:", calendario_json[0]['url'])
+    if not calendario_json:
+       calendario_json = {
+    "employees": [
+        {"id": 1, "name": "Dipendente 1", "shifts": {}},
+        {"id": 2, "name": "Dipendente 2", "shifts": {}},
+        {"id": 3, "name": "Dipendente 3", "shifts": {}},
+        {"id": 4, "name": "Dipendente 4", "shifts": {}}
+    ],
+    "shifts": [
+        {"name": "08.00-14.00", "color": "Giallo"},
+        {"name": "10-14 / 18-22", "color": "Blu"},
+        {"name": "18.00-22.00", "color": "Rosso"},
+        {"name": "ferie", "color": "Azzurro"},
+        {"name": "libero", "color": "Verde"},
+        {"name": "allattamento", "color": "Azzurro"},
+        {"name": "permesso", "color": "Verde"},
+        {"name": "trasferta", "color": "Rosso"},
+        "Aggiungi"
+    ]}
+    else:
+      response = requests.get(calendario_json[0]['url'])
+      response.raise_for_status()  # genera errore se status!=200
+      calendario_json = response.json()
+       
+    #print("CalendarioJSON da Airtable:", calendario_json[0]['url']) 
 
-    response = requests.get(calendario_json[0]['url'])
-    response.raise_for_status()  # genera errore se status!=200
-
-    # trasforma in JSON Python
-    calendario_json = response.json()
-
-
-    return render_template('timeline.html', data=data, calendario_json=calendario_json)
+    return render_template('test_timeline2.html', data=data, calendario_json=calendario_json)
 
 @app.route("/update_calendario", methods=["POST"])
 def update_calendario():
@@ -1615,7 +1636,7 @@ def update_calendario():
     if not data:
         return redirect(url_for('login'))
     
-    print(f"Data da Login: {data}")
+    #print(f"Data da Login: {data}")
 
     # Recupera JSON dal body
     payload = request.get_json()
@@ -1642,14 +1663,14 @@ def update_calendario():
         try:
             with open(tmpfile_path, "w", encoding="utf-8") as f:
                 json.dump(calendario, f, ensure_ascii=False, indent=2)
-            print(f"File calendario salvato localmente: {tmpfile_path}")
+            #print(f"File calendario salvato localmente: {tmpfile_path}")
         except Exception as e:
             print(f"Errore nel salvataggio del file calendario in locale: {e}")
             return jsonify({"error": f"Errore salvataggio locale: {str(e)}"}), 500
 
-        # Se vuoi aggiornare anche Airtable, puoi decommentare questa riga:
         try:
-           table.update(record_id, {"CalendarioJSON": [{"url": URL_TMPFILE}]})
+           print("Salvataggio su Airtable in corso..")
+           #table.update(record_id, {"CalendarioJSON": [{"url": URL_TMPFILE}]})**
         except Exception as e:
            print(f"Errore nell'invio su Airtable del file JSON in locale: {e}")
 
@@ -1657,6 +1678,244 @@ def update_calendario():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+@app.route("/turni_pdf", methods=["POST"])
+def turni_pdf():
+    data = request.json.get("calendario", {})
+    employees = data.get("employees", [])
+    shifts = data.get("shifts", [])
+    date_start = data.get("date_start")
+    date_end = data.get("date_end")
+
+    # ---- 1) Raccogli tutte le date dai dati ----
+    all_dates = set()
+    for emp in employees:
+        all_dates.update(emp.get("shifts", {}).keys())
+    all_dates = sorted(all_dates)
+
+    # ---- 2) Filtra date se start/end sono presenti ----
+    if date_start and date_end:
+        ds = datetime.fromisoformat(date_start)
+        de = datetime.fromisoformat(date_end)
+        all_dates = [d for d in all_dates if ds <= datetime.fromisoformat(d) <= de]
+
+    # ---- 3) Inizio PDF ----
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=landscape(A4),
+        rightMargin=20,
+        leftMargin=20,
+        topMargin=20,
+        bottomMargin=20
+    )
+
+    cell_style = ParagraphStyle(
+        'cell_style',
+        fontSize=8,
+        alignment=1,  # centro
+        leading=10
+    )
+
+    styles = getSampleStyleSheet()
+    mese_inizio = format_date(datetime.fromisoformat(date_start), "LLLL yyyy", locale="it")
+    mese_fine = format_date(datetime.fromisoformat(date_end), "LLLL yyyy", locale="it")
+
+    elements = []
+
+    # ---- 4) Suddividi le date in blocchi da max 14 giorni ----
+    MAX_DAYS_PER_PAGE = 14
+    chunks = [all_dates[i:i + MAX_DAYS_PER_PAGE] for i in range(0, len(all_dates), MAX_DAYS_PER_PAGE)]
+
+    for i, chunk in enumerate(chunks, start=1):
+        # Titolo pagina
+        if mese_inizio == mese_fine:
+            page_title = Paragraph(
+               f"<font size=8>Generato con <a href='https://www.teamtimeapp.it'><u><font color='blue'>TeamTimeApp.it</font></u></a> App Registro Presenze - </font>"
+                f"<font size=12>Turni Dipendenti – {mese_inizio.capitalize()} </font>"
+                f"<font size=8>(Pagina {i}/{len(chunks)})</font>",
+                styles["Title"]
+            )
+        else:
+            page_title = Paragraph(
+    f"<font size=8>Generato con <a href='https://www.teamtimeapp.it'><u><font color='blue'>TeamTimeApp.it</font></u></a> App Registro Presenze - </font>"
+    f"<font size=12>Turni Dipendenti – {mese_inizio.capitalize()} - {mese_fine.capitalize()} </font>"
+    f"<font size=8>(Pagina {i}/{len(chunks)})</font>",
+    styles["Title"]
+)
+        elements.append(page_title)
+
+        # Header
+        header = ["Dipendente"] + [datetime.fromisoformat(d).strftime("%d") for d in chunk]
+        table_data = [header]
+
+        # Righe dipendenti
+        for emp in employees:
+            row = [Paragraph(emp["name"], cell_style)]
+            for d in chunk:
+                shift = emp.get("shifts", {}).get(d)
+                row.append(shift["name"] if shift else "")
+            table_data.append(row)
+
+        # Tabella
+        table = Table(table_data, repeatRows=1, colWidths="*")
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#003366")),
+            ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+            ('ALIGN', (1,1), (-1,-1), 'CENTER'),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
+            ('FONTSIZE', (0,0), (-1,-1), 8),
+            ('BOTTOMPADDING', (0,0), (-1,0), 6),
+        ]))
+        elements.append(table)
+
+        # PageBreak tra blocchi, tranne l’ultimo
+        if i != len(chunks):
+            elements.append(PageBreak())
+
+    # ---- 5) Genera PDF ----
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="turni.pdf",
+        mimetype="application/pdf"
+    )
+
+@app.route("/turni_pdf_colori", methods=["POST"])
+def turni_pdf_colori():
+    data = request.json.get("calendario", {})
+    employees = data.get("employees", [])
+    shifts = data.get("shifts", [])
+    date_start = data.get("date_start")
+    date_end = data.get("date_end")
+
+    # ---- 1) Raccogli tutte le date dai dati ----
+    all_dates = set()
+    for emp in employees:
+        all_dates.update(emp.get("shifts", {}).keys())
+    all_dates = sorted(all_dates)
+
+    # ---- 2) Filtra date se start/end sono presenti ----
+    if date_start and date_end:
+        ds = datetime.fromisoformat(date_start)
+        de = datetime.fromisoformat(date_end)
+        all_dates = [d for d in all_dates if ds <= datetime.fromisoformat(d) <= de]
+
+    # ---- 3) Inizio PDF ----
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=landscape(A4),
+        rightMargin=20,
+        leftMargin=20,
+        topMargin=20,
+        bottomMargin=20
+    )
+
+    cell_style = ParagraphStyle(
+        'cell_style',
+        fontSize=8,
+        alignment=1,  # centro
+        leading=10
+    )
+
+    styles = getSampleStyleSheet()
+    mese_inizio = format_date(datetime.fromisoformat(date_start), "LLLL yyyy", locale="it")
+    mese_fine = format_date(datetime.fromisoformat(date_end), "LLLL yyyy", locale="it")
+    elements = []
+
+    # ---- 4) Mappa colori ----
+    color_map = {
+    "rosso": colors.Color(1, 0, 0, alpha=0.4),
+    "verde": colors.Color(0, 1, 0, alpha=0.3),
+    "giallo": colors.Color(1, 1, 0, alpha=0.3),
+    "blu": colors.Color(0, 0, 1, alpha=0.1),
+    "azzurro": colors.Color(0.68, 0.85, 0.9, alpha=0.6),  # lightblue con trasparenza
+    "grigio": colors.Color(0.5, 0.5, 0.5, alpha=0.3),
+    }
+
+    # ---- 5) Suddividi le date in blocchi da max 14 giorni ----
+    MAX_DAYS_PER_PAGE = 14
+    chunks = [all_dates[i:i + MAX_DAYS_PER_PAGE] for i in range(0, len(all_dates), MAX_DAYS_PER_PAGE)]
+
+    for i, chunk in enumerate(chunks, start=1):
+        # Titolo pagina
+        if mese_inizio == mese_fine:
+            page_title = Paragraph(
+                f"<font size=8>Generato con <a href='https://www.teamtimeapp.it'><u><font color='blue'>TeamTimeApp.it</font></u></a> App Registro Presenze - </font>"
+                f"<font size=12> Turni Dipendenti – {mese_inizio.capitalize()} </font>"
+                f"<font size=8>(Pagina {i}/{len(chunks)})</font>",
+                styles["Title"]
+            )
+        else:
+           page_title = Paragraph(
+    f"<font size=8>Generato con <a href='https://www.teamtimeapp.it'><u><font color='blue'>TeamTimeApp.it</font></u></a> App Registro Presenze - </font>"
+    f"<font size=12>Turni Dipendenti – {mese_inizio.capitalize()} - {mese_fine.capitalize()} </font>"
+    f"<font size=8>(Pagina {i}/{len(chunks)})</font>",
+    styles["Title"]
+)
+
+
+        elements.append(page_title)
+
+        # Header
+        header = ["Dipendente"] + [datetime.fromisoformat(d).strftime("%d") for d in chunk]
+        table_data = [header]
+
+        # ---- Righe dipendenti ----
+        for emp in employees:
+            row = [Paragraph(emp["name"], cell_style)]
+            for d in chunk:
+                shift = emp.get("shifts", {}).get(d)
+                row.append(shift["name"] if shift else "")
+            table_data.append(row)
+
+        # ---- Crea tabella ----
+        table = Table(table_data, repeatRows=1, colWidths="*")
+
+        # ---- Styling base ----
+        style = TableStyle([
+            ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#003366")),  # header
+            ('TEXTCOLOR', (0,0), (-1,0), colors.white),
+            ('ALIGN', (1,1), (-1,-1), 'CENTER'),
+            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
+            ('GRID', (0,0), (-1,-1), 0.5, colors.grey),
+            ('FONTSIZE', (0,0), (-1,-1), 8),
+            ('BOTTOMPADDING', (0,0), (-1,0), 6),
+        ])
+
+        # ---- Colora celle turni ----
+        for row_idx, emp in enumerate(employees, start=1):
+            for col_idx, d in enumerate(chunk, start=1):  # colonna 0 = nome dipendente
+                shift = emp.get("shifts", {}).get(d)
+                if shift:
+                    color_name = shift.get("color", "white").lower()
+                    bg_color = color_map.get(color_name, colors.white)
+                    style.add('BACKGROUND', (col_idx, row_idx), (col_idx, row_idx), bg_color)
+
+        table.setStyle(style)
+        elements.append(table)
+
+        # PageBreak tra blocchi, tranne l’ultimo
+        if i != len(chunks):
+            elements.append(PageBreak())
+
+    # ---- 6) Genera PDF ----
+    doc.build(elements)
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=True,
+        download_name="turni.pdf",
+        mimetype="application/pdf"
+    )
 
 @app.route('/blog')
 @app.route('/blog/')

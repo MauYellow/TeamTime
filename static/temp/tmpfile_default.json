@@ -1,0 +1,69 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "Mario Rossi",
+      "shifts": {}
+    },
+    {
+      "id": 2,
+      "name": "Luca Bianchi",
+      "shifts": {}
+    },
+    {
+      "id": 3,
+      "name": "Giulia Verdi",
+      "shifts": {}
+    },
+    {
+      "id": 4,
+      "name": "Gianni Sperti",
+      "shifts": {}
+    },
+    {
+      "id": 5,
+      "name": "Luca Foldini",
+      "shifts": {}
+    },
+    {
+      "id": 6,
+      "name": "Marta Zuccari",
+      "shifts": {}
+    }
+  ],
+  "shifts": [
+    {
+      "name": "08.00-14.00",
+      "color": "Giallo"
+    },
+    {
+      "name": "10-14 / 18-22",
+      "color": "Blu"
+    },
+    {
+      "name": "18.00-22.00",
+      "color": "Rosso"
+    },
+    {
+      "name": "ferie",
+      "color": "Azzurro"
+    },
+    {
+      "name": "libero",
+      "color": "Verde"
+    },
+    {
+      "name": "allattamento",
+      "color": "Azzurro"
+    },
+    {
+      "name": "permesso",
+      "color": "Verde"
+    },
+    {
+      "name": "trasferta",
+      "color": "Rosso"
+    },
+    "Aggiungi"
+  ]
+}
