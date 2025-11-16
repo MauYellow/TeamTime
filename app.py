@@ -29,7 +29,6 @@ import cloudinary.uploader
 from cloudinary.utils import cloudinary_url #** non usato?
 import threading
 import xml.etree.ElementTree as ET
-from babel.dates import format_date
 
 load_dotenv()
 
