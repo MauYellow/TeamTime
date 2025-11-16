@@ -15,7 +15,8 @@ import time
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, PageBreak
+from reportlab.platypus import SimpleDocTemplate, TableStyle, Paragraph, PageBreak
+from reportlab.platypus import Table as RLTable
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 import requests
@@ -1765,7 +1766,7 @@ def turni_pdf():
             table_data.append(row)
 
         # Tabella
-        table = Table(table_data, repeatRows=1, colWidths="*")
+        table = RLTable(table_data, repeatRows=1, colWidths="*")
         table.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#003366")),
             ('TEXTCOLOR', (0,0), (-1,0), colors.white),
@@ -1887,7 +1888,7 @@ def turni_pdf_colori():
             table_data.append(row)
 
         # ---- Crea tabella ----
-        table = Table(table_data, repeatRows=1, colWidths="*")
+        table = RLTable(table_data, repeatRows=1, colWidths="*")
 
         # ---- Styling base ----
         style = TableStyle([
