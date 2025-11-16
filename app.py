@@ -1592,6 +1592,10 @@ def timeline():
     if not data:
         return redirect(url_for('login'))
     else:
+       ip = request.remote_addr
+       user_agent = request.headers.get('User-Agent')
+       referer = request.headers.get('Referer', 'Diretto')
+       telegram(f"📋Timeline [{data['Locale']}]: {ip}, User Agent: {user_agent}, sorgente: {referer}")
        print(f"Data da Login: {data}")
     
     table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")  # seleziona la tabella
@@ -1605,10 +1609,9 @@ def timeline():
     if not calendario_json:
        calendario_json = {
     "employees": [
-        {"id": 1, "name": "Dipendente 1", "shifts": {}},
-        {"id": 2, "name": "Dipendente 2", "shifts": {}},
-        {"id": 3, "name": "Dipendente 3", "shifts": {}},
-        {"id": 4, "name": "Dipendente 4", "shifts": {}}
+        {"id": 1, "name": "Mario Rossi", "shifts": {}},
+        {"id": 2, "name": "Roberta Verdi", "shifts": {}},
+        {"id": 3, "name": "Caio Sempronio", "shifts": {}},
     ],
     "shifts": [
         {"name": "08.00-14.00", "color": "Giallo"},
@@ -1635,6 +1638,10 @@ def update_calendario():
     data = session.get("data")
     if not data:
         return redirect(url_for('login'))
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    referer = request.headers.get('Referer', 'Diretto')
+    telegram(f"💾Turni Salvati [{data['Locale']}]: {ip}, User Agent: {user_agent}, sorgente: {referer}")
     
     #print(f"Data da Login: {data}")
 
@@ -1674,7 +1681,7 @@ def update_calendario():
         except Exception as e:
            print(f"Errore nell'invio su Airtable del file JSON in locale: {e}")
 
-        return jsonify({"message": "Calendario salvato localmente ✅", "url": URL_TMPFILE})
+        return jsonify({"message": "Calendario salvato online con successo ✅", "url": URL_TMPFILE})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
