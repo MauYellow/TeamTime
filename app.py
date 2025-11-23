@@ -958,6 +958,14 @@ def report_demo():
     telegram(f"DEMO Report: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('/report_demo.html')
 
+@app.route('/correggi_orari_demo')
+def correggi_orari_demo():
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"DEMO Correggi Orari: {ip}, User Agent: {user_agent}, sorgente: {path}")
+    return render_template('correggi_orari_demo.html')
+
 @app.route('/inizia-prova')
 def inizia_prova():
     STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
