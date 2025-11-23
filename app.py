@@ -966,6 +966,96 @@ def correggi_orari_demo():
     telegram(f"DEMO Correggi Orari: {ip}, User Agent: {user_agent}, sorgente: {path}")
     return render_template('correggi_orari_demo.html')
 
+@app.route('/timeline_demo')
+def timeline_demo():
+    data = {'Max Dipendenti': '5'}
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    path = request.path
+    telegram(f"DEMO Timeline: {ip}, User Agent: {user_agent}, sorgente: {path}")
+    #calendario_json = data.get("CalendarioJSON")
+    if 1 == 1:
+       calendario_json = {
+  "employees": [
+    {
+      "id": 1,
+      "name": "Mario Rossi",
+      "shifts": {
+        "2025-11-17": {
+          "color": "Giallo",
+          "name": "08.00-14.00"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "name": "Roberta Verdi",
+      "shifts": {
+        "2025-11-17": {
+          "color": "Giallo",
+          "name": "08.00-14.00"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "name": "Maurizio Polverini",
+      "shifts": {
+        "2025-11-16": {
+          "color": "Rosso",
+          "name": "18.00-22.00"
+        },
+        "2025-11-17": {
+          "color": "Rosso",
+          "name": "18.00-22.00"
+        }
+      }
+    }
+  ],
+  "shifts": [
+    {
+      "color": "Giallo",
+      "name": "08.00-14.00"
+    },
+    {
+      "color": "Blu",
+      "name": "10-14 / 18-22"
+    },
+    {
+      "color": "Rosso",
+      "name": "18.00-22.00"
+    },
+    {
+      "color": "Azzurro",
+      "name": "ferie"
+    },
+    {
+      "color": "Verde",
+      "name": "libero"
+    },
+    {
+      "color": "Azzurro",
+      "name": "allattamento"
+    },
+    {
+      "color": "Verde",
+      "name": "permesso"
+    },
+    {
+      "color": "Rosso",
+      "name": "trasferta"
+    },
+    "Aggiungi"
+  ],
+  "nextEmployeeId": 5
+}
+    else:
+      response = requests.get(calendario_json[0]['url'])
+      response.raise_for_status()  # genera errore se status!=200
+      calendario_json = response.json()
+
+    return render_template('timeline_demo.html', calendario_json=calendario_json, data=data)
+
 @app.route('/inizia-prova')
 def inizia_prova():
     STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
@@ -1597,6 +1687,7 @@ Se dici una data, trasformala nel formato GG-MM-AA sempre tra parentesi, esempio
 @app.route('/timeline')
 def timeline():
     data = session.get("data")
+    #print(f"Data: {data}")
     if not data:
         return redirect(url_for('login'))
     else:

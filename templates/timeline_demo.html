@@ -133,132 +133,129 @@
         <div class="layout-container">
             <!-- Menu -->
             <aside class="layout-menu menu-vertical menu bg-menu-theme" id="layout-menu">
-                <div class="app-brand demo">
-                    <a class="app-brand-link" href="/">
-                        <span class="app-brand-logo demo">
-                            <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}" alt="TeamTime Logo"
-                                height="32">
-                        </span>
-                        <span class="app-brand-text demo menu-text fw-bolder ms-2">
-                            TeamTime
-                        </span>
-                    </a>
-                    <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" href="javascript:void(0);">
-                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
-                    </a>
-                </div>
+              <div class="app-brand demo">
+                <a class="app-brand-link" href="/">
+                  <span class="app-brand-logo demo">
+                    <img src="{{ url_for('static', filename='img/favicon/apple-touch-icon.png') }}" alt="TeamTime Logo" height="32">
+                  </span>
+                  <span class="app-brand-text demo menu-text fw-bolder ms-2">
+                    TeamTime
+                  </span>
+                </a>
+                <a class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none" href="javascript:void(0);">
+                  <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                </a>
+              </div>
             
-                <div class="menu-inner-shadow">
-                </div>
-                <ul class="menu-inner py-1">
-                    <!-- Dashboard -->
-                    <li class="menu-item">
-                        <a class="menu-link" href="{{ url_for('dashboard') }}">
-                            <i class="menu-icon tf-icons bx bx-home-circle">
-                            </i>
-                            <div data-i18n="Analytics">
-                                Dashboard
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a class="menu-link" href="/primi_passi">
-                            <i class="menu-icon tf-icons bx bx-help-circle"></i>
-                            <div data-i18n="Account Settings">
-                                Tutorial
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a class="menu-link" href="{{ url_for('calendario') }}">
-                            <i class="menu-icon tf-icons bx bx-calendar"></i>
-                            <div data-i18n="Authentications">
-                                Calendario
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a class="menu-link" href="{{ url_for('staff') }}">
-                            <i class="menu-icon tf-icons bx bx-group"></i>
-                            <div data-i18n="Support">
-                                Staff
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu-item active">
-                        <a class="menu-link" href="{{ url_for('timeline') }}">
-                            <i class="menu-icon tf-icons bx bx-chart"></i>
-                            <div data-i18n="Support">
-                                Turni
-                                <span class="badge bg-warning text-dark ms-2" style="font-size: 0.6rem;">Test Aperti</span>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a class="menu-link" href="{{ url_for('dipendenti_al_lavoro') }}">
-                            <i class="menu-icon tf-icons bx bx-edit"></i>
-                            <div data-i18n="Support">
-                                Correggi Orari
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a class="menu-link" href="{{ url_for('chattaAI') }}">
-                            <img src="https://img.icons8.com/?size=100&id=unXm4ixWAr6H&format=png&color=000000" height="20px"
-                                width="20px">
-                            <div data-i18n="Support">
-                                Assistente AI
-                                <span class="badge bg-success text-dark ms-2" style="font-size: 0.6rem;">Novità</span>
-                            </div>
-                        </a>
-                    </li>
+              <div class="menu-inner-shadow">
+              </div>
+              <ul class="menu-inner py-1">
+                <!-- Dashboard -->
+                <li class="menu-item">
+                  <a class="menu-link" href="{{ url_for('dashboard_demo') }}">
+                    <i class="menu-icon tf-icons bx bx-home-circle">
+                    </i>
+                    <div data-i18n="Analytics">
+                      Dashboard
+                    </div>
+                  </a>
+                </li>
+                <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">
+                    Dipendenti
+                  </span>
+                </li>
+                <li class="menu-item">
+                  <a class="menu-link" href="{{ url_for('calendario_demo') }}">
+                    <i class="menu-icon tf-icons bx bx-calendar"></i>
+                    <div data-i18n="Authentications">
+                      Calendario
+                    </div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a class="menu-link" href="#"
+                    onclick="alert('Dati dei dipendenti! Non disponibile in versione demo'); return false;">
+                    <i class="menu-icon tf-icons bx bx-group"></i>
+                    <div data-i18n="Support">Staff</div>
+                  </a>
+                </li>
+                <li class="menu-item active">
+                  <a class="menu-link" href="{{ url_for('timeline_demo') }}">
+                    <i class="menu-icon tf-icons bx bx-chart"></i>
+                    <div data-i18n="Support">
+                      Turni
+                    </div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a class="menu-link" href="{{ url_for('correggi_orari_demo') }}">
+                    <i class="menu-icon tf-icons bx bx-edit"></i>
+                    <div data-i18n="Support">
+                      Correggi Orari
+                    </div>
+                  </a>
+                </li>
             
-            
-            
-                    <!-- Documenti -->
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">
-                            Documenti
-                        </span>
+                <!-- Documenti -->
+                <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">
+                    Documenti
+                  </span>
+                </li>
+                <li class="menu-item">
+                  <a class="menu-link menu-toggle" href="javascript:void(0);">
+                    <i class="menu-icon tf-icons bx bx-euro">
+                    </i>
+                    <div data-i18n="Account Settings">
+                      Piani
+                    </div>
+                  </a>
+                  <ul class="menu-sub">
+                    <li class="menu-item">
+                      <a class="menu-link" href="piani" target="_blank">
+                        <div data-i18n="Account">
+                          Piano Start
+                        </div>
+                      </a>
                     </li>
                     <li class="menu-item">
-                        <a class="menu-link" href="/report">
-                            <i class="menu-icon tf-icons bx bx-file">
-                            </i>
-                            <div data-i18n="Support">
-                                Report
-                            </div>
-                        </a>
-                    </li>
-                    <li class="menu-header small text-uppercase">
-                        <span class="menu-header-text">
-                            Profilo
-                        </span>
+                      <a class="menu-link" href="piani" target="_blank">
+                        <div data-i18n="Notifications">
+                          Piano Teams
+                        </div>
+                      </a>
                     </li>
                     <li class="menu-item">
-                        {% if data['Link Annullamento'] %}
-                        <a class="menu-link" href="{{ data['Link Annullamento'] }}" target="_blank">
-                            <i class="menu-icon tf-icons bx bx-repeat"></i>
-                            <div data-i18n="Subscription">Gestisci Abbonamento</div>
-                        </a>
-                        {% else %}
-                        <a class="menu-link" href="#" onclick="mostraPopupAbbonamento()">
-                            <i class="menu-icon tf-icons bx bx-repeat"></i>
-                            <div data-i18n="Subscription">Gestisci Abbonamento</div>
-                        </a>
-                        {% endif %}
+                      <a class="menu-link" href="piani" target="_blank">
+                        <div data-i18n="Connections">
+                          Piano Business
+                        </div>
+                      </a>
                     </li>
-            
-                    <li class="menu-item">
-                        <a class="menu-link" href="{{ url_for('logout') }}">
-                            <i class="menu-icon tf-icons bx bx-log-out"></i>
-                            </i>
-                            <div data-i18n="Documentation">
-                                Log Out
-                            </div>
-                        </a>
-                    </li>
-                </ul>
+                  </ul>
+                </li>
+                <li class="menu-item">
+                  <a class="menu-link" href="{{ url_for('report_demo') }}">
+                    <i class="menu-icon tf-icons bx bx-file"></i>
+                    <div data-i18n="Support">Report</div>
+                  </a>
+                </li>
+                <li class="menu-header small text-uppercase">
+                  <span class="menu-header-text">
+                    Profilo
+                  </span>
+                </li>
+                <li class="menu-item">
+                  <a class="menu-link" href="{{ url_for('logout') }}">
+                    <i class="menu-icon tf-icons bx bx-log-out"></i>
+                    </i>
+                    <div data-i18n="Documentation">
+                      Log Out
+                    </div>
+                  </a>
+                </li>
+              </ul>
             </aside>
 
             <!-- Layout page -->
@@ -414,80 +411,11 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
 
-        <!-- Pulsante Assistenza -->
-        <div class="buy-now" id="assistenza-button">
-            <button class="btn btn-danger btn-buy-now" onclick="apriChat()">
-                Assistenza
-            </button>
-        </div>
-        
-        <!-- Chat Assistenza -->
-        <div id="chat-assistenza" class="card p-3 mb-4 position-fixed end-0 bottom-0 m-4 shadow"
-            style="width: 350px; max-width: 90vw; display: none; z-index: 9999;">
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <h6 class="mb-0">🤖 Assistenza TeamTime</h6>
-                <button class="btn-close" aria-label="Close" onclick="toggleChat()"></button>
-            </div>
-        
-            <div id="chat-box" class="border rounded bg-light p-3 mb-3"
-                style="min-height: 150px; max-height: 200px; overflow-y: auto;">
-                <p><i>Benvenuto! Seleziona una domanda per ricevere assistenza.</i></p>
-            </div>
-        
-            <div class="d-grid gap-2">
-                <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('primoscan')"> 🚪 Come registrare
-                    un'entrata?</button>
-                <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('correggi')">👤 Un dipendente si è
-                    dimenticato di timbrare l'uscita</button>
-                <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('report')">📊 Come scarico il
-                    report
-                    mensile?</button>
-                <button class="btn btn-outline-primary btn-sm" onclick="showAnswer('alLavoro')">📌 Cosa significa “al
-                    lavoro”?</button>
-                <button class="btn btn-outline-success btn-sm" onclick="showAnswer('Assistenza')">Chat Whatsapp</button>
-            </div>
-        </div>
-        
-        <!-- Script -->
-        <script>
-            function apriChat() {
-                document.getElementById("chat-assistenza").style.display = "block";
-                document.getElementById("assistenza-button").style.display = "none";
-            }
-
-            function toggleChat() {
-                const chat = document.getElementById("chat-assistenza");
-                if (chat.style.display === "none") {
-                    chat.style.display = "block";
-                    document.getElementById("assistenza-button").style.display = "none";
-                } else {
-                    chat.style.display = "none";
-                    document.getElementById("assistenza-button").style.display = "block";
-                }
-            }
-
-            function showAnswer(type) {
-                const chatBox = document.getElementById("chat-box");
-                let answer = "";
-
-                if (type === 'correggi') {
-                    answer = "Nessun problema! Vai su <strong>Correggi Orari</strong> (nel menu a sinistra) > Cerca il dipendente > Clicca '<strong>Correggi</strong>' > Immetti l'orario di uscita > clicca '<strong>Salva</strong>'";
-                } else if (type === 'report') {
-                    answer = "Puoi scaricare il report mensile accedendo alla sezione 'Report' e selezionando il mese desiderato.";
-                } else if (type === 'alLavoro') {
-                    answer = "Quando un dipendente risulta 'Al lavoro', significa che non ha ancora registrato l'orario di uscita.";
-                } else if (type === 'Assistenza') {
-                    answer = `Per ricevere supporto Whatsapp, <a href="https://wa.me/393931367530?text=Salve%2C%20ho%20bisogno%20di%20assistenza%20per%20TeamTime" class="text-primary" target="_blank">clicca qui</a>.`;
-                } else if (type === 'primoscan') {
-                    answer = `Scarica l'app mobile > Registrati come dipendente e legati al QR Code > Scannerizza il QR Code<br><a href="/primi_passi">📘 Inizia Tutorial</a>`;
-                }
-
-                const domanda = document.querySelector(`button[onclick*="${type}"]`).innerText;
-                chatBox.innerHTML += `<p><b> Tu :</b> ${domanda}</p>`;
-                chatBox.innerHTML += `<p><b>TeamTimeBot:</b> ${answer}</p>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        </script>
+    <div class="buy-now">
+      <a class="btn btn-danger btn-buy-now" href="{{ url_for('inizia_prova') }}" style="color: white;">
+        Inizia Prova Gratuita
+      </a>
+    </div>
 
     <!-- Core JS -->
     <script src="/static/vendor/libs/jquery/jquery.js"></script>
@@ -1039,24 +967,9 @@
 
 
                 if (btnSaveAirtable)
-                    btnSaveAirtable.onclick = () => {
-                        fetch("/update_calendario", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                calendario: { employees, shifts }
-                            })
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.message) alert(data.message);
-                                else if (data.error) alert("Errore: " + data.error);
-                            })
-                            .catch(err => {
-                                console.error(err);
-                                alert("Errore di connessione");
-                            });
-                    };
+                btnSaveAirtable.onclick = () => {
+                  alert("Cliccando questo pulsante potrai salvare il calendario online e rivederlo ogni volta che rientri nella dashboard ✔️");
+                };
 
                 if (btnClear)
                     btnClear.onclick = () => {
@@ -1108,7 +1021,7 @@
                 const maxEmployees = parseInt(backendData?.['Max Dipendenti'], 10) || 10; // fallback a 10
 
                 if (employees.length >= maxEmployees)
-                    return alert(`Secondo il tuo piano scelto puoi gestire un massimo di ${maxEmployees} dipendenti, contatta l'assistenza per aumentare il limite!`);
+                    return alert(`Limite massimo di dipendenti raggiunto per la versione DEMO!`);
 
                 const newEmployee = {
                     id: nextEmployeeId,
