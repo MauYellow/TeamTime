@@ -1056,6 +1056,10 @@ def timeline_demo():
 
     return render_template('timeline_demo.html', calendario_json=calendario_json, data=data)
 
+@app.route('/chattaAI_demo')
+def chattaAI_demo():
+  return render_template('/chattaAI_demo.html')
+
 @app.route('/inizia-prova')
 def inizia_prova():
     STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY')
@@ -1580,7 +1584,7 @@ def chattaAI():
        return render_template('/chattaAI.html', data=data, mesi_disponibili=mesi_disponibili, mese_corrente=mese_corrente, records_mese=records_mese, records_json=json.dumps(records))
 
 @app.route('/api/chat_ai_test', methods=['POST'])
-def chat_ai_test(): #** da cancellare solo di test senza sprecare AI
+def chat_ai_test(): #** da cancellare, non usata per la demo, solo per non consumare Openai
    data = request.get_json()
    creditiAI = data.get("creditiAI", 0)
    nome_qrcode = data.get("nome_qrcode", "")
