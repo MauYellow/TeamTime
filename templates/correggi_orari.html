@@ -197,17 +197,22 @@
           <div id="navbar-collapse" class="navbar-nav-right d-flex align-items-center">
             <ul class="navbar-nav flex-row align-items-center ms-auto">
         
-              <!-- IMG (dimensionata) -->
-              <!-- IMG (radius + centrata + stretch) -->
+              <!-- Video Affiliato (dimensionata) -->
               <li class="nav-item d-flex align-items-center me-3">
-                <a href="{{ url_for('programma_affiliato') }}" target="_blank"><img src="https://i.postimg.cc/0NBh8rVt/programma-affiliato-teamtime.png" alt="Programma Affiliato" style="
-                    max-height: 40px;
-                    width: auto;
-                    object-fit: contain;
-                    border-radius: 5px;
-                    display: block;
-                  " /></a>
+                <a href="{{ url_for('programma_affiliato') }}" target="_blank">
+                  <video autoplay muted loop playsinline style="
+                      max-height: 40px;
+                      width: auto;
+                      object-fit: contain;
+                      border-radius: 5px;
+                      display: block;
+                    ">
+                    <source src="{{ url_for('static', filename='video/video_affiliato.mp4') }}" type="video/mp4">
+                    Il tuo browser non supporta il video.
+                  </video>
+                </a>
               </li>
+
 
         
               <!-- BUTTON -->
@@ -239,7 +244,7 @@
                           </div>
                         </div>
                         <div class="flex-grow-1">
-                          <span class="fw-semibold d-block"></span>
+                          <span class="fw-semibold d-block">{{ data.Locale }}</span>
                           <small class="text-muted">Admin</small>
                         </div>
                       </div>

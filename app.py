@@ -1628,6 +1628,7 @@ def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non util
      try:
         table.update(record_id, {"CreditiAI": creditiAI})
      except Exception as e:
+        print(f"💬ChatAI {nome_qrcode}: Errore durante l'elaborazione Airtable: {e}")
         return jsonify({"error": f"Errore durante l'elaborazione Airtable: {e}"}), 500
      
     lista_dati = []
@@ -1640,9 +1641,9 @@ def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non util
          f"{entry['fields']['Ore Lavorate']}" + ", GPS: " +
          entry['fields']['GPS']
 )
-    #print(f"Lista_dati: {lista_dati}")
 
     if not message:
+        print(f"💬ChatAI {nome_qrcode}: Messaggio mancante")
         return jsonify({
            "error": "Messaggio mancante",}), 400
     
@@ -1685,13 +1686,12 @@ Se dici una data, trasformala nel formato GG-MM-AA sempre tra parentesi, esempio
                         })
 
     except Exception as e:
-        print(f"Errore AI: {e}")
+        print(f"💬Chat AI {nome_qrcode}: Errore AI: {e}")
         return jsonify({"error": f"Errore durante l'elaborazione AI: {e}"}), 500
 
 @app.route('/timeline')
 def timeline():
     data = session.get("data")
-    #print(f"Data: {data}")
     if not data:
         return redirect(url_for('login'))
     else:
@@ -1701,7 +1701,7 @@ def timeline():
        telegram(f"📋Timeline [{data['Locale']}]: {ip}, User Agent: {user_agent}, sorgente: {referer}")
        print(f"Data da Login: {data}")
     
-    table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")  # seleziona la tabella
+    table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
     record = table.first(formula=match({"Locale": data["Locale"]}))
 
     if not record:
