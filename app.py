@@ -1604,7 +1604,7 @@ def chat_ai_test(): #** da cancellare, non usata per la demo, solo per non consu
         "creditiAI": creditiAI
     })
      except Exception as e:
-        return jsonify({"error": "Errore durante l'elaborazione AI"}), 500
+        return jsonify({"error": f"Errore durante l'elaborazione AI: {e}"}), 500
 
    else:
      return jsonify({"error": "Errore durante l'elaborazione AI"}), 500
@@ -1628,7 +1628,7 @@ def chat_ai(): #questa è quella giusta!** l'altra è solo di prova per non util
      try:
         table.update(record_id, {"CreditiAI": creditiAI})
      except Exception as e:
-        return jsonify({"error": "Errore durante l'elaborazione Airtable: {e}"}), 500
+        return jsonify({"error": f"Errore durante l'elaborazione Airtable: {e}"}), 500
      
     lista_dati = []
     for entry in context:
@@ -1686,7 +1686,7 @@ Se dici una data, trasformala nel formato GG-MM-AA sempre tra parentesi, esempio
 
     except Exception as e:
         print(f"Errore AI: {e}")
-        return jsonify({"error": "Errore durante l'elaborazione AI: {e}"}), 500
+        return jsonify({"error": f"Errore durante l'elaborazione AI: {e}"}), 500
 
 @app.route('/timeline')
 def timeline():
