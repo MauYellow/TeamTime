@@ -481,7 +481,7 @@
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {% for r in records_50 %}
+                                  {% for r in records_100 %}
                                   {% set f = r.get('fields', {}) %}
                                   <tr id="row-{{ r.get('id') }}">
                                     <td>{{ f.get('Nome', '—') }}</td>
@@ -506,7 +506,7 @@
                                   </tr>
                                   {% endfor %}
 
-                                  {% if not records_50 %}
+                                  {% if not records_100 %}
                                   <tr>
                                     <td colspan="6" class="text-center text-muted">Nessuna voce trovata.</td>
                                   </tr>
@@ -516,7 +516,7 @@
                             </div>
 
                             <small class="text-muted d-block mt-2">
-                              Mostrate le ultime 50 righe.
+                              Mostrate le ultime 100 righe.
                             </small>
                           </div>
 

@@ -566,16 +566,14 @@
                                                                         <div
                                                                               class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                                                               <div class="me-2">
-                                                                                    <h6 class="mb-0">
-                                                                                          {{ GPS_labels.0 }}
-                                                                                    </h6>
+                                                                                    
                                                                                     <small class="text-muted">
-                                                                                          {{ GPS_labels.0 }}
+                                                                                          {{ (GPS_labels[0] if GPS_labels|length > 1 else "N/A") | truncate(90, True, "..") }}
                                                                                     </small>
                                                                               </div>
                                                                               <div class="user-progress">
                                                                                     <small class="fw-semibold">
-                                                                                          {{ GPS_series.0 }}
+                                                                                          {{ GPS_series.0 }} registrazioni
                                                                                     </small>
                                                                               </div>
                                                                         </div>
@@ -591,18 +589,14 @@
                                                                         <div
                                                                               class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                                                               <div class="me-2">
-                                                                                    <h6 class="mb-0">
-                                                                                          {{ GPS_labels[1] if
-                                                                                          GPS_labels|length > 1 else
-                                                                                          "N/A" }}
-                                                                                    </h6>
+                                                                                    
                                                                                     <small class="text-muted">
-                                                                                          {{ GPS_labels.1 }}
+                                                                                          {{ (GPS_labels[1] if GPS_labels|length > 1 else "N/A") | truncate(90, True, "..") }}
                                                                                     </small>
                                                                               </div>
                                                                               <div class="user-progress">
                                                                                     <small class="fw-semibold">
-                                                                                          {{ GPS_series.1 }}
+                                                                                          {{ GPS_series.1 }} registrazioni
                                                                                     </small>
                                                                               </div>
                                                                         </div>
@@ -618,18 +612,14 @@
                                                                         <div
                                                                               class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                                                                               <div class="me-2">
-                                                                                    <h6 class="mb-0">
-                                                                                          {{ GPS_labels[2] if
-                                                                                          GPS_labels|length > 1 else
-                                                                                          "N/A" }}
-                                                                                    </h6>
+                                                                              
                                                                                     <small class="text-muted">
-                                                                                          {{ GPS_labels.2 }}
+                                                                                          {{ (GPS_labels[2] if GPS_labels|length > 1 else "N/A") | truncate(90, True, "..") }}
                                                                                     </small>
                                                                               </div>
                                                                               <div class="user-progress">
                                                                                     <small class="fw-semibold">
-                                                                                          {{ GPS_series.2 }}
+                                                                                          {{ GPS_series.2 }} registrazioni
                                                                                     </small>
                                                                               </div>
                                                                         </div>

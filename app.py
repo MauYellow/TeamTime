@@ -346,7 +346,7 @@ Il Team di TeamTime"""
         billing_reason = invoice.get('billing_reason', 'unknown')
         record = table.first(formula=match({"Stripe Customer ID": customer_id}))
         print(f"❌ invoice.payment_failed → Pagamento fallito per {customer_id}, billing_reason: {billing_reason}")
-        telegram("Pagamento Fallito")
+        telegram(f"Pagamento Fallito per {event['data']['object']['customer_email']}")
         try: 
           table.update(record["id"], {"Status": 'Disattivato'})
           print(f"❌ Pagamento non riuscito per: {customer_id}")
@@ -562,7 +562,7 @@ def login():
               return redirect(url_for('login_failed', motivo="Username e Password errate"))
               
         else:
-            telegram(f"Login Fallito: Servizio Disattivato")
+            telegram(f"Login Fallito: Servizio Disattivato per {data['fields']['Locale']}")
             return redirect(url_for('login_failed', motivo="Il servizio per questo QR Code è stato disattivato, contatta l'assistenza"))
 
     # Se è una richiesta GET → mostra il form
@@ -1339,7 +1339,7 @@ def dipendenti_al_lavoro():
    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
 
    records = table.all(sort=["-Created"])
-   records_50 = records[:50]
+   records_100 = records[:100] #** Era :50
 
    dipendenti = []
    dipendenti_a_lavoro = []
@@ -1358,7 +1358,7 @@ def dipendenti_al_lavoro():
                 "giorno_corretto": fields.get("Giorno Corretto", "-")
             })
 
-   return render_template('/correggi_orari.html', data=data, dipendenti_a_lavoro=dipendenti_a_lavoro, dipendenti=dipendenti, records_50=records_50)
+   return render_template('/correggi_orari.html', data=data, dipendenti_a_lavoro=dipendenti_a_lavoro, dipendenti=dipendenti, records_100=records_100)
 
 @app.route('/elimina_presenza', methods=['POST'])
 def elimina_presenza():
@@ -1712,9 +1712,9 @@ def timeline():
     if not calendario_json:
        calendario_json = {
     "employees": [
-        {"id": 1, "name": "Mario Rossi", "shifts": {}},
-        {"id": 2, "name": "Roberta Verdi", "shifts": {}},
-        {"id": 3, "name": "Caio Sempronio", "shifts": {}},
+        {"id": 1, "name": "Nome Staff 1", "shifts": {}},
+        {"id": 2, "name": "Nome Staff 2", "shifts": {}},
+        {"id": 3, "name": "Nome Staff 3", "shifts": {}},
     ],
     "shifts": [
         {"name": "08.00-14.00", "color": "Giallo"},
