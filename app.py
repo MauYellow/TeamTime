@@ -26,7 +26,7 @@ from openai import OpenAI
 import json, tempfile
 import cloudinary
 import cloudinary.uploader
-from cloudinary.utils import cloudinary_url #** non usato?
+from cloudinary.utils import cloudinary_url #** non usato? bisogna togliere i pacchetti dal server per non appesantirlo?
 import threading
 import xml.etree.ElementTree as ET
 
@@ -1339,7 +1339,7 @@ def dipendenti_al_lavoro():
    table = api.table(AIRTABLE_BASE_ID, TABLE_NAME)
 
    records = table.all(sort=["-Created"])
-   records_100 = records[:100] #** Era :50
+   records_100 = records[:100]
 
    dipendenti = []
    dipendenti_a_lavoro = []
@@ -2060,32 +2060,35 @@ def turni_pdf_colori():
 
 @app.route('/dettagli_dipendenti')
 def dettagli_dipendenti():
-    data = session.get("data")
-    if not data:
-        return redirect(url_for('login'))
-
     ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
     referer = request.headers.get('Referer', 'Diretto')
 
-    telegram(
+    data = session.get("data")
+    if not data:
+        return redirect(url_for('login'))
+    else:
+      telegram(
         f"📋Dettagli Dipendenti [{data.get('Locale', 'N/D')}]: "
         f"{ip}, User Agent: {user_agent}, sorgente: {referer}"
     )
+      
+      table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
+      record = table.first(formula=match({"Locale": data['Locale']}))
+      calendario_json = record["fields"].get("CalendarioJSON", "")
+      json_url = calendario_json[0].get('url')
+      if json_url:
+        response = requests.get(json_url, timeout=10)
+        response.raise_for_status()
+        calendario_json = response.json()
+        print(f"Prova JSON con API Calendario {calendario_json}")
 
-    calendario_json = {}
     anni_disponibili = []
 
     try:
         if data.get('CalendarioJSON'):
             json_url = data['CalendarioJSON'][0].get('url')
             if json_url:
-                response = requests.get(json_url, timeout=10)
-                response.raise_for_status()
-                calendario_json = response.json()
-                print(f"Calendario {calendario_json}")
-
-
                 # 🔹 Estrazione degli anni dai turni
                 anni_set = set()
                 for employee in calendario_json.get('employees', []):
@@ -2100,7 +2103,7 @@ def dettagli_dipendenti():
         print(f"Errore nel caricamento del JSON: {e}")
 
     return render_template(
-        'test_dipendenti.html',
+        'dettagli_dipendenti.html',
         data=data,
         calendario_json=calendario_json,
         anni_disponibili=anni_disponibili

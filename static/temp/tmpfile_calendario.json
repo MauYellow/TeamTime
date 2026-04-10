@@ -56,27 +56,31 @@
           "color": "Rosso",
           "name": "18.00-22.00"
         },
+        "2026-04-07": {
+          "color": "Azzurro",
+          "name": "ferie"
+        },
+        "2026-04-08": {
+          "color": "Azzurro",
+          "name": "ferie"
+        },
         "2026-04-09": {
           "color": "Azzurro",
-          "name": "allattamento"
+          "name": "ferie"
         },
         "2026-04-10": {
           "color": "Azzurro",
           "name": "ferie"
         },
         "2026-04-11": {
-          "color": "Rosso",
-          "name": "18.00-22.00"
-        },
-        "2026-04-08": {
-          "color": "Azzurro",
-          "name": "ferie"
-        },
-        "2026-04-07": {
           "color": "Azzurro",
           "name": "ferie"
         },
         "2026-04-12": {
+          "color": "Azzurro",
+          "name": "ferie"
+        },
+        "2026-04-13": {
           "color": "Azzurro",
           "name": "ferie"
         }
