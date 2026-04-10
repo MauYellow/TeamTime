@@ -7,6 +7,18 @@
         "2025-11-17": {
           "color": "Giallo",
           "name": "08.00-14.00"
+        },
+        "2026-04-09": {
+          "color": "Azzurro",
+          "name": "allattamento"
+        },
+        "2026-04-10": {
+          "color": "Rosso",
+          "name": "trasferta"
+        },
+        "2026-04-11": {
+          "color": "Rosso",
+          "name": "trasferta"
         }
       }
     },
@@ -17,6 +29,18 @@
         "2025-11-17": {
           "color": "Giallo",
           "name": "08.00-14.00"
+        },
+        "2026-04-09": {
+          "color": "Azzurro",
+          "name": "allattamento"
+        },
+        "2026-04-10": {
+          "color": "Verde",
+          "name": "permesso"
+        },
+        "2026-04-11": {
+          "color": "Verde",
+          "name": "libero"
         }
       }
     },
@@ -31,6 +55,30 @@
         "2025-11-17": {
           "color": "Rosso",
           "name": "18.00-22.00"
+        },
+        "2026-04-09": {
+          "color": "Azzurro",
+          "name": "allattamento"
+        },
+        "2026-04-10": {
+          "color": "Azzurro",
+          "name": "ferie"
+        },
+        "2026-04-11": {
+          "color": "Rosso",
+          "name": "18.00-22.00"
+        },
+        "2026-04-08": {
+          "color": "Azzurro",
+          "name": "ferie"
+        },
+        "2026-04-07": {
+          "color": "Azzurro",
+          "name": "ferie"
+        },
+        "2026-04-12": {
+          "color": "Azzurro",
+          "name": "ferie"
         }
       }
     }

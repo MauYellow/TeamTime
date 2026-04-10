@@ -1673,13 +1673,35 @@ Se dici una data, trasformala nel formato GG-MM-AA sempre tra parentesi, esempio
             {"role": "user", "content": message},
         ]
 
-        response = client.chat.completions.create(
+        #response = client.chat.completions.create(
+        #    model="gpt-5-mini",
+        #    messages=messages,
+        #    temperature=1,
+        #)
+
+        reply = "" #prima era così senza stream** response.choices[0].message.content
+        
+
+
+        for chunk in client.chat.completions.create(  #questa parte di chunk non c'era prima senza stream**
             model="gpt-5-mini",
             messages=messages,
             temperature=1,
-        )
+            stream=True,
+        ):
+            delta = chunk.choices[0].delta
+            if "content" in delta:
+                reply += delta["content"]
 
-        reply = response.choices[0].message.content
+        if not reply:
+    # prova con stream=False come piano B
+          response = client.chat.completions.create(
+          model="gpt-5-mini",
+          messages=messages,
+          temperature=1,
+        )
+          reply = response.choices[0].message.content or "❌ Nessuna risposta"
+
         return jsonify({
            "reply": reply,
            "creditiAI": creditiAI
@@ -2034,6 +2056,54 @@ def turni_pdf_colori():
         as_attachment=True,
         download_name="turni.pdf",
         mimetype="application/pdf"
+    )
+
+@app.route('/dettagli_dipendenti')
+def dettagli_dipendenti():
+    data = session.get("data")
+    if not data:
+        return redirect(url_for('login'))
+
+    ip = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    referer = request.headers.get('Referer', 'Diretto')
+
+    telegram(
+        f"📋Dettagli Dipendenti [{data.get('Locale', 'N/D')}]: "
+        f"{ip}, User Agent: {user_agent}, sorgente: {referer}"
+    )
+
+    calendario_json = {}
+    anni_disponibili = []
+
+    try:
+        if data.get('CalendarioJSON'):
+            json_url = data['CalendarioJSON'][0].get('url')
+            if json_url:
+                response = requests.get(json_url, timeout=10)
+                response.raise_for_status()
+                calendario_json = response.json()
+                print(f"Calendario {calendario_json}")
+
+
+                # 🔹 Estrazione degli anni dai turni
+                anni_set = set()
+                for employee in calendario_json.get('employees', []):
+                    for data_turno in employee.get('shifts', {}).keys():
+                        anno = data_turno[:4]  # Estrae YYYY
+                        anni_set.add(anno)
+
+                # Ordina gli anni
+                anni_disponibili = sorted(anni_set)
+
+    except Exception as e:
+        print(f"Errore nel caricamento del JSON: {e}")
+
+    return render_template(
+        'test_dipendenti.html',
+        data=data,
+        calendario_json=calendario_json,
+        anni_disponibili=anni_disponibili
     )
 
 @app.route('/blog')
