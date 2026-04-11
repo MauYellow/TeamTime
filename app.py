@@ -2076,12 +2076,19 @@ def dettagli_dipendenti():
       table = api.table(AIRTABLE_BASE_ID, "Locali Approvati")
       record = table.first(formula=match({"Locale": data['Locale']}))
       calendario_json = record["fields"].get("CalendarioJSON", "")
-      json_url = calendario_json[0].get('url')
-      if json_url:
-        response = requests.get(json_url, timeout=10)
-        response.raise_for_status()
-        calendario_json = response.json()
-        print(f"Prova JSON con API Calendario {calendario_json}")
+      print(f"Prova** Calendario JSON: {calendario_json}")
+      if not calendario_json:
+        calendario_json = {}
+      else:
+         
+
+        if calendario_json[0].get('url'):
+          json_url = calendario_json[0].get('url')
+          response = requests.get(json_url, timeout=10)
+          response.raise_for_status()
+          calendario_json = response.json()
+          print(f"Prova JSON con API Calendario {calendario_json}")
+
 
     anni_disponibili = []
 
