@@ -1257,6 +1257,7 @@ def start_airtable():
     customer_id = data_json.get('customer_id', 'Nessun ID Stripe')
 
     print("🔁 Inizio ricerca tabella vuota...")
+    table_scelta = None
     for i in range(21, 51):  # da teamtime020 a teamtime050 inclusi
         table_name = f"teamtime0{i:02d}"
         print(f"🔍 Controllo tabella: {table_name}")
@@ -1272,12 +1273,17 @@ def start_airtable():
 
         except Exception as e:
             print(f"❌ Errore , Nessuna tabella disposnibile per {table_name}: {str(e)}")
-            msg = Message(subject=f"Errore TeamTime",
-                  sender=app.config['MAIL_USERNAME'],
-                  recipients=["help.teamtime@gmail.com"],
-                  body=f"""Non sono più presenti table disponibili, ricontattare {telefono_cliente}, {ragionesociale_cliente}, customer id: {customer_id}""")
-            mail.send(msg)
-            break  # Stop se la tabella non esiste
+            continue  # Salta la tabella non disponibile e prova la successiva
+
+    # Se nessuna tabella disponibile è stata trovata, invia mail di alert ed esci
+    if not table_scelta:
+        print("❌ Nessuna tabella disponibile in tutto il range")
+        msg = Message(subject=f"Errore TeamTime",
+              sender=app.config['MAIL_USERNAME'],
+              recipients=["help.teamtime@gmail.com"],
+              body=f"""Non sono più presenti table disponibili, ricontattare {telefono_cliente}, {ragionesociale_cliente}, customer id: {customer_id}""")
+        mail.send(msg)
+        return jsonify({"success": False, "error": "Nessuna tabella disponibile"}), 500
 
     ora_attuale = datetime.now().strftime('%H:%M')
     table = api.table(AIRTABLE_BASE_ID, table_scelta)
