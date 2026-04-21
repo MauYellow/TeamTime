@@ -1272,7 +1272,7 @@ def start_airtable():
                 break  # Ferma appena trovi una tabella vuota
 
         except Exception as e:
-            print(f"❌ Errore , Nessuna tabella disposnibile per {table_name}: {str(e)}")
+            print(f"❌ Errore , Nessuna tabella disponibile per {table_name}: {str(e)}")
             continue  # Salta la tabella non disponibile e prova la successiva
 
     # Se nessuna tabella disponibile è stata trovata, invia mail di alert ed esci
