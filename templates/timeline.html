@@ -128,29 +128,34 @@
 
         /* ── Mobile responsive ── */
         @media (max-width: 767.98px) {
-            /* Tabella: celle più compatte */
+            /* Tabella: ottimizzata per touch con vista a 7 giorni */
             .table-turni th,
             .table-turni td {
-                min-width: 82px !important;
-                font-size: 0.72rem;
-                padding: 0.3rem 0.35rem !important;
+                min-width: 86px !important;
+                font-size: 0.75rem;
+                padding: 0.4rem 0.35rem !important;
             }
             .table-turni th:first-child,
             .table-turni td:first-child {
-                min-width: 115px !important;
+                min-width: 110px !important;
+                font-size: 0.75rem;
+            }
+            /* Celle più alte: tap area più generosa */
+            .table-turni .drop-cell {
+                height: 62px !important;
             }
 
-            /* Badge turni più piccoli */
+            /* Badge turni: più leggibili con solo 7 giorni visibili */
             .shift-badge {
-                font-size: 0.65rem !important;
-                padding: .15rem .35rem !important;
-                gap: .15rem !important;
+                font-size: 0.7rem !important;
+                padding: .2rem .4rem !important;
+                gap: .2rem !important;
             }
             .shift-badge .bx {
-                font-size: 0.75rem !important;
+                font-size: 0.8rem !important;
             }
 
-            /* Card turni fissi: riduce padding */
+            /* Card turni fissi: padding ridotto */
             .fixed-shifts-card .card-body {
                 padding: 0.5rem 0.75rem !important;
             }
@@ -167,6 +172,13 @@
             .turni-toolbar .form-select {
                 font-size: 0.8rem;
                 padding: 0.3rem 1.6rem 0.3rem 0.55rem;
+            }
+
+            /* Barra navigazione settimana */
+            .week-nav-bar {
+                background: #f8f9fa;
+                border-top: 1px solid #dee2e6;
+                border-bottom: 1px solid #dee2e6;
             }
         }
     </style>
@@ -817,9 +829,13 @@
         }
 
         // ShiftTable component
-        function ShiftTable({ employees, setEmployees, dragOver, setDragOver, shifts, month, year }) {
+        function ShiftTable({ employees, setEmployees, dragOver, setDragOver, shifts, month, year, isMobile, dayOffset }) {
             const today = new Date();
             const days = React.useMemo(() => getMonthDays(year, month), [year, month]);
+            const visibleDays = React.useMemo(
+                () => isMobile ? days.slice(dayOffset, dayOffset + 7) : days,
+                [days, isMobile, dayOffset]
+            );
 
             // assegna turno a un dipendente (value è il nome del turno o un oggetto)
             const assign = (employeeId, dayNumber, value) => {
@@ -892,7 +908,7 @@
                     <thead>
                         <tr>
                             <th style={{ minWidth: 220 }}>Dipendente</th>
-                            {days.map(d => {
+                            {visibleDays.map(d => {
                                 const dayNumber = parseInt(d, 10);
                                 const isTodayHeader = dayNumber === today.getDate() && month === today.getMonth() && year === today.getFullYear();
                                 return <th key={d} className={classNames('text-center', isTodayHeader && 'current-day')} style={{ minWidth: 110 }}>{d}</th>;
@@ -908,7 +924,7 @@
                                 </td>
 
                                 {/* Colonne dei giorni */}
-                                {days.map(day => {
+                                {visibleDays.map(day => {
                                     const dayNumber = parseInt(day, 10);
                                     const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
                                     const raw = (emp.shifts || {})[dateKey] || null;
@@ -986,10 +1002,27 @@
             }, [initialData]);
 
             const [dragOver, setDragOver] = React.useState({});
+            const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 767);
+            const [dayOffset, setDayOffset] = React.useState(0);
 
             const now = new Date();
             const [month, setMonth] = React.useState(now.getMonth());
             const [year, setYear] = React.useState(now.getFullYear());
+
+            React.useEffect(() => {
+                const onResize = () => setIsMobile(window.innerWidth <= 767);
+                window.addEventListener('resize', onResize);
+                return () => window.removeEventListener('resize', onResize);
+            }, []);
+
+            React.useEffect(() => {
+                const n = new Date();
+                if (month === n.getMonth() && year === n.getFullYear()) {
+                    setDayOffset(Math.floor((n.getDate() - 1) / 7) * 7);
+                } else {
+                    setDayOffset(0);
+                }
+            }, [month, year]);
 
             // Popola i dropdown
             const months = [
@@ -1155,15 +1188,45 @@
 
             }, [employees, shifts]);  // 👈 IMPORTANTE
 
+            const allDays = getMonthDays(year, month);
+            const monthShortNames = ["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"];
+            const weekDays = allDays.slice(dayOffset, dayOffset + 7);
+            const weekLabel = weekDays.length
+                ? `${parseInt(weekDays[0], 10)} – ${parseInt(weekDays[weekDays.length - 1], 10)} ${monthShortNames[month]}`
+                : '';
+
             return (
                 <div>
                     <div className="card fixed-shifts-card">
                         <div className="card-body">
-                            <div className="mb-2 fw-semibold">Trascina un turno o clicca sul "+" in tabella, ricordati di salvare prima di uscire. Puoi aggiungere altri dipendenti in basso.</div>
+                            <div className="mb-2 fw-semibold">
+                                {isMobile
+                                    ? "Tocca una cella per cambiare turno. Salva prima di uscire."
+                                    : "Trascina un turno o clicca sul \"+\" in tabella, ricordati di salvare prima di uscire. Puoi aggiungere altri dipendenti in basso."}
+                            </div>
                             <ShiftChips shifts={shifts} setShifts={setShifts} />
                         </div>
                     </div>
 
+                    {isMobile && (
+                        <div className="week-nav-bar d-flex justify-content-between align-items-center px-3 py-2">
+                            <button
+                                className="btn btn-sm btn-outline-secondary px-3"
+                                onClick={() => setDayOffset(Math.max(0, dayOffset - 7))}
+                                disabled={dayOffset === 0}
+                            >
+                                <i className="bx bx-chevron-left bx-sm"></i>
+                            </button>
+                            <span className="fw-semibold" style={{ fontSize: '0.9rem' }}>{weekLabel}</span>
+                            <button
+                                className="btn btn-sm btn-outline-secondary px-3"
+                                onClick={() => setDayOffset(Math.min(allDays.length - 1, dayOffset + 7))}
+                                disabled={dayOffset + 7 >= allDays.length}
+                            >
+                                <i className="bx bx-chevron-right bx-sm"></i>
+                            </button>
+                        </div>
+                    )}
 
                     <div style={{ overflowX: 'auto' }}>
                         <ShiftTable
@@ -1174,6 +1237,8 @@
                             shifts={shifts}
                             month={month}
                             year={year}
+                            isMobile={isMobile}
+                            dayOffset={dayOffset}
                         />
                     </div>
                     <EmployeeChips
