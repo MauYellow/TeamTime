@@ -48,6 +48,15 @@
   <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
   <!--? Config: Mandatory theme config file containing global vars & default theme options -->
   <script src="/static/js/config.js"></script>
+  <style>
+    /* ── Mobile responsive ── */
+    @media (max-width: 767.98px) {
+      .card-body { padding: 0.75rem; }
+      .btn { font-size: 0.82rem; }
+      .table-responsive { font-size: 0.78rem; }
+      .table td, .table th { padding: 0.4rem 0.5rem; }
+    }
+  </style>
 </head>
 
 <body>
@@ -205,7 +214,7 @@
             <ul class="navbar-nav flex-row align-items-center ms-auto">
         
               <!-- Video Affiliato (dimensionata) -->
-              <li class="nav-item d-flex align-items-center me-3">
+              <li class="nav-item d-none d-md-flex align-items-center me-3">
                 <a href="{{ url_for('programma_affiliato') }}" target="_blank">
                   <video autoplay muted loop playsinline style="
                       max-height: 40px;
@@ -223,7 +232,7 @@
 
         
               <!-- BUTTON -->
-              <li class="nav-item me-3">
+              <li class="nav-item d-none d-md-flex me-3">
                 <a href="https://beacons.ai/teamtime" target="_blank" class="btn btn-outline-primary d-flex align-items-center">
                   <i class="bx bx-download me-1"></i> Scarica App Mobile
                 </a>
